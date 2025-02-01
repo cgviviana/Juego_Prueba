@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lectura rápida</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+            background-color: black;
+            color: white;
+        }
+        h1 {
+            margin-bottom: 40px; /* Espacio doble después del título */
+        }
+        #inputText {
+            width: 80%;
+            height: 150px;
+            margin-bottom: 20px;
+            background-color: gray;
+            color: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            font-weight: bold;
+        }
+        ::placeholder {
+            color: white;
+            font-weight: bold;
+        }
+        #controlSection {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        #speedControl {
+            margin-bottom: 20px;
+        }
+        #buttonControls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        #displayArea {
+            width: 80%;
+            border: 1px solid #ccc;
+            padding: 10px;
+            min-height: 50px;
+            margin: 20px 0;
+            font-size: 26px;
+            text-align: center;
+            background-color: white;
+            color: black;
+        }
+        .highlight {
+            color: red;
+        }
+        #result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Aprendiendo con @LaProfeVivy</h1>
+<textarea id="inputText" placeholder="Introduce tu texto acá..."></textarea>
+<div id="controlSection">
+    <div id="speedControl">
+        <label for="speed">Velocidad: </label>
+        <select id="speed">
+            <option value="slow">Lenta</option>
+            <option value="medium">Media</option>
+            <option value="fast">Rápida</option>
+        </select>
+    </div>
+    <div id="buttonControls">
+        <button onclick="startReading()" style="font-size: 16px; padding: 10px;">Comenzar Lectura</button>
+        <button onclick="stopReading()" style="font-size: 16px; padding: 10px;">Parar</button>
+        <button onclick="resetReading()" style="font-size: 16px; padding: 10px;">Reiniciar</button>
+    </div>
+</div>
+<div id="displayArea"></div>
+<div id="resultControl">
+    <button onclick="showResults()">Mostrar Resultados</button>
+</div>
+<div id="result"></div>
+
+<script>
+    let words = [];
+    let currentIndex = 0;
+    let interval;
+    let startTime;
+    let wordCount = 0;
+
+    function startReading() {
+        const text = document.getElementById('inputText').value;
+        const speed = document.getElementById('speed').value;
+        words = text.split(/\s+/);
+        currentIndex = 0;
+        wordCount = words.length;
+        clearInterval(interval);
+
+        let speedInMs;
+        switch(speed) {
+            case 'slow':
+                speedInMs = 500;
+                break;
+            case 'medium':
+                speedInMs = 300;
+                break;
+            case 'fast':
+                speedInMs = 100;
+                break;
+        }
+
+        startTime = new Date();
+        interval = setInterval(displayNextWord, speedInMs);
+    }
+
+    function stopReading() {
+        clearInterval(interval);
+    }
+
+    function resetReading() {
+        clearInterval(interval);
+        currentIndex = 0;
+        document.getElementById('displayArea').innerHTML = '';
+        document.getElementById('result').innerText = '';
+    }
+
+    function displayNextWord() {
+        if (currentIndex >= words.length) {
+            clearInterval(interval);
+            const endTime = new Date();
+            const timeDiff = (endTime - startTime) / 1000; // time difference in seconds
+            const wordsPerMinute = Math.round((wordCount / timeDiff) * 60);
+            document.getElementById('result').innerText = `Palabras leídas por minuto: ${wordsPerMinute}`;
+            return;
+        }
+        const displayArea = document.getElementById('displayArea');
+        const currentWord = words[currentIndex];
+        const highlightedWord = highlightMiddleLetter(currentWord);
+
+        displayArea.innerHTML = highlightedWord;
+        currentIndex++;
+    }
+
+    function highlightMiddleLetter(word) {
+        const middleIndex = Math.floor(word.length / 2);
+        return word.split('').map((char, index) => {
+            if (index === middleIndex) {
+                return `<span class="highlight">${char}</span>`;
+            }
+            return char;
+        }).join('');
+    }
+
+    function showResults() {
+        const endTime = new Date();
+        const timeDiff = (endTime - startTime) / 1000; // time difference in seconds
+        const wordsPerMinute = Math.round((wordCount / timeDiff) * 60);
+        alert(`Palabras leídas por minuto: ${wordsPerMinute}`);
+    }
+</script>
+
+</body>
+</html>
