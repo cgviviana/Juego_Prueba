@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acordeón Familiar</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+}
+
+.acordeon-container {
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+.acordeon-titulo {
+  text-align: center;
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+details {
+  background-color: #f9f9f9;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  padding: 10px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+/* Colores de fondo pastel en gama de azules */
+details:nth-of-type(1) > summary {
+  background-color: #B3DFFA; /* Azul claro pastel */
+}
+
+details:nth-of-type(2) > summary {
+  background-color: #A4CAEF; /* Azul medio pastel */
+}
+
+details:nth-of-type(3) > summary {
+  background-color: #92B4E4; /* Azul oscuro pastel */
+}
+
+summary {
+  font-weight: bold;
+  margin: -10px -10px 10px -10px;
+  padding: 10px;
+  border-bottom: 1px solid #aaa;
+  cursor: pointer;
+}
+
+summary:hover {
+  background-color: #e9e9e9;
+}
+
+.panel {
+  padding: 0 5px;
+}
+</style>
+</head>
+<body>
+
+<div class="acordeon-container">
+  <div class="acordeon-titulo">Acordeón Familiar</div>
+
+  <details>
+    <summary>Papá</summary>
+    <div class="panel">
+      <p>Información sobre Papá.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Mamá</summary>
+    <div class="panel">
+      <p>Información sobre Mamá.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Hijos</summary>
+    <div class="panel">
+      <p>Información sobre los Hijos.</p>
+    </div>
+  </details>
+</div>
+
+</body>
+</html>
