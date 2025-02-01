@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> La hora de refuerzo con  @LaProfeVivy</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffe4e1; /* Color pastel rosado */
+            text-align: center;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 50%;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+        #circle {
+            position: relative;
+            width: 350px;
+            height: 350px;
+            margin: 50px auto;
+            border-radius: 50%;
+            border: 5px solid #D8BFD8;
+        }
+        .letter {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-color: #EEE;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        .highlight {
+            background-color: #DA70D6;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>¡La hora de refuerzo! </h1>
+    <h2>con: </h2>
+     <h2>@LaProfeVivy</h2>
+
+    <p>Ingresa tu nombre completo para empezar:</p>
+    <input type="text" id="playerName" placeholder="Escribe tu nombre aquí">
+    <button onclick="startGame()">Comenzar</button>
+
+    <div id="game" style="display:none;">
+        <div id="circle">
+            <!-- 20 Letras para el juego circular -->
+            <div class="letter" id="A">A</div>
+            <div class="letter" id="B">B</div>
+            <div class="letter" id="C">C</div>
+            <div class="letter" id="D">D</div>
+            <div class="letter" id="E">E</div>
+            <div class="letter" id="F">F</div>
+            <div class="letter" id="H">H</div>
+            <div class="letter" id="I">I</div>
+            <div class="letter" id="L">L</div>
+            <div class="letter" id="M">M</div>
+            <div class="letter" id="N">N</div>
+            <div class="letter" id="O">O</div>
+            <div class="letter" id="P">P</div>
+            <div class="letter" id="R">R"></div>
+            <div class="letter" id="S">S</div>
+            <div class="letter" id="T">T</div>
+        </div>
+        <h2>¡Responde las preguntas!</h2>
+        <div id="question"></div>
+        <input type="text" id="answer" placeholder="Escribe tu respuesta">
+        <button onclick="checkAnswer()">Responder</button>
+        <div id="feedback"></div>
+    </div>
+
+    <div id="result" class="result" style="display:none;"></div>
+
+    <!-- Sonidos -->
+    <audio id="aplausoAudio" src="aplauso.mp3"></audio>
+    <audio id="errorAudio" src="error.mp3"></audio>
+
+</div>
+
+<script>
+    const questions = [
+        { letter: "A", question: "Con la A. Característica de una persona creativa.", answer: "abierta al cambio" },
+        { letter: "B", question: "Con la B. Técnica utilizada para generar ideas en grupo.", answer: "brainstorming" },
+        { letter: "C", question: "Con la C. Técnica que mediante combinación relaciona ideas, imágenes, productos.", answer: "conexiones forzosas" },
+        { letter: "D", question: "Con la D. Cambio drástico que interrumpe una industria.", answer: "disrupción" },
+        { letter: "E", question: "Con la E. Dimensión que evidencia la capacidad de refinamiento en el proceso creativo.", answer: "elaboración" },
+        { letter: "F", question: "Con la F. Dimensión que relaciona la capacidad de generar muchas ideas diferentes.", answer: "fluidez" },
+        { letter: "H", question: "Con la H. Estructura que controla las funciones del ser humano desde razonamiento hasta la imaginación.", answer: "hemisferio" },
+        { letter: "I", question: "Con la I. Añade novedades al producto, la marca o los métodos de producción, sin promover cambios bruscos.", answer: "innovación incremental" },
+        { letter: "L", question: "Con la L. Una de las funciones que controla el hemisferio izquierdo.", answer: "lenguaje" },
+        { letter: "M", question: "Con la M. Relaciona una fase de la metodología SCAMPER.", answer: "modificar" },
+        { letter: "N", question: "Con la N. Son las responsables de los impulsos eléctricos que generan nuevas ideas.", answer: "neuronas" },
+        { letter: "O", question: "Con la O. Dimensión que identifica la cualidad de crear cosas únicas o diferentes.", answer: "originalidad" },
+        { letter: "P", question: "Con la P. Lóbulo encargado de integrar información de los sentidos: tacto, gusto, visión, temperatura, presión y dolor.", answer: "parietal" },
+        { letter: "R", question: "Con la R. Dimensión que orienta a la revisión de una idea para mejorarla.", answer: "reelaboracion" },
+        { letter: "S", question: "Con la S. Técnica que genera una perspectiva según el color.", answer: "seis sombreros" },
+        { letter: "T", question: "Con la T. Lóbulo que relaciona el procesamiento de la información auditiva, reconocimiento del lenguaje y formar memorias.", answer: "temporal" }
+    ];
+
+    const numLetters = 16;  // Cantidad de letras
+    const radius = 150;  // Radio del círculo
+    const centerX = 175;  // Coordenada X del centro del círculo
+    const centerY = 175;  // Coordenada Y del centro del círculo
+
+    let currentQuestion = 0;
+    let score = 0;
+    let startTime, endTime;
+
+    const aplausoAudio = document.getElementById("aplausoAudio");
+    const errorAudio = document.getElementById("errorAudio");
+
+    // Distribuir letras en círculo
+    window.onload = () => {
+        const letters = document.getElementsByClassName("letter");
+        for (let i = 0; i < numLetters; i++) {
+            const angle = (i / numLetters) * (2 * Math.PI);  // Calcular el ángulo de cada letra
+            const x = centerX + radius * Math.cos(angle) - 20;  // Restar 20 para centrar el círculo
+            const y = centerY + radius * Math.sin(angle) - 20;
+            letters[i].style.left = `${x}px`;
+            letters[i].style.top = `${y}px`;
+        }
+    };
+
+    function startGame() {
+        const playerName = document.getElementById("playerName").value;
+        if (!playerName) {
+            alert("Por favor, ingresa tu nombre");
+            return;
+        }
+
+        startTime = new Date();
+        document.getElementById("game").style.display = "block";
+        document.getElementById("question").innerHTML = questions[currentQuestion].question;
+        highlightLetter(questions[currentQuestion].letter);
+        document.getElementById("playerName").style.display = "none";
+        document.querySelector("button").style.display = "none";
+    }
+
+    function checkAnswer() {
+        const playerAnswer = document.getElementById("answer").value.toLowerCase();
+        const correctAnswer = questions[currentQuestion].answer.toLowerCase();
+
+        if (playerAnswer === correctAnswer) {
+            score++;
+            document.getElementById("feedback").innerHTML = "¡Correcto!";
+            aplausoAudio.play(); // Reproducir sonido de aplauso
+            document.getElementById(questions[currentQuestion].letter).classList.remove("highlight");
+        } else {
+            document.getElementById("feedback").innerHTML = "Incorrecto. La respuesta correcta era: " + questions[currentQuestion].answer;
+            errorAudio.play(); // Reproducir sonido de error
+            document.getElementById(questions[currentQuestion].letter).classList.remove("highlight");
+        }
+
+        currentQuestion++;
+        document.getElementById("answer").value = "";
+
+        if (currentQuestion < questions.length) {
+            document.getElementById("question").innerHTML = questions[currentQuestion].question;
+            highlightLetter(questions[currentQuestion].letter);
+        } else {
+            endGame();
+        }
+    }
+
+    function highlightLetter(letter) {
+        document.getElementById(letter).classList.add("highlight");
+    }
+
+    function endGame() {
+        endTime = new Date();
+        const timeTaken = (endTime - startTime) / 1000;
+        const playerName = document.getElementById("playerName").value;
+
+        document.getElementById("game").style.display = "none";
+
+        if (score === questions.length) {
+            document.getElementById("result").innerHTML = `¡Excelente, ${playerName}! Eres un crack. Tu puntuación: ${score}/${questions.length} en ${timeTaken} segundos.`;
+        } else {
+            document.getElementById("result").innerHTML = `Puedes, ${playerName}. Intentarlo nuevamente. Tu puntuación: ${score}/${questions.length} en ${timeTaken} segundos.`;
+        }
+
+        document.getElementById("result").style.display = "block";
+    }
+</script>
+
+</body>
+</html>
