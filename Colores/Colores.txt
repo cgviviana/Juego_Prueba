@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hora de Entrenar Neuronitas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            margin-top: 20px;
+        }
+        #exercise-container {
+            margin: 0 auto;
+            padding: 20px;
+            width: 50%;
+            border: 2px solid #333;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background-color: #fff;
+            text-align: center;
+        }
+        #word {
+            font-size: 48px;
+            font-weight: bold;
+            margin-top: 50px;
+            transition: color 0.5s ease; /* Suaviza el cambio de color */
+        }
+        #timer {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>¡Hora de entrenar neuronitas!</h1>
+    <h2>     Con @laprofeVivy </h2>
+    <p>Di el color en el que está escrita la palabra, no lo que dice la palabra.</p>
+
+    <div id="exercise-container">
+        <div id="word"></div>
+        <div id="timer"></div>
+        <button id="startButton" onclick="iniciarEjercicio()">Iniciar Ejercicio</button>
+    </div>
+
+    <script>
+        // Lista de colores y nombres de colores
+        const colores = ["red", "green", "blue", "yellow", "orange", "black", "purple"];
+        const nombres = ["ROJO", "VERDE", "AZUL", "AMARILLO", "NARANJA", "NEGRO", "MORADO"];
+        
+        let tiempoRestante = 60; // Duración del ejercicio en segundos
+        let intervalo;
+
+        function generarPalabra() {
+            // Generar una palabra aleatoria
+            const indicePalabra = Math.floor(Math.random() * nombres.length);
+            const palabra = nombres[indicePalabra];
+            
+            // Generar un color aleatorio (diferente al texto de la palabra)
+            let indiceColor;
+            do {
+                indiceColor = Math.floor(Math.random() * colores.length);
+            } while (indiceColor === indicePalabra); // Asegurarse de que el color no coincida con el texto
+
+            // Mostrar la palabra con el color
+            const palabraElemento = document.getElementById("word");
+            palabraElemento.textContent = palabra;
+            palabraElemento.style.color = colores[indiceColor]; // Aplicar el color con el nombre en inglés
+        }
+
+        function iniciarEjercicio() {
+            // Reiniciar el temporizador y los elementos
+            clearInterval(intervalo); // Limpiar el intervalo si hay uno activo
+            tiempoRestante = 60;
+            document.getElementById("timer").textContent = "Tiempo restante: 60s";
+            document.getElementById("startButton").disabled = true; // Desactivar el botón mientras corre el ejercicio
+
+            generarPalabra(); // Generar la primera palabra inmediatamente
+            intervalo = setInterval(() => {
+                if (tiempoRestante > 0) {
+                    generarPalabra();
+                    tiempoRestante--;
+                    document.getElementById("timer").textContent = "Tiempo restante: " + tiempoRestante + "s";
+                } else {
+                    clearInterval(intervalo);
+                    document.getElementById("timer").textContent = "¡Tiempo terminado!";
+                    document.getElementById("word").textContent = "";
+                    document.getElementById("startButton").disabled = false; // Reactivar el botón para jugar de nuevo
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
