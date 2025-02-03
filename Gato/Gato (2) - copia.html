@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Gatito Saltando</title>
+<style>
+  @keyframes jump {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-100px);
+    }
+  }
+
+  .cat {
+    width: 100px;
+    animation: jump 2s infinite;
+    position: relative;
+  }
+</style>
+</head>
+<body>
+
+<div class="cat">
+  <img src="ruta_a_tu_imagen_de_gatito.png" alt="Gatito">
+</div>
+
+</body>
+</html>
