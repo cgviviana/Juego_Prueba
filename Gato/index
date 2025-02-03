@@ -23,7 +23,7 @@
 <body>
 
 <div class="cat">
-  <img src="ruta_a_tu_imagen_de_gatito.png" alt="Gatito">
+  <img src="gato.png" alt="Gatito">
 </div>
 
 </body>
