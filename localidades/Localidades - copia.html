@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rosco de Localidades de Bogotá</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #6d6875;
+        }
+        #rosco {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: auto;
+            border: 5px solid #6d6875;
+            border-radius: 50%;
+        }
+        .letter {
+            width: 50px;
+            height: 50px;
+            background-color: #f4a261;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .letter.correct {
+            background-color: #2a9d8f;
+        }
+        .letter.incorrect {
+            background-color: #e76f51;
+        }
+        #question-box {
+            margin-top: 20px;
+        }
+        #question {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px 0;
+            width: 100%;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #6d6875;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #b5838d;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Rosco de Localidades de Bogotá</h1>
+
+    <!-- Rosco de localidades -->
+    <div id="rosco"></div>
+
+    <!-- Caja de preguntas y respuestas -->
+    <div id="question-box">
+        <p id="question">Haz clic en una localidad para comenzar.</p>
+        <input type="text" id="answer" placeholder="Escribe tu respuesta">
+        <button onclick="checkAnswer()">Comprobar respuesta</button>
+    </div>
+
+    <script>
+        const questions = {
+            Usaquén: { question: "Comienza con U: Localidad al norte de Bogotá, famosa por su parque y su mercado de pulgas.", answer: "Usaquén" },
+            Chapinero: { question: "Comienza con C: Localidad conocida por ser una zona residencial y comercial importante, con gran vida nocturna.", answer: "Chapinero" },
+            "Santa Fe": { question: "Comienza con S: Localidad que alberga el centro histórico de la ciudad.", answer: "Santa Fe" },
+            "San Cristóbal": { question: "Comienza con S: Localidad en el suroriente, con una vista panorámica de la ciudad.", answer: "San Cristóbal" },
+            Usme: { question: "Comienza con U: Localidad ubicada en el extremo sur, caracterizada por sus zonas rurales.", answer: "Usme" },
+            Tunjuelito: { question: "Comienza con T: Localidad pequeña del sur de Bogotá, famosa por el Parque El Tunal.", answer: "Tunjuelito" },
+            Bosa: { question: "Comienza con B: Localidad en el suroccidente, con un crecimiento residencial importante.", answer: "Bosa" },
+            Kennedy: { question: "Comienza con K: Localidad densamente poblada, conocida por el Parque Mundo Aventura.", answer: "Kennedy" },
+            Fontibón: { question: "Comienza con F: Localidad cercana al aeropuerto y de tradición industrial.", answer: "Fontibón" },
+            Engativá: { question: "Comienza con E: Localidad al occidente, conocida por sus parques y zonas residenciales.", answer: "Engativá" },
+            Suba: { question: "Comienza con S: Localidad en el norte de la ciudad, con una mezcla de zonas rurales y urbanas.", answer: "Suba" },
+            "Barrios Unidos": { question: "Comienza con B: Localidad que alberga zonas comerciales como el barrio 7 de Agosto.", answer: "Barrios Unidos" },
+            Teusaquillo: { question: "Comienza con T: Localidad conocida por sus zonas residenciales y el Estadio El Campín.", answer: "Teusaquillo" },
+            "Los Mártires": { question: "Comienza con L: Localidad que rinde homenaje a los próceres de la independencia.", answer: "Los Mártires" },
+            "Antonio Nariño": { question: "Comienza con A: Localidad ubicada al sur del centro de la ciudad, cercana a San Mateo.", answer: "Antonio Nariño" },
+            "Puente Aranda": { question: "Comienza con P: Localidad industrial y residencial del centro-occidente de Bogotá.", answer: "Puente Aranda" },
+            Candelaria: { question: "Comienza con C: Localidad donde se encuentran edificios históricos como el Congreso y la Casa de Nariño.", answer: "Candelaria" },
+            "Rafael Uribe Uribe": { question: "Comienza con R: Localidad ubicada al suroriente, con zonas residenciales populares.", answer: "Rafael Uribe Uribe" },
+            "Ciudad Bolívar": { question: "Comienza con C: Localidad en el extremo sur, conocida por su alta población y desarrollo residencial.", answer: "Ciudad Bolívar" },
+            Sumapaz: { question: "Comienza con S: La localidad rural más extensa de Bogotá, famosa por su páramo.", answer: "Sumapaz" }
+        };
+
+        const localities = [
+            "Usaquén", "Chapinero", "Santa Fe", "San Cristóbal", "Usme", "Tunjuelito", "Bosa", 
+            "Kennedy", "Fontibón", "Engativá", "Suba", "Barrios Unidos", "Teusaquillo", 
+            "Los Mártires", "Antonio Nariño", "Puente Aranda", "Candelaria", "Rafael Uribe Uribe", 
+            "Ciudad Bolívar", "Sumapaz"
+        ];
+        let currentLocality = '';
+        let currentAnswer = '';
+        let score = 0;
+
+        // Generar el rosco en círculo
+        const roscoDiv = document.getElementById('rosco');
+        const radius = 140;
+        const totalLetters = localities.length;
+        localities.forEach((locality, index) => {
+            const angle = (index / totalLetters) * (2 * Math.PI);
+            const x = radius * Math.cos(angle);
+            const y = radius * Math.sin(angle);
+            const letterDiv = document.createElement('div');
+            letterDiv.className = 'letter';
+            letterDiv.style.transform = `translate(${x}px, ${y}px)`;
+            letterDiv.textContent = locality[0]; // Mostrar la primera letra de cada localidad
+            letterDiv.onclick = () => loadQuestion(locality);
+            roscoDiv.appendChild(letterDiv);
+        });
+
+        // Cargar una pregunta
+        function loadQuestion(locality) {
+            currentLocality = locality;
+            currentAnswer = questions[locality].answer;
+            document.getElementById('question').textContent = questions[locality].question;
+        }
+
+        // Verificar la respuesta
+        function checkAnswer() {
+            const userAnswer = document.getElementById('answer').value.trim().toLowerCase();
+            const correctAnswer = currentAnswer.toLowerCase();
+            const letterDiv = Array.from(document.querySelectorAll('.letter')).find(div => div.textContent === currentLocality[0]);
+
+            if (userAnswer === correctAnswer) {
+                letterDiv.classList.add('correct');
+                score++;
+            } else {
+                letterDiv.classList.add('incorrect');
+            }
+
+            // Limpiar entrada
+            document.getElementById('answer').value = '';
+            document.getElementById('question').textContent = 'Haz clic en otra localidad para continuar.';
+        }
+    </script>
+
+</body>
+</html>
