@@ -4,6 +4,28 @@
   <title>Juegos de Arrastre</title>
 </head>
 <body>
+  <style>
+  @keyframes jump {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-100px);
+    }
+  }
+
+  .cat {
+    width: 100px;
+    animation: jump 2s infinite;
+    position: relative;
+  }
+</style>
+</head>
+<body>
+
+<div class="cat">
+  <img src="ruta_a_tu_imagen_de_gatito.png" alt="Gatito">
+</div>
   <h1>Lista de codigos de Juegos de la profe Vivy</h1>
   <ul>
     <li><a href="Acordeon/">Acordeon</a></li>
