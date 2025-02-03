@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprendiendo con @LaProfeVivy</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Aprendiendo con @LaProfeVivy</h1>
+    <h2>Vocabulary</h2>
+    <p>Instrucciones: Arrastra las palabras escritas en el cuadro azul a la categoría correcta dentro de los cuadros naranja.</p>
+    <div class="double-space"></div>
+    <div class="word-container">
+        <div class="word" draggable="true" id="word1" data-word="Creativity">Innovation</div>
+        <div class="word" draggable="true" id="word2" data-word="Creativity">Originality</div>
+        <div class="word" draggable="true" id="word3" data-word="Creativity">Expression</div>
+        <div class="word" draggable="true" id="word4" data-word="Entrepreneurship">Business</div>
+        <div class="word" draggable="true" id="word5" data-word="Entrepreneurship">Initiative</div>
+        <div class="word" draggable="true" id="word6" data-word="Entrepreneurship">Risk</div>
+        <div class="word" draggable="true" id="word7" data-word="Innovation">Technology</div>
+        <div class="word" draggable="true" id="word8" data-word="Innovation">Progress</div>
+        <div class="word" draggable="true" id="word9" data-word="Innovation">Change</div>
+        <div class="word" draggable="true" id="word10" data-word="Needs">Requirements</div>
+        <div class="word" draggable="true" id="word11" data-word="Needs">Demands</div>
+        <div class="word" draggable="true" id="word12" data-word="Needs">Priorities</div>
+        <div class="word" draggable="true" id="word13" data-word="Causes">Origin</div>
+        <div class="word" draggable="true" id="word14" data-word="Causes">Factors</div>
+        <div class="word" draggable="true" id="word15" data-word="Causes">Reasons</div>
+        <div class="word" draggable="true" id="word16" data-word="Effects">Consequences</div>
+        <div class="word" draggable="true" id="word17" data-word="Effects">Impact</div>
+        <div class="word" draggable="true" id="word18" data-word="Effects">Results</div>
+    </div>
+    <div class="context-container">
+        <div class="context" id="context1" data-context="Creativity">Creativity</div>
+        <div class="context" id="context2" data-context="Entrepreneurship">Entrepreneurship</div>
+        <div class="context" id="context3" data-context="Innovation">Innovation</div>
+        <div class="context" id="context4" data-context="Needs">Needs</div>
+        <div class="context" id="context5" data-context="Causes">Causes</div>
+        <div class="context" id="context6" data-context="Effects">Effects</div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
