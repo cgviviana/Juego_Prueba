@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagrama de Flujo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.6.0/fabric.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        h1 {
+            color: blue;
+        }
+        #toolbox {
+            display: flex;
+            justify-content: center;
+            margin: 20px;
+        }
+        #toolbox button {
+            margin: 0 10px;
+            padding: 10px;
+            background-color: #6c7ae0;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #workspace {
+            border: 2px dashed #aaa;
+            width: 80%;
+            height: 500px;
+            margin: 20px auto;
+            position: relative;
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Diagrama de Flujo</h1>
+    <p>Aprendiendo con @LaProfeVivy</p>
+
+    <div id="toolbox">
+        <button onclick="addShape('circle')">Inicio/Fin</button>
+        <button onclick="addShape('rect')">Proceso</button>
+        <button onclick="addShape('diamond')">Decisión</button>
+        <button onclick="addShape('parallelogram')">Entrada/Salida</button>
+        <button id="connect-btn" onclick="startConnecting()">Conector</button>
+        <button id="delete-btn" onclick="deleteElement()">Eliminar</button>
+    </div>
+
+    <div id="workspace">
+        <canvas id="flowchart-canvas" width="800" height="500"></canvas>
+    </div>
+
+    <script>
+        const canvas = new fabric.Canvas('flowchart-canvas');
+        let isConnecting = false;
+        let connectionPoints = [];
+
+        function addShape(type) {
+            let shape, color;
+            switch(type) {
+                case 'circle':
+                    color = '#6c7ae0';
+                    shape = new fabric.Circle({
+                        radius: 30, fill: color, left: 100, top: 100, hasControls: true
+                    });
+                    break;
+                case 'rect':
+                    color = '#6c7ab0';
+                    shape = new fabric.Rect({
+                        width: 120, height: 60, fill: color, left: 100, top: 100, hasControls: true
+                    });
+                    break;
+                case 'diamond':
+                    color = '#6c7a80';
+                    shape = new fabric.Rect({
+                        width: 100, height: 100, fill: color, left: 100, top: 100, angle: 45, hasControls: true
+                    });
+                    break;
+                case 'parallelogram':
+                    color = '#6c7a50';
+                    shape = new fabric.Polygon([
+                        {x: -60, y: -30}, {x: 60, y: -30}, {x: 40, y: 30}, {x: -80, y: 30}
+                    ], {
+                        fill: color,
+                        left: 100,
+                        top: 100,
+                        angle: 0,
+                        hasControls: true
+                    });
+                    break;
+            }
+
+            // Crear un cuadro de texto editable
+            const text = new fabric.Textbox('Escribe aquí', {
+                left: shape.left,
+                top: shape.top,
+                width: shape.width || shape.radius * 2,
+                fontSize: 16,
+                textAlign: 'center',
+                editable: true
+            });
+
+            // Agrupar la forma y el texto
+            const group = new fabric.Group([shape, text], {
+                left: 100,
+                top: 100,
+                hasControls: true,
+                selectable: true
+            });
+
+            // Añadir evento para actualizar conexiones cuando la figura se mueve
+            group.on('moving', updateConnections);
+
+            canvas.add(group);
+        }
+
+        // Iniciar el proceso de conexión
+        function startConnecting() {
+            isConnecting = true;
+            connectionPoints = [];
+            canvas.discardActiveObject().renderAll();
+        }
+
+        // Conectar elementos seleccionados
+        canvas.on('mouse:down', function(o) {
+            if (isConnecting) {
+                const activeObject = canvas.findTarget(o.e, true);
+                if (activeObject && activeObject.type === 'group') {
+                    connectionPoints.push(activeObject);
+                }
+
+                if (connectionPoints.length === 2) {
+                    const from = connectionPoints[0];
+                    const to = connectionPoints[1];
+
+                    // Crear una línea que conecte las figuras
+                    const line = createLine(from, to);
+                    canvas.add(line);
+
+                    // Guardar referencias de las conexiones
+                    if (!from.connections) from.connections = [];
+                    if (!to.connections) to.connections = [];
+                    from.connections.push(line);
+                    to.connections.push(line);
+
+                    connectionPoints = [];
+                    isConnecting = false;
+                }
+            }
+        });
+
+        // Crear línea entre dos figuras
+        function createLine(from, to) {
+            const fromCenter = from.getCenterPoint();
+            const toCenter = to.getCenterPoint();
+
+            return new fabric.Line([fromCenter.x, fromCenter.y, toCenter.x, toCenter.y], {
+                strokeWidth: 2,
+                fill: 'black',
+                stroke: 'black',
+                selectable: false,
+                from: from,
+                to: to
+            });
+        }
+
+        // Actualizar conexiones cuando se mueve una figura
+        function updateConnections(event) {
+            const obj = event.target;
+            if (obj.connections) {
+                obj.connections.forEach(line => {
+                    const fromCenter = line.from.getCenterPoint();
+                    const toCenter = line.to.getCenterPoint();
+                    line.set({ x1: fromCenter.x, y1: fromCenter.y, x2: toCenter.x, y2: toCenter.y });
+                });
+                canvas.renderAll();
+            }
+        }
+
+        // Eliminar el elemento seleccionado junto con sus líneas
+        function deleteElement() {
+            const activeObject = canvas.getActiveObject();
+            if (activeObject) {
+                if (activeObject.connections) {
+                    activeObject.connections.forEach(line => {
+                        canvas.remove(line);
+                    });
+                }
+                canvas.remove(activeObject);
+            }
+        }
+    </script>
+
+</body>
+</html>
