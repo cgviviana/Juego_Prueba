@@ -6,16 +6,16 @@
 <body>
   <style>
   @keyframes jump {
-    0%, 50% {
+    0%, 100% {
       transform: translateY(0);
     }
-    20% {
-      transform: translateY(-50px);
+    50% {
+      transform: translateY(-100px);
     }
   }
 
   .cat {
-    width: 50px;
+    width: 100px;
     animation: jump 2s infinite;
     position: relative;
   }
