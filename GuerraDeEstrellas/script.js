@@ -1,4 +1,3 @@
-// 🔥 Configuración de Firebase
 const firebaseConfig = {
     apiKey: "TU_API_KEY",
     authDomain: "TU_AUTH_DOMAIN",
@@ -9,11 +8,10 @@ const firebaseConfig = {
     appId: "TU_APP_ID"
 };
 
-// Inicializar Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// 🏆 Generar preguntas del 1 al 25
+// 🏆 Generar una pregunta aleatoria
 function generateQuestion() {
     const randomNumber = Math.floor(Math.random() * 25) + 1;
     const questionText = `Pregunta para el número ${randomNumber}`;
@@ -32,18 +30,27 @@ db.ref("game/currentQuestion").on("value", (snapshot) => {
     }
 });
 
-// 🏅 Responder preguntas y actualizar puntajes
+// 📩 Enviar respuesta desde `respuesta.html`
+function sendAnswer() {
+    const group = document.getElementById("group").value;
+    const answer = document.getElementById("answer").value.toUpperCase();
+    db.ref(`game/responses/grupo${group}`).set(answer);
+}
+
+// 🏅 Evaluar respuestas y actualizar puntajes
 db.ref("game/responses").on("child_added", (snapshot) => {
     const group = snapshot.key.replace("grupo", "");
     const response = snapshot.val();
     const correctAnswer = `RESPUESTA ${group}`;
     const cell = document.querySelector(`.grid-item:nth-child(${group})`);
 
-    if (response === correctAnswer) {
-        cell.classList.add("correct"); // ✅ Respuesta correcta (Verde pastel)
-        db.ref(`game/scores/grupo${group}`).transaction(score => (score || 0) + 1);
-    } else {
-        cell.classList.add("incorrect"); // ❌ Respuesta incorrecta (Rosa pastel)
+    if (cell) {
+        if (response === correctAnswer) {
+            cell.classList.add("correct");
+            db.ref(`game/scores/grupo${group}`).transaction(score => (score || 0) + 1);
+        } else {
+            cell.classList.add("incorrect");
+        }
     }
 });
 
