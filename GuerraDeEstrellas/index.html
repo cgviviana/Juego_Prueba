@@ -8,11 +8,15 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
     <script src="script.js" defer></script>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; background: #f8f8f8; }
-        
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #f8f8f8;
+        }
+
         .container {
             width: 90%;
-            max-width: 800px;
+            max-width: 900px;
             margin: auto;
             background: white;
             padding: 20px;
@@ -20,13 +24,42 @@
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         }
 
+        /* Pregunta y Temporizador */
+        .question-container {
+            margin-top: 20px;
+            padding: 20px;
+            background: #e3e3e3;
+            border-radius: 10px;
+        }
+
+        #timer {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff0000;
+            margin-top: 10px;
+        }
+
+        /* Contenedores */
+        .content {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .board-container, .results-container {
+            width: 48%;
+            padding: 10px;
+            border-radius: 10px;
+            background: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
         .grid-container {
             display: grid;
             grid-template-columns: repeat(5, 60px);
-            grid-template-rows: repeat(5, 60px);
             gap: 10px;
             justify-content: center;
-            margin: 20px auto;
+            margin: auto;
         }
 
         .grid-item {
@@ -47,11 +80,20 @@
         .correct { background-color: #b2fab4; }
         .incorrect { background-color: #f7b2b7; }
 
-        #timer {
-            font-size: 24px;
-            font-weight: bold;
-            color: #ff0000;
-            margin-top: 10px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background: #007BFF;
+            color: white;
         }
     </style>
 </head>
@@ -59,25 +101,26 @@
     <div class="container">
         <h1>Juego de Preguntas: Bogotá</h1>
 
-        <h2>Configurar Tiempo</h2>
-        <select id="timeSelect">
-            <option value="30">30 segundos</option>
-            <option value="60">60 segundos</option>
-            <option value="90">90 segundos</option>
-        </select>
-
-        <h2>Pregunta Actual</h2>
-        <p id="question">Haz clic en un número para generar una pregunta.</p>
-
-        <h3>Tiempo restante: <span id="timer">--</span> segundos</h3>
+        <div class="question-container">
+            <h2>Pregunta Actual</h2>
+            <p id="question">Selecciona un número para ver la pregunta.</p>
+            
+            <h3>Configurar Tiempo</h3>
+            <select id="timeSelect">
+                <option value="30">30 segundos</option>
+                <option value="45">45 segundos</option>
+                <option value="60">60 segundos</option>
+            </select>
+            <h3>Tiempo restante: <span id="timer">--</span> segundos</h3>
+        </div>
 
         <div class="content">
-            <div>
+            <div class="board-container">
                 <h2>Tablero de Preguntas</h2>
                 <div class="grid-container" id="questionBoard"></div>
             </div>
 
-            <div>
+            <div class="results-container">
                 <h2>Tabla de Resultados</h2>
                 <table>
                     <thead>
@@ -96,6 +139,8 @@
                         <tr><td>Grupo 6</td><td id="resp6">-</td><td id="score6">0</td></tr>
                     </tbody>
                 </table>
+                <button onclick="sumarPuntos()">Calcular Ganador</button>
+                <h3 id="winner"></h3>
             </div>
         </div>
     </div>
@@ -103,14 +148,31 @@
     <script>
         let countdown;
         const questions = [
-            "BOGOTÁ", "1538", "MONSERRATE", "AJIACO", "PLAZA DE BOLÍVAR", 
-            "EL DORADO", "FESTIVAL IBEROAMERICANO DE TEATRO", "AVENIDA CHILE",
-            "TRANSMILENIO", "MUSEO DEL ORO", "MEDIA MARATÓN DE BOGOTÁ", "LA CANDELARIA",
-            "SAN VICTORINO", "BIBLIOTECA LUIS ÁNGEL ARANGO", "RÍO BOGOTÁ", 
-            "TEUSAQUILLO", "CATEDRAL DE SAL DE ZIPAQUIRÁ", "CICLOPASEO NOCTURNO",
-            "ZONA G", "ZONA T", "ARCHIVO GENERAL DE LA NACIÓN", "TITÁN PLAZA",
-            "FERNANDO BOTERO", "JAZZ AL PARQUE", "SEPTIMAZO"
+            "¿Cuál es la capital de Colombia?", "¿En qué año fue fundada Bogotá?", "¿Cómo se llama el cerro más famoso de Bogotá?",
+            "¿Cuál es el plato típico más famoso de Bogotá?", "¿Cuál es la plaza principal de Bogotá?",
+            "¿Cómo se llama el aeropuerto de Bogotá?", "¿Qué festival de teatro es reconocido mundialmente en Bogotá?",
+            "¿Qué avenida es conocida por ser el centro financiero de Bogotá?", "¿Cuál es el medio de transporte masivo más usado en Bogotá?",
+            "¿Cuál es el museo más famoso de Bogotá?", "¿Qué evento deportivo se celebra cada año en Bogotá?", "¿Cuál es el barrio más antiguo de Bogotá?",
+            "¿Qué ciudadela comercial es una de las más grandes de Bogotá?", "¿Cómo se llama la biblioteca más grande de Bogotá?",
+            "¿Qué río atraviesa Bogotá?", "¿En qué localidad se encuentra el estadio El Campín?",
+            "¿Cómo se llama la catedral construida dentro de una mina de sal cerca de Bogotá?", "¿Qué es el ciclopaseo nocturno en Bogotá?",
+            "¿Cuál es la zona más reconocida por sus restaurantes en Bogotá?", "¿Cuál es la zona de rumba más famosa de Bogotá?",
+            "¿Qué institución en Bogotá es reconocida por preservar la historia de Colombia?", "¿Cuál es el centro comercial más grande de Bogotá?",
+            "¿Qué artista colombiano tiene un museo en Bogotá?", "¿Cómo se llama el festival de jazz que se realiza en Bogotá?",
+            "¿Qué es el 'Septimazo' en Bogotá?"
         ];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const board = document.getElementById("questionBoard");
+            for (let i = 1; i <= 25; i++) {
+                const cell = document.createElement("div");
+                cell.classList.add("grid-item");
+                cell.innerText = i;
+                cell.dataset.number = i;
+                cell.addEventListener("click", () => startQuestion(i));
+                board.appendChild(cell);
+            }
+        });
 
         function startQuestion(num) {
             document.getElementById("question").innerText = questions[num - 1];
