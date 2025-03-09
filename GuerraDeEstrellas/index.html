@@ -1,1 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego Bogotá - Tablero</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+    <script src="script.js" defer></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background: #f8f8f8; }
+        h1 { color: #333; }
+        .table-container { display: flex; justify-content: center; }
+        table { border-collapse: collapse; width: 60%; background: white; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        th { background-color: #ff5f7a; color: white; }
+        
+        /* Estilos para el tablero */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(5, 50px);
+            grid-template-rows: repeat(5, 50px);
+            gap: 5px;
+            justify-content: center;
+            margin: 20px auto;
+        }
+        .grid-item {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            font-weight: bold;
+            border-radius: 5px;
+            border: 1px solid #aaa;
+            font-size: 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .correct { background-color: #b2fab4; } /* Verde pastel */
+        .incorrect { background-color: #f7b2b7; } /* Rosa pastel */
+    </style>
+</head>
+<body>
+    <h1>Juego de Preguntas: Bogotá</h1>
+
+    <h2>Pregunta Actual</h2>
+    <p id="question">Esperando nueva pregunta...</p>
+    <button onclick="generateQuestion()">Nueva Pregunta</button>
+
+    <h2>Tablero de Preguntas</h2>
+    <div class="grid-container" id="questionBoard"></div>
+
+    <h2>Tabla de Resultados</h2>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Grupo</th>
+                    <th>Respuesta</th>
+                    <th>Puntos</th>
+                </tr>
+            </thead>
+            <tbody id="scoreboard">
+                <tr><td>Grupo 1</td><td id="resp1">-</td><td id="score1">0</td></tr>
+                <tr><td>Grupo 2</td><td id="resp2">-</td><td id="score2">0</td></tr>
+                <tr><td>Grupo 3</td><td id="resp3">-</td><td id="score3">0</td></tr>
+                <tr><td>Grupo 4</td><td id="resp4">-</td><td id="score4">0</td></tr>
+                <tr><td>Grupo 5</td><td id="resp5">-</td><td id="score5">0</td></tr>
+                <tr><td>Grupo 6</td><td id="resp6">-</td><td id="score6">0</td></tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
 
