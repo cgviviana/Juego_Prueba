@@ -21,17 +21,17 @@
             width: 90%;
             max-width: 900px;
             margin: auto;
-            background: rgba(255, 255, 255, 0.8); /* Transparencia para fondo */
+            background: rgba(255, 255, 255, 0.85);
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
         }
 
-        /* Pregunta y Temporizador */
-        .question-container {
+        /* Estilos comunes para todos los contenedores */
+        .content-container {
             margin-top: 20px;
             padding: 20px;
-            background: #fce4ec; /* Rosa pastel */
+            background: #fce4ec; /* Rosa pálido */
             border-radius: 10px;
             box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
         }
@@ -43,22 +43,23 @@
             margin-top: 10px;
         }
 
-        /* Contenedores */
+        /* Separación entre contenedores */
         .content {
             display: flex;
             justify-content: space-between;
+            gap: 30px;
             margin-top: 20px;
         }
 
-        .board-container, .results-container {
+        /* Tablero de Preguntas */
+        .board-container {
             width: 48%;
             padding: 15px;
             border-radius: 10px;
-            background: #e1bee7; /* Lila pastel */
+            background: #fce4ec; /* Mismo rosa pálido */
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         }
 
-        /* Tablero de Preguntas */
         .grid-container {
             display: grid;
             grid-template-columns: repeat(5, 60px);
@@ -73,7 +74,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #c5e1a5; /* Verde pastel */
+            background: #c5e1a5; /* Verde pastel por defecto */
             font-weight: bold;
             border-radius: 5px;
             border: 2px solid #444;
@@ -91,6 +92,14 @@
         .incorrect { background-color: #f7b2b7; } /* Rosa pastel */
 
         /* Tabla de Resultados */
+        .results-container {
+            width: 48%;
+            padding: 15px;
+            border-radius: 10px;
+            background: #fce4ec; /* Mismo rosa pálido */
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -131,7 +140,7 @@
     <div class="container">
         <h1>Juego de Preguntas: Bogotá</h1>
 
-        <div class="question-container">
+        <div class="content-container">
             <h2>Pregunta Actual</h2>
             <p id="question">Selecciona un número para ver la pregunta.</p>
             
@@ -169,8 +178,6 @@
                         <tr><td>Grupo 6</td><td id="resp6">-</td><td id="score6">0</td></tr>
                     </tbody>
                 </table>
-                <button onclick="sumarPuntos()">Calcular Ganador</button>
-                <h3 id="winner"></h3>
             </div>
         </div>
     </div>
@@ -184,33 +191,31 @@
                 cell.classList.add("grid-item");
                 cell.innerText = i;
                 cell.dataset.number = i;
-                cell.addEventListener("click", () => startQuestion(i));
+                cell.addEventListener("click", () => startQuestion(i, cell));
                 board.appendChild(cell);
             }
         });
 
-        function startQuestion(num) {
+        function startQuestion(num, cell) {
             const questions = [
-                "¿Cuál es la capital de Colombia?", "¿En qué año fue fundada Bogotá?", 
-                "¿Cómo se llama el cerro más famoso de Bogotá?", "¿Cuál es el plato típico de Bogotá?", 
+                "¿Cuál es la capital de Colombia?", "¿En qué año fue fundada Bogotá?",
+                "¿Cómo se llama el cerro más famoso de Bogotá?", "¿Cuál es el plato típico de Bogotá?",
                 "¿Cuál es la plaza principal de Bogotá?", "¿Cómo se llama el aeropuerto de Bogotá?",
-                "¿Qué festival de teatro es reconocido mundialmente en Bogotá?", 
-                "¿Cuál es el medio de transporte más usado en Bogotá?", "¿Cuál es el museo más famoso de Bogotá?",
-                "¿Cuál es el barrio más antiguo de Bogotá?", "¿Cómo se llama la biblioteca más grande de Bogotá?",
-                "¿Qué río atraviesa Bogotá?", "¿En qué localidad está el estadio El Campín?", 
-                "¿Cómo se llama la catedral construida dentro de una mina de sal?", "¿Qué es el Septimazo?"
             ];
             document.getElementById("question").innerText = questions[num - 1];
-            startTimer(parseInt(document.getElementById("timeSelect").value));
+            startTimer(parseInt(document.getElementById("timeSelect").value), cell);
         }
 
-        function startTimer(seconds) {
+        function startTimer(seconds, cell) {
             clearInterval(countdown);
             document.getElementById("timer").innerText = seconds;
             countdown = setInterval(() => {
                 seconds--;
                 document.getElementById("timer").innerText = seconds;
-                if (seconds <= 0) clearInterval(countdown);
+                if (seconds <= 0) {
+                    clearInterval(countdown);
+                    cell.classList.add("incorrect");
+                }
             }, 1000);
         }
     </script>
