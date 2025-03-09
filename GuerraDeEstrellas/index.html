@@ -9,8 +9,7 @@
     <script src="script.js" defer></script>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; background: #f8f8f8; }
-        h1 { color: #333; }
-
+        
         .container {
             width: 90%;
             max-width: 800px;
@@ -42,50 +41,28 @@
             border: 2px solid #444;
             font-size: 20px;
             box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
         }
 
         .correct { background-color: #b2fab4; }
         .incorrect { background-color: #f7b2b7; }
 
-        button {
-            background: #007BFF;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            background: #0056b3;
-        }
-
-        table {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: center;
-        }
-
-        th {
-            background: #007BFF;
-            color: white;
+        #timer {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff0000;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Juego de Preguntas: Bogotá</h1>
+
         <h2>Pregunta Actual</h2>
-        <p id="question">Haz clic en "Nueva Pregunta" para empezar</p>
-        <button onclick="generateQuestion()">Nueva Pregunta</button>
+        <p id="question">Haz clic en un número para generar una pregunta.</p>
+
+        <h3>Tiempo restante: <span id="timer">--</span> segundos</h3>
 
         <h2>Tablero de Preguntas</h2>
         <div class="grid-container" id="questionBoard"></div>
@@ -111,6 +88,7 @@
     </div>
 
     <script>
+        let countdown;
         document.addEventListener("DOMContentLoaded", () => {
             const board = document.getElementById("questionBoard");
             for (let i = 1; i <= 25; i++) {
@@ -118,9 +96,35 @@
                 cell.classList.add("grid-item");
                 cell.innerText = i;
                 cell.dataset.number = i;
+                cell.addEventListener("click", () => startQuestion(i));
                 board.appendChild(cell);
             }
         });
+
+        function startQuestion(number) {
+            const questionText = `Pregunta para el número ${number}`;
+            document.getElementById("question").innerText = questionText;
+            db.ref("game/currentQuestion").set({
+                number: number,
+                text: questionText
+            });
+
+            startTimer(30);
+        }
+
+        function startTimer(seconds) {
+            clearInterval(countdown);
+            document.getElementById("timer").innerText = seconds;
+
+            countdown = setInterval(() => {
+                seconds--;
+                document.getElementById("timer").innerText = seconds;
+                if (seconds <= 0) {
+                    clearInterval(countdown);
+                    document.getElementById("timer").innerText = "¡Tiempo agotado!";
+                }
+            }, 1000);
+        }
     </script>
 </body>
 </html>
