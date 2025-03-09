@@ -42,7 +42,7 @@ db.ref("game/responses").on("child_added", (snapshot) => {
     const group = snapshot.key.replace("grupo", "");
     const response = snapshot.val();
     const correctAnswer = `RESPUESTA ${group}`;
-    const cell = document.querySelector(`.grid-item:nth-child(${group})`);
+    const cell = document.querySelector(`.grid-item[data-number='${group}']`);
 
     if (cell) {
         if (response === correctAnswer) {
