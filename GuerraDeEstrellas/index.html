@@ -8,34 +8,38 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
     <script src="script.js" defer></script>
     <style>
+        /* Fondo con imagen */
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background: #f8f8f8;
+            background: url('fondo.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
         }
 
         .container {
             width: 90%;
             max-width: 900px;
             margin: auto;
-            background: white;
+            background: rgba(255, 255, 255, 0.8); /* Transparencia para fondo */
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
         }
 
         /* Pregunta y Temporizador */
         .question-container {
             margin-top: 20px;
             padding: 20px;
-            background: #e3e3e3;
+            background: #fce4ec; /* Rosa pastel */
             border-radius: 10px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
         }
 
         #timer {
             font-size: 24px;
             font-weight: bold;
-            color: #ff0000;
+            color: #ff4081; /* Rosa fuerte */
             margin-top: 10px;
         }
 
@@ -48,12 +52,13 @@
 
         .board-container, .results-container {
             width: 48%;
-            padding: 10px;
+            padding: 15px;
             border-radius: 10px;
-            background: #fff;
+            background: #e1bee7; /* Lila pastel */
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         }
 
+        /* Tablero de Preguntas */
         .grid-container {
             display: grid;
             grid-template-columns: repeat(5, 60px);
@@ -68,21 +73,30 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: white;
+            background: #c5e1a5; /* Verde pastel */
             font-weight: bold;
             border-radius: 5px;
             border: 2px solid #444;
             font-size: 20px;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
             cursor: pointer;
+            transition: 0.3s;
         }
 
-        .correct { background-color: #b2fab4; }
-        .incorrect { background-color: #f7b2b7; }
+        .grid-item:hover {
+            transform: scale(1.1);
+            background: #aed581; /* Verde más claro */
+        }
 
+        .correct { background-color: #b2fab4; } /* Verde pastel */
+        .incorrect { background-color: #f7b2b7; } /* Rosa pastel */
+
+        /* Tabla de Resultados */
         table {
             width: 100%;
             border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
         }
 
         th, td {
@@ -92,8 +106,24 @@
         }
 
         th {
-            background: #007BFF;
+            background: #ff80ab; /* Rosa pastel */
             color: white;
+        }
+
+        /* Botones */
+        button {
+            background: #ffccbc; /* Naranja pastel */
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #ffab91; /* Naranja más intenso */
         }
     </style>
 </head>
@@ -147,21 +177,6 @@
 
     <script>
         let countdown;
-        const questions = [
-            "¿Cuál es la capital de Colombia?", "¿En qué año fue fundada Bogotá?", "¿Cómo se llama el cerro más famoso de Bogotá?",
-            "¿Cuál es el plato típico más famoso de Bogotá?", "¿Cuál es la plaza principal de Bogotá?",
-            "¿Cómo se llama el aeropuerto de Bogotá?", "¿Qué festival de teatro es reconocido mundialmente en Bogotá?",
-            "¿Qué avenida es conocida por ser el centro financiero de Bogotá?", "¿Cuál es el medio de transporte masivo más usado en Bogotá?",
-            "¿Cuál es el museo más famoso de Bogotá?", "¿Qué evento deportivo se celebra cada año en Bogotá?", "¿Cuál es el barrio más antiguo de Bogotá?",
-            "¿Qué ciudadela comercial es una de las más grandes de Bogotá?", "¿Cómo se llama la biblioteca más grande de Bogotá?",
-            "¿Qué río atraviesa Bogotá?", "¿En qué localidad se encuentra el estadio El Campín?",
-            "¿Cómo se llama la catedral construida dentro de una mina de sal cerca de Bogotá?", "¿Qué es el ciclopaseo nocturno en Bogotá?",
-            "¿Cuál es la zona más reconocida por sus restaurantes en Bogotá?", "¿Cuál es la zona de rumba más famosa de Bogotá?",
-            "¿Qué institución en Bogotá es reconocida por preservar la historia de Colombia?", "¿Cuál es el centro comercial más grande de Bogotá?",
-            "¿Qué artista colombiano tiene un museo en Bogotá?", "¿Cómo se llama el festival de jazz que se realiza en Bogotá?",
-            "¿Qué es el 'Septimazo' en Bogotá?"
-        ];
-
         document.addEventListener("DOMContentLoaded", () => {
             const board = document.getElementById("questionBoard");
             for (let i = 1; i <= 25; i++) {
@@ -175,6 +190,16 @@
         });
 
         function startQuestion(num) {
+            const questions = [
+                "¿Cuál es la capital de Colombia?", "¿En qué año fue fundada Bogotá?", 
+                "¿Cómo se llama el cerro más famoso de Bogotá?", "¿Cuál es el plato típico de Bogotá?", 
+                "¿Cuál es la plaza principal de Bogotá?", "¿Cómo se llama el aeropuerto de Bogotá?",
+                "¿Qué festival de teatro es reconocido mundialmente en Bogotá?", 
+                "¿Cuál es el medio de transporte más usado en Bogotá?", "¿Cuál es el museo más famoso de Bogotá?",
+                "¿Cuál es el barrio más antiguo de Bogotá?", "¿Cómo se llama la biblioteca más grande de Bogotá?",
+                "¿Qué río atraviesa Bogotá?", "¿En qué localidad está el estadio El Campín?", 
+                "¿Cómo se llama la catedral construida dentro de una mina de sal?", "¿Qué es el Septimazo?"
+            ];
             document.getElementById("question").innerText = questions[num - 1];
             startTimer(parseInt(document.getElementById("timeSelect").value));
         }
