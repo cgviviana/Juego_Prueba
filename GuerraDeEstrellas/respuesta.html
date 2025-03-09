@@ -1,1 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enviar Respuesta</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+    <script src="script.js" defer></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background: #f8f8f8; }
+        h1 { color: #333; }
+        select, input, button { margin: 10px; padding: 10px; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <h1>Participa en el Juego</h1>
+    <label for="group">Selecciona tu grupo:</label>
+    <select id="group">
+        <option value="1">Grupo 1</option>
+        <option value="2">Grupo 2</option>
+        <option value="3">Grupo 3</option>
+        <option value="4">Grupo 4</option>
+        <option value="5">Grupo 5</option>
+        <option value="6">Grupo 6</option>
+    </select>
+
+    <input type="text" id="answer" placeholder="Escribe tu respuesta en MAYÚSCULAS">
+    <button onclick="sendAnswer()">Enviar Respuesta</button>
+</body>
+</html>
 
