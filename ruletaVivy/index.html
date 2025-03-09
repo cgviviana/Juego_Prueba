@@ -3,124 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juego Bogotá - Tablero</title>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
-    <script src="script.js" defer></script>
+    <title>Aprendiendo con:LaProfeVivy</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; background: #f8f8f8; }
-        h1 { color: #333; }
-
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #fff0f3, #ffdde1);
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+        }
+        h1 {
+            margin-top: 20px;
+            color: black;
+        }
         .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             width: 90%;
-            max-width: 800px;
-            margin: auto;
+            gap: 20px;
+        }
+        .input-container, .results-container, .roulette-container {
+            flex: 1;
             background: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            min-height: 300px;
         }
-
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(5, 60px);
-            grid-template-rows: repeat(5, 60px);
-            gap: 10px;
-            justify-content: center;
-            margin: 20px auto;
-        }
-
-        .grid-item {
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: white;
-            font-weight: bold;
+        textarea {
+            width: 90%;
+            height: 150px;
+            padding: 10px;
             border-radius: 5px;
-            border: 2px solid #444;
-            font-size: 20px;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            border: 1px solid #ff6384;
+            resize: none;
+            background: #ffe4e9;
+            color: #333;
+            font-size: 16px;
         }
-
-        .correct { background-color: #b2fab4; }
-        .incorrect { background-color: #f7b2b7; }
-
         button {
-            background: #007BFF;
+            background: #ffc1cc;
             color: white;
             border: none;
             padding: 10px 20px;
+            margin: 5px;
             font-size: 16px;
-            border-radius: 5px;
             cursor: pointer;
+            border-radius: 5px;
             transition: 0.3s;
+            box-shadow: 0 4px 6px rgba(255, 64, 129, 0.3);
         }
-
         button:hover {
-            background: #0056b3;
+            background: #ff85a2;
         }
-
+        canvas {
+            max-width: 300px;
+            margin: auto;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(255, 64, 129, 0.5);
+        }
         table {
             width: 100%;
-            margin-top: 20px;
             border-collapse: collapse;
         }
-
         th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
+            border: 1px solid white;
+            padding: 8px;
             text-align: center;
+            color: #333;
         }
-
         th {
-            background: #007BFF;
+            background: #ffc1cc;
             color: white;
+        }
+        .winner-container {
+            margin-top: 10px;
+            padding: 10px;
+            background: #ffc1cc;
+            color: #333;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 8px;
+            display: none;
+            box-shadow: 0 0 10px rgba(255, 193, 204, 0.8);
         }
     </style>
 </head>
 <body>
+    <h1>Aprendiendo con: LaProfeVivy</h1>
     <div class="container">
-        <h1>Juego de Preguntas: Bogotá</h1>
-        <h2>Pregunta Actual</h2>
-        <p id="question">Haz clic en "Nueva Pregunta" para empezar</p>
-        <button onclick="generateQuestion()">Nueva Pregunta</button>
-
-        <h2>Tablero de Preguntas</h2>
-        <div class="grid-container" id="questionBoard"></div>
-
-        <h2>Tabla de Resultados</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Grupo</th>
-                    <th>Respuesta</th>
-                    <th>Puntos</th>
-                </tr>
-            </thead>
-            <tbody id="scoreboard">
-                <tr><td>Grupo 1</td><td id="resp1">-</td><td id="score1">0</td></tr>
-                <tr><td>Grupo 2</td><td id="resp2">-</td><td id="score2">0</td></tr>
-                <tr><td>Grupo 3</td><td id="resp3">-</td><td id="score3">0</td></tr>
-                <tr><td>Grupo 4</td><td id="resp4">-</td><td id="score4">0</td></tr>
-                <tr><td>Grupo 5</td><td id="resp5">-</td><td id="score5">0</td></tr>
-                <tr><td>Grupo 6</td><td id="resp6">-</td><td id="score6">0</td></tr>
-            </tbody>
-        </table>
+        <div class="input-container">
+            <h2>Ruleta</h2>
+            <textarea id="inputNames" placeholder="Ingresa los nombres separados por comas"></textarea>
+            <div>
+                <button onclick="generateWheel()">Generar Ruleta</button>
+                <button onclick="spinWheel()">Girar</button>
+            </div>
+        </div>
+        <div class="roulette-container">
+            <canvas id="roulette"></canvas>
+            <div id="winner" class="winner-container"></div>
+        </div>
+        <div class="results-container">
+            <h2>Resultados</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsTable"></tbody>
+            </table>
+        </div>
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const board = document.getElementById("questionBoard");
-            for (let i = 1; i <= 25; i++) {
-                const cell = document.createElement("div");
-                cell.classList.add("grid-item");
-                cell.innerText = i;
-                cell.dataset.number = i;
-                board.appendChild(cell);
-            }
-        });
+        let chart;
+        let segments = [];
+        let results = [];
+        
+        function generateWheel() {
+            const input = document.getElementById("inputNames").value;
+            segments = input.split(",").map(name => name.trim()).filter(name => name);
+            document.getElementById("winner").style.display = "none";
+            results = [];
+            updateResultsTable();
+            updateWheel();
+        }
+        
+        function updateWheel() {
+            if (chart) chart.destroy();
+            const ctx = document.getElementById("roulette").getContext("2d");
+            chart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: segments,
+                    datasets: [{
+                        data: Array(segments.length).fill(1),
+                        backgroundColor: ["#FFB3BA", "#FFDFBA", "#FFFFBA", "#BAFFC9", "#BAE1FF", "#E6BAFF", "#FFB3E6", "#FFD6E6"],
+                        borderColor: "#ffffff",
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        datalabels: {
+                            color: '#333',
+                            font: { weight: 'bold' },
+                            formatter: (value, context) => context.chart.data.labels[context.dataIndex]
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+        }
+        
+        function spinWheel() {
+            if (segments.length === 0) return alert("No hay más participantes.");
+            document.getElementById("winner").style.display = "none";
+            let randomIndex = Math.floor(Math.random() * segments.length);
+            let selectedName = segments[randomIndex];
+            
+            setTimeout(() => {
+                document.getElementById("winner").innerText = "Ganador: " + selectedName;
+                document.getElementById("winner").style.display = "block";
+                
+                results.push(selectedName);
+                updateResultsTable();
+                
+                segments.splice(randomIndex, 1);
+                if (segments.length > 0) updateWheel();
+            }, 3000);
+        }
+        
+        function updateResultsTable() {
+            const table = document.getElementById("resultsTable");
+            table.innerHTML = "";
+            results.forEach((name, index) => {
+                let row = `<tr><td>#${index + 1}</td><td>${name}</td></tr>`;
+                table.innerHTML += row;
+            });
+        }
     </script>
 </body>
 </html>
