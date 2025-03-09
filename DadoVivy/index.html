@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprendiendo con: LaProfeVivy</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background: url('fondo.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 32px;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+            color: white;
+            margin-bottom: 20px;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .box {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            width: 25%;
+            min-width: 220px;
+            box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        button {
+            background: linear-gradient(145deg, #ff99a5, #ff5f7a);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s, box-shadow 0.3s;
+            box-shadow: 0px 4px 8px rgba(255, 95, 122, 0.6);
+        }
+        button:hover {
+            background: linear-gradient(145deg, #ff7b90, #ff4d6d);
+            box-shadow: 0px 6px 12px rgba(255, 77, 109, 0.8);
+        }
+        .output-box {
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, #ffffff 30%, #e6e6e6 70%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            font-weight: bold;
+            color: #ff5f7a;
+            border-radius: 10px;
+            margin: 15px auto;
+            box-shadow: inset 4px 4px 12px rgba(255, 255, 255, 1), inset -4px -4px 12px rgba(0, 0, 0, 0.3), 4px 4px 20px rgba(255, 95, 122, 0.6);
+        }
+        table {
+            margin: 10px auto;
+            border-collapse: collapse;
+            width: 90%;
+            background: white;
+            color: #ff5f7a;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+        }
+        th {
+            background: #ff99a5;
+            color: white;
+            padding: 10px;
+        }
+        th, td {
+            padding: 8px;
+            border: 1px solid rgba(255, 95, 122, 0.4);
+            text-align: center;
+        }
+        input {
+            padding: 6px;
+            border-radius: 5px;
+            border: 2px solid #ff99a5;
+            width: 85%;
+            text-align: center;
+            font-size: 14px;
+            background: rgba(255, 240, 240, 0.6);
+            box-shadow: 0px 4px 10px rgba(255, 95, 122, 0.4);
+            color: #ff5f7a;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Aprendiendo con: LaProfeVivy</h1>
+    
+    <div class="container">
+        <!-- Contenedor 1: Lanzar Dado para Grupo -->
+        <div class="box">
+            <h2>Seleccionar Grupo</h2>
+            <button onclick="lanzarDado()">Lanzar Dado</button>
+            <div class="output-box" id="dadoOutput">-</div>
+        </div>
+
+        <!-- Contenedor 2: Generar Número de Alumno -->
+        <div class="box">
+            <h2>Seleccionar Número de Alumno</h2>
+            <label for="numMax">Número máximo:</label>
+            <input type="number" id="numMax" min="1" value="10">
+            <br>
+            <button onclick="generarNumeroAlumno()">Generar Número</button>
+            <div class="output-box" id="displayOutput">-</div>
+        </div>
+
+        <!-- Contenedor 3: Tabla de Resultados -->
+        <div class="box">
+            <h2>Resultados</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Grupo</th>
+                        <th>Número de Alumno</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaResultados"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let grupoSeleccionado = null;
+
+        function lanzarDado() {
+            const dadoOutput = document.getElementById("dadoOutput");
+            grupoSeleccionado = Math.floor(Math.random() * 6) + 1;
+            dadoOutput.textContent = grupoSeleccionado;
+        }
+
+        function generarNumeroAlumno() {
+            const numMax = document.getElementById("numMax").value;
+            const displayOutput = document.getElementById("displayOutput");
+            const tablaResultados = document.getElementById("tablaResultados");
+
+            if (grupoSeleccionado === null) {
+                alert("Primero lanza el dado para seleccionar un grupo.");
+                return;
+            }
+
+            const alumno = Math.floor(Math.random() * numMax) + 1;
+            displayOutput.textContent = alumno;
+
+            // Agregar a la tabla
+            const newRow = document.createElement("tr");
+            newRow.innerHTML = `<td>${grupoSeleccionado}</td><td>${alumno}</td>`;
+            tablaResultados.appendChild(newRow);
+        }
+    </script>
+</body>
+</html>
