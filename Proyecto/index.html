@@ -2,11 +2,12 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Portal Galáctico</title>
+  <title>Portal Galáctico - Areandina</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: 'Orbitron', sans-serif;
       background-image: url('fondo.jpg');
       background-size: cover;
       background-position: center;
@@ -16,25 +17,24 @@
     }
 
     h1 {
-      margin: 0;
-      padding: 40px 0 10px;
-      font-size: 2.5em;
-      text-shadow: 2px 2px 5px black;
+      margin-top: 40px;
+      font-size: 3em;
+      text-shadow: 2px 2px 10px black;
     }
 
     .contenedor-planetas {
       display: flex;
       justify-content: center;
-      gap: 60px; /* Más separación entre planetas */
-      padding: 30px;
+      gap: 60px; /* Separación entre planetas */
+      padding: 60px 30px; /* Baja todo el grupo */
       flex-wrap: wrap;
     }
 
     .planeta {
-      background: rgba(255, 255, 255, 0.2); /* Transparencia blanca */
+      background: rgba(255, 255, 255, 0.4); /* Fondo blanco con transparencia 40% */
       padding: 20px;
       border-radius: 20px;
-      width: 220px; /* Mismo tamaño para todos */
+      width: 266px; /* Todos igual de grandes */
       transition: transform 0.3s;
     }
 
@@ -46,21 +46,22 @@
       width: 100%;
       height: auto;
       border-radius: 15px;
+      margin-top: 60px; /* Baja cada imagen 3 espacios */
     }
 
     .planeta p {
-      margin-top: 10px;
+      margin-top: 15px;
       font-size: 1.2em;
+      color: black;
     }
 
     a {
-      color: white;
       text-decoration: none;
     }
   </style>
 </head>
 <body>
-  <h1>Bienvenido a la constelación Areandina</h1>
+  <h1>Bienvenido a la Constelación Areandina</h1>
   <div class="contenedor-planetas">
     <a href="planeta1.html" class="planeta">
       <img src="p1.png" alt="Planeta 1">
@@ -71,4 +72,9 @@
       <p>Planeta 2</p>
     </a>
     <a href="planeta3.html" class="planeta">
-      <
+      <img src="P3.png" alt="Planeta 3">
+      <p>Planeta 3</p>
+    </a>
+  </div>
+</body>
+</html>
