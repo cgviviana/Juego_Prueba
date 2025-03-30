@@ -2,98 +2,83 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Portal Galáctico - Areandina</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <title>Ingreso a la Constelación Areandina</title>
   <style>
     body {
       margin: 0;
-      font-family: 'Orbitron', sans-serif;
-      background-image: url('fondo.jpg'); /* Asegúrate de que esta imagen exista */
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      color: white;
-      text-align: center;
-    }
-
-    h1 {
-      margin-top: 40px;
-      font-size: 3em;
-      text-shadow: 2px 2px 10px black;
-    }
-
-    #comandante {
-      font-size: 1.8em;
-      margin-top: 10px;
-      color: #ffe;
-    }
-
-    .contenedor-planetas {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #000428, #004e92);
+      height: 100vh;
       display: flex;
       justify-content: center;
-      gap: 60px;
-      padding: 60px 30px;
-      flex-wrap: wrap;
+      align-items: center;
+      color: white;
     }
 
-    .planeta {
-      background: rgba(255, 255, 255, 0.4); /* Transparente clarito */
-      padding: 20px;
-      border-radius: 20px;
-      width: 266px; /* Todos del mismo tamaño */
-      transition: transform 0.3s;
-      cursor: pointer;
-    }
-
-    .planeta:hover {
-      transform: scale(1.05);
-    }
-
-    .planeta p {
-      margin-bottom: 15px;
-      font-size: 1.2em;
-      color: black;
-    }
-
-    .planeta img {
-      width: 100%;
-      height: auto;
+    .login-box {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
       border-radius: 15px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      text-align: center;
+      width: 300px;
+    }
+
+    .login-box h2 {
+      margin-bottom: 20px;
+    }
+
+    .login-box input {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    .login-box button {
+      background-color: #00c3ff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    .login-box button:hover {
+      background-color: #008fcb;
     }
   </style>
 </head>
 <body>
-  <h1>Constelación Areandina</h1>
-  <h2 id="comandante"></h2>
-
-  <div class="contenedor-planetas">
-    <div class="planeta" onclick="viajar('Planeta 1', 'planeta1.html')">
-      <p>Planeta 1</p>
-      <img src="p1.png" alt="Planeta 1">
-    </div>
-    <div class="planeta" onclick="viajar('Planeta 2', 'planeta2.html')">
-      <p>Planeta 2</p>
-      <img src="2.png" alt="Planeta 2">
-    </div>
-    <div class="planeta" onclick="viajar('Planeta 3', 'planeta3.html')">
-      <p>Planeta 3</p>
-      <img src="P3.png" alt="Planeta 3">
-    </div>
+  <div class="login-box">
+    <h2>Ingreso a la Constelación</h2>
+    <input type="text" id="nombre" placeholder="Nombre del estudiante">
+    <input type="password" id="clave" placeholder="Contraseña">
+    <br>
+    <button onclick="ingresar()">Ingresar</button>
   </div>
 
   <script>
-    // Mostrar el nombre del estudiante que viene desde la URL
-    const params = new URLSearchParams(window.location.search);
-    const nombre = params.get("nombre");
+    function ingresar() {
+      const nombre = document.getElementById("nombre").value.trim();
+      const clave = document.getElementById("clave").value;
 
-    if (nombre) {
-      document.getElementById("comandante").innerText = "Bienvenido comandante " + nombre;
-    }
+      if (nombre === "") {
+        alert("Por favor, ingresa tu nombre.");
+        return;
+      }
 
-    // Función que se ejecuta al hacer clic en un planeta
-    function viajar(nombre, enlace) {
-      alert("🪐 Estás viajando al " + nombre + "… ¡Prepárate para el salto estelar!");
-      window.location.href = enlace;
+      if (clave !== "000") {
+        alert("Contraseña incorrecta. Pista: es 000");
+        return;
+      }
+
+      const nombreCodificado = encodeURIComponent(nombre);
+      window.location.href = 'https://cgviviana.github.io/Juego_Prueba/Proyecto/?nombre=' + nombreCodificado;
     }
   </script>
 </body>
