@@ -1,82 +1,21 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Ingreso a la Constelación</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to right, #000428, #004e92);
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
+<script>
+  function ingresar() {
+    const nombre = document.getElementById("nombre").value.trim();
+    const clave = document.getElementById("clave").value;
+
+    if (nombre === "") {
+      alert("Por favor, ingresa tu nombre.");
+      return;
     }
 
-    .login-box {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-      text-align: center;
-      width: 300px;
+    if (clave !== "000") {
+      alert("Contraseña incorrecta. Pista: es 000");
+      return;
     }
 
-    .login-box h2 {
-      margin-bottom: 20px;
-    }
-
-    .login-box input {
-      width: 90%;
-      padding: 10px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-
-    .login-box button {
-      background-color: #00c3ff;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 15px;
-    }
-
-    .login-box button:hover {
-      background-color: #008fcb;
-    }
-  </style>
-</head>
-<body>
-  <div class="login-box">
-    <h2>Ingreso a la Constelación</h2>
-    <input type="text" id="nombre" placeholder="Nombre del estudiante">
-    <input type="password" id="clave" placeholder="Contraseña">
-    <button onclick="ingresar()">Ingresar</button>
-  </div>
-
-  <script>
-    function ingresar() {
-      const nombre = document.getElementById("nombre").value.trim();
-      const clave = document.getElementById("clave").value;
-
-      if (nombre === "") {
-        alert("Por favor, ingresa tu nombre.");
-      } else if (clave !== "000") {
-        alert("Contraseña incorrecta. Pista: es 000");
-      } else {
-        // Redirigir al portal con el nombre como parámetro
-        const nombreCodificado = encodeURIComponent(nombre);
-        window.location.href = `https://cgviviana.github.io/Juego_Prueba/Proyecto/portal.html?nombre=${nombreCodificado}`;
-      }
-    }
-  </script>
-</body>
-</html>
-
+    const nombreCodificado = encodeURIComponent(nombre);
+    
+    // ✅ Redirección al portal completo
+    window.location.href = 'https://cgviviana.github.io/Juego_Prueba/Proyecto/?nombre=' + nombreCodificado;
+  }
+</script>
