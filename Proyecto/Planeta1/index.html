@@ -192,6 +192,7 @@
     </div>
   </div>
   <script>
+    let misionesCompletadas = 0;
     const params = new URLSearchParams(window.location.search);
     const nombre = params.get("nombre");
 
@@ -230,11 +231,10 @@
           document.body.style.opacity = "0";
           setTimeout(() => {
             window.location.href = "../";
-          }, 10000);
+          }, 13000);
+        }, 2000);
         }, 2000);
       }
-    }
   </script>
 </body>
 </html>
-
