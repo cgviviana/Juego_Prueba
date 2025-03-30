@@ -3,79 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Resultado del Juego</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f8ff;
-      text-align: center;
-      padding-top: 50px;
-    }
-    .resultado {
-      font-size: 24px;
-      margin-top: 20px;
-    }
-    .medalla {
-      font-size: 30px;
-      color: gold;
-    }
-  </style>
+  <title>Resultados</title>
 </head>
 <body>
-  <h1>¡Juego Terminado!</h1>
+  <h1>Resultados del Juego</h1>
   
-  <!-- Aquí se mostrarán el nombre y el puntaje del estudiante -->
-  <div class="resultado">
-    <p id="mensaje">Cargando...</p>
-  </div>
+  <p>Nombre: <span id="nombreEstudiante"></span></p>
+  <p>Identificación: <span id="identificacionEstudiante"></span></p>
+  <p>Puntaje: <span id="puntaje"></span></p>
+  <p>Puntaje más alto: <span id="puntajeMasAlto"></span></p>
+  <p>Fecha de juego: <span id="fecha"></span></p>
+  <p>Veces jugadas: <span id="juegosJugados"></span></p>
 
-  <script type="module">
-    // Importar Firebase SDK para Firestore
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-firestore.js";
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
+  <script>
+    // Recuperar los datos de localStorage
+    const nombre = localStorage.getItem("nombreEstudiante");
+    const identificacion = localStorage.getItem("identificacionEstudiante");
+    const puntaje = localStorage.getItem("puntaje");
+    const puntajeMasAlto = localStorage.getItem("puntajeMasAlto");
+    const fecha = localStorage.getItem("fecha");
+    const juegosJugados = localStorage.getItem("juegosJugados");
 
-    // Configuración de Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyDnsipBijBnhkq1hMd302X5lm-wYiH_i38",
-      authDomain: "pruebaptocomputacional.firebaseapp.com",
-      projectId: "pruebaptocomputacional",
-      storageBucket: "pruebaptocomputacional.firebasestorage.app",
-      messagingSenderId: "426845828920",
-      appId: "1:426845828920:web:9bf33c919debbf43df73cd",
-      measurementId: "G-2P5CD8GJQZ"
-    };
-
-    // Inicializar Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    // Función para guardar el puntaje en Firestore
-    async function guardarPuntaje(nombre, puntaje) {
-      try {
-        const docRef = await addDoc(collection(db, "puntajes"), {
-          nombre: nombre,
-          puntaje: puntaje,
-          fecha: new Date() // Almacena la fecha también
-        });
-        console.log("Puntaje guardado en Firestore con ID: ", docRef.id);
-      } catch (e) {
-        console.error("Error al agregar el puntaje: ", e);
-      }
-    }
-
-    // Leer nombre y puntaje desde localStorage
-    let nombre = localStorage.getItem("nombreEstudiante");
-    let puntaje = localStorage.getItem("puntaje");
-
-    if (nombre && puntaje) {
-      // Mostrar el puntaje en la página
-      document.getElementById("mensaje").innerHTML = `¡Hola ${nombre}, tu puntaje es ${puntaje}/3!`;
-
-      // Guardar en Firestore
-      guardarPuntaje(nombre, puntaje);
-    } else {
-      document.getElementById("mensaje").innerText = "No se encontró el puntaje. Vuelve a jugar.";
-    }
+    // Mostrar los resultados
+    document.getElementById("nombreEstudiante").textContent = nombre;
+    document.getElementById("identificacionEstudiante").textContent = identificacion;
+    document.getElementById("puntaje").textContent = `${puntaje}/3`;
+    document.getElementById("puntajeMasAlto").textContent = `${puntajeMasAlto}/3`;
+    document.getElementById("fecha").textContent = fecha;
+    document.getElementById("juegosJugados").textContent = juegosJugados;
   </script>
 </body>
 </html>
