@@ -190,51 +190,54 @@
     </div>
   </div>
   <script>
-    // Eliminado duplicado
+  let nombre = "";
+  let misionesCompletadas = 0;
 
+  document.addEventListener("DOMContentLoaded", () => {
     const params = new URLSearchParams(window.location.search);
-    const nombre = params.get("nombre");
-
+    nombre = params.get("nombre");
     if (nombre) {
       document.getElementById("comandante").textContent = "Bienvenido comandante " + nombre;
     }
-    
+  });
 
-    let misionesCompletadas = 0;
-
-    function completarMision(num) {
-      const mision = document.getElementById("m" + num);
-      if (!mision.classList.contains("completado")) {
-        const estrella = document.getElementById("estrella" + num);
-        estrella.src = "estrella.png";
-        estrella.style.visibility = "visible";
-        mision.classList.add("completado");
-        misionesCompletadas++;
-        alert("Misión " + num + " completada. Has ganado una estrella.");
-      } else {
-        alert("¡Ya has completado esta misión!");
-      }
-
-      if (misionesCompletadas >= 4) {
-        if (nombre) {
-          document.getElementById("comandante").textContent = "Bienvenido Almirante " + nombre;
-        }
-        document.getElementById("tablero-estrellas").innerHTML = '<img src="insignia.jpg" alt="Insignia del Planeta 1" style="width: 80px;">';
-        document.getElementById("insignia").style.display = "block";
-        if (nombre) {
-          document.getElementById("nombreAlmirante").textContent = nombre;
-        }
-        alert("✨ Has completado todas las misiones. ¡Has ascendido de Comandante a Almirante! ✨");
-        setTimeout(() => {
-          document.body.style.transition = "opacity 2s ease";
-          document.body.style.opacity = "0";
-          setTimeout(() => {
-            window.location.href = "../";
-          }, 10000);
-        }, 2000);
-      }
-  
+  function completarMision(num) {
+    const mision = document.getElementById("m" + num);
+    if (!mision.classList.contains("completado")) {
+      const estrella = document.getElementById("estrella" + num);
+      estrella.src = "estrella.png";
+      estrella.style.visibility = "visible";
+      mision.classList.add("completado");
+      misionesCompletadas++;
+      alert("Misión " + num + " completada. Has ganado una estrella.");
+    } else {
+      alert("¡Ya has completado esta misión!");
     }
-  </script>
+
+    if (misionesCompletadas >= 4) {
+      if (nombre) {
+        document.getElementById("comandante").textContent = "Bienvenido Almirante " + nombre;
+        document.getElementById("nombreAlmirante").textContent = nombre;
+      }
+      const tablero = document.getElementById("tablero-estrellas");
+      tablero.innerHTML = "";
+      const insigniaImg = document.createElement("img");
+      insigniaImg.src = "insignia.jpg";
+      insigniaImg.alt = "Insignia del Planeta 1";
+      insigniaImg.style.width = "80px";
+      tablero.appendChild(insigniaImg);
+      document.getElementById("insignia").style.display = "block";
+      alert("✨ Has completado todas las misiones. ¡Has ascendido de Comandante a Almirante! ✨");
+
+      setTimeout(() => {
+        document.body.style.transition = "opacity 2s ease";
+        document.body.style.opacity = "0";
+        setTimeout(() => {
+          window.location.href = "../Proyecto";
+        }, 2000);
+      }, 10000);
+    }
+  }
+</script>
 </body>
 </html>
