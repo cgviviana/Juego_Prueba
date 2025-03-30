@@ -1,1 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resultados</title>
+</head>
+<body>
+  <h1>Resultados del Juego</h1>
+
+  <div id="resultado">
+    <p>Nombre: <span id="nombreEstudiante"></span></p>
+    <p>Identificación: <span id="identificacionEstudiante"></span></p>
+    <p>Puntaje: <span id="puntaje"></span></p>
+    <p>Fecha: <span id="fecha"></span></p>
+    <p>Hora: <span id="hora"></span></p>
+    <p>Veces jugadas: <span id="juegosJugados"></span></p>
+  </div>
+
+  <script>
+    // Obtener los datos del localStorage
+    const nombre = localStorage.getItem("nombreEstudiante");
+    const identificacion = localStorage.getItem("identificacionEstudiante");
+    const puntaje = localStorage.getItem("puntaje");
+    const fecha = localStorage.getItem("fecha");
+    const hora = localStorage.getItem("hora");
+    const juegosJugados = localStorage.getItem("juegosJugados");
+
+    // Mostrar los resultados
+    document.getElementById("nombreEstudiante").textContent = nombre;
+    document.getElementById("identificacionEstudiante").textContent = identificacion;
+    document.getElementById("puntaje").textContent = `${puntaje}/3`;
+    document.getElementById("fecha").textContent = fecha;
+    document.getElementById("hora").textContent = hora;
+    document.getElementById("juegosJugados").textContent = juegosJugados;
+  </script>
+</body>
+</html>
 
