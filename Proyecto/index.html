@@ -8,7 +8,7 @@
     body {
       margin: 0;
       font-family: 'Orbitron', sans-serif;
-      background-image: url('fondo.jpg'); /* Asegúrate de que esta imagen exista */
+      background-image: url('fondo.jpg');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
@@ -25,7 +25,7 @@
     #comandante {
       font-size: 1.8em;
       margin-top: 10px;
-      color: #ffe;
+      color: #fff;
     }
 
     .contenedor-planetas {
@@ -37,10 +37,10 @@
     }
 
     .planeta {
-      background: rgba(255, 255, 255, 0.4); /* Transparente clarito */
+      background: rgba(255, 255, 255, 0.4);
       padding: 20px;
       border-radius: 20px;
-      width: 266px; /* Todos del mismo tamaño */
+      width: 266px;
       transition: transform 0.3s;
       cursor: pointer;
     }
@@ -60,11 +60,26 @@
       height: auto;
       border-radius: 15px;
     }
+
+    /* ✨ EFECTO LUMINOSO LETRA POR LETRA ✨ */
+    .efecto span {
+      display: inline-block;
+      opacity: 0;
+      animation: iluminar 0.5s forwards;
+    }
+
+    @keyframes iluminar {
+      to {
+        opacity: 1;
+        text-shadow: 0 0 8px #00f0ff, 0 0 16px #00f0ff;
+        color: #ffffff;
+      }
+    }
   </style>
 </head>
 <body>
   <h1>Constelación Areandina</h1>
-  <h2 id="comandante"></h2>
+  <h2 id="comandante" class="efecto"></h2>
 
   <div class="contenedor-planetas">
     <div class="planeta" onclick="viajar('Planeta 1', 'planeta1.html')">
@@ -82,15 +97,28 @@
   </div>
 
   <script>
-    // Mostrar el nombre del estudiante que viene desde la URL
+    // ✨ FUNCIÓN: Efecto de escritura brillante
+    function escribirConEfecto(texto, contenedorId) {
+      const contenedor = document.getElementById(contenedorId);
+      contenedor.innerHTML = '';
+      [...texto].forEach((letra, i) => {
+        const span = document.createElement('span');
+        span.textContent = letra;
+        span.style.animationDelay = `${i * 0.05}s`;
+        contenedor.appendChild(span);
+      });
+    }
+
+    // Leer nombre desde la URL y aplicar el efecto
     const params = new URLSearchParams(window.location.search);
     const nombre = params.get("nombre");
 
     if (nombre) {
-      document.getElementById("comandante").innerText = "Bienvenido comandante " + nombre;
+      const mensaje = "Bienvenido comandante " + nombre;
+      escribirConEfecto(mensaje, "comandante");
     }
 
-    // Función que se ejecuta al hacer clic en un planeta
+    // Redirección con mensaje al hacer clic en los planetas
     function viajar(nombre, enlace) {
       alert("🪐 Estás viajando al " + nombre + "… ¡Prepárate para el salto estelar!");
       window.location.href = enlace;
