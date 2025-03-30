@@ -12,6 +12,7 @@
       overflow: hidden;
       margin: 0;
       padding: 0;
+      text-align: center;
     }
     #app {
       display: flex;
@@ -24,12 +25,36 @@
       color: yellow;
       text-align: center;
     }
+    #formulario {
+      margin-bottom: 20px;
+    }
+    input {
+      padding: 8px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
-  <div id="app"></div>
-  <div id="mensaje">Cargando...</div> <!-- Mensaje de puntaje -->
+  <div id="mensaje">Cargando...</div>
+  
+  <!-- Formulario para ingresar el nombre -->
+  <div id="formulario">
+    <input type="text" id="nombreEstudiante" placeholder="Ingresa tu nombre" required />
+    <button id="iniciarJuego" onclick="guardarNombre()">Iniciar Juego</button>
+  </div>
 
+  <div id="app"></div>
   <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js"></script>
 
@@ -63,7 +88,19 @@
       }
     }
 
-    // Recibir el puntaje del juego
+    // Función para guardar el nombre en localStorage y mostrar el juego
+    function guardarNombre() {
+      const nombre = document.getElementById("nombreEstudiante").value;
+      if (nombre.trim()) {
+        localStorage.setItem("nombreEstudiante", nombre);
+        document.getElementById("formulario").style.display = "none"; // Ocultar formulario
+        iniciarJuego(); // Llamar a la función que inicia el juego
+      } else {
+        alert("Por favor, ingresa tu nombre.");
+      }
+    }
+
+    // Simulación del puntaje (esto debería reemplazarse con la lógica de Scratch)
     function recibirPuntaje(puntaje) {
       // Guardar el puntaje en localStorage
       localStorage.setItem("puntaje", puntaje);
@@ -76,21 +113,15 @@
       guardarPuntaje(nombre, puntaje);
     }
 
-    // Escuchar los datos de Scratch (broadcast) o usar la lógica que se activa al final del juego de Scratch
-    // Aquí puedes adaptar la función para recibir el puntaje de Scratch cuando se termine el juego
-    window.addEventListener('message', (event) => {
-      if (event.data && event.data.puntaje) {
-        // Recibir el puntaje desde Scratch
-        recibirPuntaje(event.data.puntaje);
-      }
-    });
+    // Aquí es donde se simula el puntaje, reemplázalo con el puntaje real de Scratch
+    function iniciarJuego() {
+      // Aquí simulas que el puntaje es 3 después de iniciar el juego
+      setTimeout(() => {
+        // Simula el puntaje recibido del juego (cambia esto con el puntaje real de Scratch)
+        recibirPuntaje(3);
+      }, 3000); // Simula que después de 3 segundos se recibe el puntaje
+    }
 
-    // Simulación de los datos (esto se debería reemplazar con el envío real del puntaje desde Scratch)
-    // Por ejemplo, Scratch debe enviar el puntaje a través de un "broadcast" que lo pueda recibir aquí
-    setTimeout(() => {
-      // Simulamos que el puntaje de Scratch es 3
-      recibirPuntaje(3);
-    }, 3000); // Simulamos que después de 3 segundos se recibe el puntaje
   </script>
 </body>
 </html>
