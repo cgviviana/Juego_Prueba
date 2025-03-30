@@ -25,56 +25,59 @@
     .contenedor-planetas {
       display: flex;
       justify-content: center;
-      gap: 60px; /* Separación entre planetas */
-      padding: 60px 30px; /* Baja todo el grupo */
+      gap: 60px;
+      padding: 60px 30px;
       flex-wrap: wrap;
     }
 
     .planeta {
-      background: rgba(255, 255, 255, 0.4); /* Fondo blanco con transparencia 40% */
+      background: rgba(255, 255, 255, 0.4);
       padding: 20px;
       border-radius: 20px;
-      width: 266px; /* Todos igual de grandes */
+      width: 266px;
       transition: transform 0.3s;
+      cursor: pointer;
     }
 
     .planeta:hover {
       transform: scale(1.05);
     }
 
-    .planeta img {
-      width: 100%;
-      height: auto;
-      border-radius: 15px;
-      margin-top: 60px; /* Baja cada imagen 3 espacios */
-    }
-
     .planeta p {
-      margin-top: 15px;
+      margin-bottom: 15px;
       font-size: 1.2em;
       color: black;
     }
 
-    a {
-      text-decoration: none;
+    .planeta img {
+      width: 100%;
+      height: auto;
+      border-radius: 15px;
     }
   </style>
 </head>
 <body>
   <h1>Bienvenido a la Constelación Areandina</h1>
   <div class="contenedor-planetas">
-    <a href="planeta1.html" class="planeta">
-      <img src="p1.png" alt="Planeta 1">
+    <div class="planeta" onclick="viajar('Planeta 1', 'planeta1.html')">
       <p>Planeta 1</p>
-    </a>
-    <a href="planeta2.html" class="planeta">
-      <img src="2.png" alt="Planeta 2">
+      <img src="p1.png" alt="Planeta 1">
+    </div>
+    <div class="planeta" onclick="viajar('Planeta 2', 'planeta2.html')">
       <p>Planeta 2</p>
-    </a>
-    <a href="planeta3.html" class="planeta">
-      <img src="P3.png" alt="Planeta 3">
+      <img src="2.png" alt="Planeta 2">
+    </div>
+    <div class="planeta" onclick="viajar('Planeta 3', 'planeta3.html')">
       <p>Planeta 3</p>
-    </a>
+      <img src="P3.png" alt="Planeta 3">
+    </div>
   </div>
+
+  <script>
+    function viajar(nombre, enlace) {
+      alert("🪐 Estás viajando al " + nombre + "… ¡Prepárate para el salto estelar!");
+      window.location.href = enlace;
+    }
+  </script>
 </body>
 </html>
