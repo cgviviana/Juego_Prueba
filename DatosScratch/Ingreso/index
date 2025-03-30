@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingreso al Juego</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            text-align: center;
+            padding-top: 50px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bienvenido al Juego de Cultura General</h1>
+    <p>Ingresa tu nombre para comenzar:</p>
+    <input type="text" id="nombre" placeholder="Escribe tu nombre" required>
+    <br>
+    <button onclick="iniciarJuego()">Iniciar Juego</button>
+
+    <script>
+        function iniciarJuego() {
+            let nombre = document.getElementById("nombre").value;
+            if (nombre) {
+                // Guardamos el nombre y redirigimos a la página del juego
+                localStorage.setItem("nombreEstudiante", nombre);  // Guarda el nombre en el navegador
+                window.location.href = "https://tu-repositorio-en-github.com/tu-juego";  // Cambia este enlace por el de tu juego
+            } else {
+                alert("Por favor ingresa tu nombre");
+            }
+        }
+    </script>
+</body>
+</html>
