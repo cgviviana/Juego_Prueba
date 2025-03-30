@@ -36,10 +36,13 @@
     <script>
         function iniciarJuego() {
             let nombre = document.getElementById("nombre").value;
+
             if (nombre) {
-                // Guardamos el nombre y redirigimos al juego
-                localStorage.setItem("nombreEstudiante", nombre);  // Guarda el nombre en el navegador
-                window.location.href = "https://cgviviana.github.io/Juego_Prueba/Objetivos/";  // Tu URL de juego
+                // Guardar el nombre del estudiante en localStorage
+                localStorage.setItem("nombreEstudiante", nombre);
+
+                // Redirigir al estudiante a la página del juego
+                window.location.href = "https://cgviviana.github.io/Juego_Prueba/DatosScratch/Ingreso/juego.html"; // Cambiar por la URL correcta del juego
             } else {
                 alert("Por favor ingresa tu nombre");
             }
