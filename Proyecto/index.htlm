@@ -1,1 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Portal Galáctico</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-image: url('https://images.unsplash.com/photo-1581324098414-4df1b1c16d4a?auto=format&fit=crop&w=1950&q=80');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      text-align: center;
+    }
+
+    h1 {
+      padding: 40px 0 10px;
+      font-size: 2.5em;
+      text-shadow: 2px 2px 5px black;
+    }
+
+    .contenedor-planetas {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      padding: 30px;
+      flex-wrap: wrap;
+    }
+
+    .planeta {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      border-radius: 20px;
+      width: 200px;
+      transition: transform 0.3s;
+    }
+
+    .planeta:hover {
+      transform: scale(1.05);
+    }
+
+    .planeta img {
+      width: 100%;
+      border-radius: 15px;
+    }
+
+    .planeta p {
+      margin-top: 10px;
+      font-size: 1.2em;
+    }
+
+    a {
+      color: white;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Bienvenido a la constelación No Se Qué</h1>
+  <div class="contenedor-planetas">
+    <a href="planeta1.html" class="planeta">
+      <img src="p1.png" alt="Planeta 1">
+      <p>Planeta 1</p>
+    </a>
+    <a href="planeta2.html" class="planeta">
+      <img src="p2.png" alt="Planeta 2">
+      <p>Planeta 2</p>
+    </a>
+    <a href="planeta3.html" class="planeta">
+      <img src="p3.png" alt="Planeta 3">
+      <p>Planeta 3</p>
+    </a>
+  </div>
+</body>
+</html>
 
