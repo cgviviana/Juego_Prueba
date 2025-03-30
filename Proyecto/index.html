@@ -61,7 +61,7 @@
       border-radius: 15px;
     }
 
-    /* ✨ EFECTO LUMINOSO LETRA POR LETRA ✨ */
+    /* ✨ EFECTO LUMINOSO LETRA POR LETRA */
     .efecto span {
       display: inline-block;
       opacity: 0;
@@ -96,29 +96,39 @@
     </div>
   </div>
 
+  <!-- 🔊 SONIDO GALÁCTICO -->
+  <audio id="sonidoBienvenida" src="sonido-galactico.mp3" preload="auto"></audio>
+
   <script>
-    // ✨ FUNCIÓN: Efecto de escritura brillante
-    function escribirConEfecto(texto, contenedorId) {
+    // ✨ Escribir texto con efecto brillante y espacios correctos
+    function escribirConEfecto(texto, contenedorId, callback) {
       const contenedor = document.getElementById(contenedorId);
       contenedor.innerHTML = '';
       [...texto].forEach((letra, i) => {
         const span = document.createElement('span');
-        span.textContent = letra;
+        span.innerHTML = (letra === ' ') ? '&nbsp;' : letra;
         span.style.animationDelay = `${i * 0.05}s`;
         contenedor.appendChild(span);
       });
+
+      // Ejecutar sonido después de completar escritura
+      const duracionTotal = texto.length * 50; // 50ms por letra
+      setTimeout(() => {
+        if (callback) callback();
+      }, duracionTotal + 300);
     }
 
-    // Leer nombre desde la URL y aplicar el efecto
     const params = new URLSearchParams(window.location.search);
     const nombre = params.get("nombre");
 
     if (nombre) {
       const mensaje = "Bienvenido comandante " + nombre;
-      escribirConEfecto(mensaje, "comandante");
+      escribirConEfecto(mensaje, "comandante", () => {
+        const sonido = document.getElementById("sonidoBienvenida");
+        sonido.play();
+      });
     }
 
-    // Redirección con mensaje al hacer clic en los planetas
     function viajar(nombre, enlace) {
       alert("🪐 Estás viajando al " + nombre + "… ¡Prepárate para el salto estelar!");
       window.location.href = enlace;
