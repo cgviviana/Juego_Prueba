@@ -3,36 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Juego de Scratch</title>
+  <title>Resultados</title>
 </head>
 <body>
-  <h1>Juego de Scratch</h1>
+  <h1>Resultados del Juego</h1>
   
-  <div id="game-container">
-    <iframe src="https://scratch.mit.edu/projects/YOUR_PROJECT_ID/embed" width="500" height="500"></iframe>
-  </div>
-
-  <button id="finalizarJuego">Finalizar Juego</button>
+  <p>Nombre: <span id="nombreEstudiante"></span></p>
+  <p>Identificación: <span id="identificacionEstudiante"></span></p>
+  <p>Puntaje: <span id="puntaje"></span></p>
+  <p>Puntaje más alto: <span id="puntajeMasAlto"></span></p>
+  <p>Fecha de juego: <span id="fecha"></span></p>
+  <p>Veces jugadas: <span id="juegosJugados"></span></p>
 
   <script>
-    document.getElementById("finalizarJuego").addEventListener("click", function() {
-      // Simula el puntaje (cámbialo con el puntaje real de Scratch)
-      const puntaje = Math.floor(Math.random() * 4); // Puntaje entre 0 y 3
+    // Obtener los datos de localStorage
+    const nombre = localStorage.getItem("nombreEstudiante");
+    const identificacion = localStorage.getItem("identificacionEstudiante");
+    const puntaje = localStorage.getItem("puntaje");
+    const puntajeMasAlto = localStorage.getItem("puntajeMasAlto");
+    const fecha = localStorage.getItem("fecha");
+    const juegosJugados = localStorage.getItem("juegosJugados");
 
-      // Guardar en localStorage
-      const nombre = localStorage.getItem("nombreEstudiante");
-      const identificacion = localStorage.getItem("identificacionEstudiante");
-      const juegosJugados = parseInt(localStorage.getItem("juegosJugados"));
-      const puntajeMasAlto = Math.max(puntaje, parseInt(localStorage.getItem("puntajeMasAlto")));
-
-      localStorage.setItem("juegosJugados", juegosJugados + 1);
-      localStorage.setItem("puntaje", puntaje);
-      localStorage.setItem("puntajeMasAlto", puntajeMasAlto);
-      localStorage.setItem("fecha", new Date().toLocaleDateString());
-
-      // Redirigir a la página de resultados
-      window.location.href = "puntaje.html";
-    });
+    // Mostrar los resultados
+    document.getElementById("nombreEstudiante").textContent = nombre;
+    document.getElementById("identificacionEstudiante").textContent = identificacion;
+    document.getElementById("puntaje").textContent = `${puntaje}/3`;
+    document.getElementById("puntajeMasAlto").textContent = `${puntajeMasAlto}/3`;
+    document.getElementById("fecha").textContent = fecha;
+    document.getElementById("juegosJugados").textContent = juegosJugados;
   </script>
 </body>
 </html>
