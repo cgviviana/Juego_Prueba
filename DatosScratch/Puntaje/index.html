@@ -1,50 +1,81 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resultados</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f8ff;
-            text-align: center;
-            padding-top: 50px;
-        }
-        h1 {
-            color: #4CAF50;
-        }
-        .resultado {
-            font-size: 24px;
-            margin-top: 20px;
-        }
-        .medalla {
-            font-size: 30px;
-            color: gold;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resultado del Juego</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f8ff;
+      text-align: center;
+      padding-top: 50px;
+    }
+    .resultado {
+      font-size: 24px;
+      margin-top: 20px;
+    }
+    .medalla {
+      font-size: 30px;
+      color: gold;
+    }
+  </style>
 </head>
 <body>
-    <h1>¡Juego Terminado!</h1>
-    <div class="resultado">
-        <p id="nombreEstudiante"></p>
-        <p id="puntaje"></p>
-    </div>
+  <h1>¡Juego Terminado!</h1>
+  
+  <!-- Aquí se mostrarán el nombre y el puntaje del estudiante -->
+  <div class="resultado">
+    <p id="mensaje">Cargando...</p>
+  </div>
 
-    <script>
-        // Obtener el nombre y puntaje
-        let nombre = localStorage.getItem("nombreEstudiante");
-        let puntaje = 3;  // Aquí puedes poner la variable que obtenga el puntaje real del juego
+  <script type="module">
+    // Importar Firebase SDK para Firestore
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
 
-        // Mostrar el nombre y puntaje
-        document.getElementById("nombreEstudiante").innerText = `Nombre: ${nombre}`;
-        document.getElementById("puntaje").innerText = `Puntaje: ${puntaje}/3`;
+    // Configuración de Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyDnsipBijBnhkq1hMd302X5lm-wYiH_i38",
+      authDomain: "pruebaptocomputacional.firebaseapp.com",
+      projectId: "pruebaptocomputacional",
+      storageBucket: "pruebaptocomputacional.firebasestorage.app",
+      messagingSenderId: "426845828920",
+      appId: "1:426845828920:web:9bf33c919debbf43df73cd",
+      measurementId: "G-2P5CD8GJQZ"
+    };
 
-        // Agregar medalla si tiene puntaje perfecto
-        if (puntaje === 3) {
-            document.getElementById("puntaje").innerHTML += " 🏅 Medalla de Oro";
-        }
-    </script>
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Función para guardar el puntaje en Firestore
+    async function guardarPuntaje(nombre, puntaje) {
+      try {
+        const docRef = await addDoc(collection(db, "puntajes"), {
+          nombre: nombre,
+          puntaje: puntaje,
+          fecha: new Date() // Almacena la fecha también
+        });
+        console.log("Puntaje guardado en Firestore con ID: ", docRef.id);
+      } catch (e) {
+        console.error("Error al agregar el puntaje: ", e);
+      }
+    }
+
+    // Leer nombre y puntaje desde localStorage
+    let nombre = localStorage.getItem("nombreEstudiante");
+    let puntaje = localStorage.getItem("puntaje");
+
+    if (nombre && puntaje) {
+      // Mostrar el puntaje en la página
+      document.getElementById("mensaje").innerHTML = `¡Hola ${nombre}, tu puntaje es ${puntaje}/3!`;
+
+      // Guardar en Firestore
+      guardarPuntaje(nombre, puntaje);
+    } else {
+      document.getElementById("mensaje").innerText = "No se encontró el puntaje. Vuelve a jugar.";
+    }
+  </script>
 </body>
 </html>
-
