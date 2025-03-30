@@ -37,9 +37,9 @@
         function iniciarJuego() {
             let nombre = document.getElementById("nombre").value;
             if (nombre) {
-                // Guardamos el nombre y redirigimos a la página del juego
+                // Guardamos el nombre y redirigimos al juego
                 localStorage.setItem("nombreEstudiante", nombre);  // Guarda el nombre en el navegador
-                window.location.href = "https://tu-repositorio-en-github.com/tu-juego";  // Cambia este enlace por el de tu juego
+                window.location.href = "https://cgviviana.github.io/Juego_Prueba/Objetivos/";  // Tu URL de juego
             } else {
                 alert("Por favor ingresa tu nombre");
             }
