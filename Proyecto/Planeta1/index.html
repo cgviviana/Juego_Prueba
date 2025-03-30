@@ -1,1 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Planeta 1 - Misión Galáctica</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background: radial-gradient(circle at center, #000428, #004e92);
+      color: white;
+      display: flex;
+      height: 100vh;
+    }
+
+    .historia {
+      flex: 2;
+      padding: 40px;
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .historia h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+
+    .historia p {
+      font-size: 1.2em;
+      line-height: 1.6;
+    }
+
+    .panel-misiones {
+      flex: 1;
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-left: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .panel-misiones h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .panel-misiones ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .panel-misiones li {
+      background-color: rgba(255, 255, 255, 0.2);
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .panel-misiones li:hover {
+      background-color: rgba(0, 195, 255, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="historia">
+    <h1>Planeta 1: Misión Estelar</h1>
+    <p>
+      Has aterrizado en el misterioso Planeta 1, donde una energía antigua mantiene la vida a salvo. Sin embargo, este mundo está en peligro: 
+      una sombra cósmica amenaza con extinguir la luz estelar. Para salvar el planeta, debes completar 4 misiones clave que te otorgarán las 
+      4 Estrellas Sagradas. Solo quien las reúna todas, podrá restaurar el equilibrio del universo y evitar la catástrofe.
+    </p>
+    <p>
+      Cada misión pondrá a prueba tu valentía, inteligencia y creatividad. ¡Prepárate, comandante!
+    </p>
+  </div>
+
+  <div class="panel-misiones">
+    <h2>Misiones</h2>
+    <ul>
+      <li onclick="alert('Misión 1: Resolver el laberinto de energía estelar')">Misión 1</li>
+      <li onclick="alert('Misión 2: Recolectar los cristales de conocimiento')">Misión 2</li>
+      <li onclick="alert('Misión 3: Enfrentar la simulación de tormenta cuántica')">Misión 3</li>
+      <li onclick="alert('Misión 4: Activar la torre de luz para salvar el planeta')">Misión 4</li>
+    </ul>
+  </div>
+</body>
+</html>
 
