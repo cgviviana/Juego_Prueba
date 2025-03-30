@@ -24,13 +24,13 @@
     .contenedor-planetas {
       display: flex;
       justify-content: center;
-      gap: 40px;
+      gap: 60px; /* Separación aumentada entre planetas */
       padding: 30px;
       flex-wrap: wrap;
     }
 
     .planeta {
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(255, 255, 255, 0.2); /* Más clarito */
       padding: 20px;
       border-radius: 20px;
       width: 200px;
@@ -47,6 +47,10 @@
       border-radius: 15px;
     }
 
+    .planeta.p3 {
+      width: 266px; /* 1/3 más que 200px */
+    }
+
     .planeta p {
       margin-top: 10px;
       font-size: 1.2em;
@@ -59,7 +63,7 @@
   </style>
 </head>
 <body>
-  <h1>Bienvenido a la constelación Areandina</h1>
+  <h1>Bienvenido a la constelación No Se Qué</h1>
   <div class="contenedor-planetas">
     <a href="planeta1.html" class="planeta">
       <img src="p1.png" alt="Planeta 1">
@@ -69,8 +73,8 @@
       <img src="2.png" alt="Planeta 2">
       <p>Planeta 2</p>
     </a>
-    <a href="planeta3.html" class="planeta">
-      <img src="p3.jpeg" alt="Planeta 3">
+    <a href="planeta3.html" class="planeta p3">
+      <img src="P3.png" alt="Planeta 3">
       <p>Planeta 3</p>
     </a>
   </div>
