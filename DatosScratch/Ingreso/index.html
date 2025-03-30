@@ -3,36 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ingreso Estudiante</title>
+  <title>Juego de Scratch</title>
 </head>
 <body>
-  <h1>Ingreso al Juego</h1>
+  <h1>Juego de Scratch</h1>
   
-  <form id="formIngreso">
-    <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre" required><br><br>
-    
-    <label for="identificacion">Identificación:</label>
-    <input type="text" id="identificacion" required><br><br>
-    
-    <button type="submit">Ingresar</button>
-  </form>
+  <div id="game-container">
+    <iframe src="https://scratch.mit.edu/projects/YOUR_PROJECT_ID/embed" width="500" height="500"></iframe>
+  </div>
+
+  <button id="finalizarJuego">Finalizar Juego</button>
 
   <script>
-    document.getElementById("formIngreso").addEventListener("submit", function(event) {
-      event.preventDefault();
+    document.getElementById("finalizarJuego").addEventListener("click", function() {
+      // Simula el puntaje (cámbialo con el puntaje real de Scratch)
+      const puntaje = Math.floor(Math.random() * 4); // Puntaje entre 0 y 3
 
-      // Capturar el nombre y la identificación
-      const nombre = document.getElementById("nombre").value;
-      const identificacion = document.getElementById("identificacion").value;
-      
-      // Guardar los datos en localStorage
-      localStorage.setItem("nombreEstudiante", nombre);
-      localStorage.setItem("identificacionEstudiante", identificacion);
-      localStorage.setItem("juegosJugados", 0);  // Inicializamos la cantidad de juegos jugados en 0
+      // Guardar en localStorage
+      const nombre = localStorage.getItem("nombreEstudiante");
+      const identificacion = localStorage.getItem("identificacionEstudiante");
+      const juegosJugados = parseInt(localStorage.getItem("juegosJugados"));
+      const puntajeMasAlto = Math.max(puntaje, parseInt(localStorage.getItem("puntajeMasAlto")));
 
-      // Redirigir al juego
-      window.location.href = "juego.html"; // Cambia esta URL según el nombre de tu página de juego
+      localStorage.setItem("juegosJugados", juegosJugados + 1);
+      localStorage.setItem("puntaje", puntaje);
+      localStorage.setItem("puntajeMasAlto", puntajeMasAlto);
+      localStorage.setItem("fecha", new Date().toLocaleDateString());
+
+      // Redirigir a la página de resultados
+      window.location.href = "puntaje.html";
     });
   </script>
 </body>
