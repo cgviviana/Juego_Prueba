@@ -3,85 +3,238 @@
 <head>
   <meta charset="UTF-8">
   <title>Planeta 1 - Misión Galáctica</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      font-family: 'Arial', sans-serif;
-      background: radial-gradient(circle at center, #000428, #004e92);
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
       color: white;
+      min-height: 100vh;
       display: flex;
-      height: 100vh;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      margin-top: 60px;
+      font-size: 2.5em;
+      color: #00f0ff;
+      text-shadow: 0 0 15px #00f0ff;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .contenedor {
+      display: flex;
+      flex-direction: column;
+      width: 95%;
+      max-width: 1200px;
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 20px;
+      margin: 60px auto;
+      box-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
+    }
+
+    @media (min-width: 768px) {
+      .contenedor {
+        flex-direction: row;
+      }
+    }
+
+    .historia, .panel-misiones {
+      padding: 30px;
     }
 
     .historia {
       flex: 2;
-      padding: 40px;
-      background-color: rgba(0, 0, 0, 0.7);
-    }
-
-    .historia h1 {
-      font-size: 2.5em;
-      margin-bottom: 20px;
+      background-color: rgba(255, 255, 255, 0.05);
     }
 
     .historia p {
-      font-size: 1.2em;
-      line-height: 1.6;
-    }
+  font-size: 1.1em;
+  line-height: 1.6;
+  text-align: justify;
+}
 
     .panel-misiones {
       flex: 1;
-      background-color: rgba(255, 255, 255, 0.1);
-      padding: 20px;
-      border-left: 2px solid rgba(255, 255, 255, 0.2);
+      background-color: rgba(255, 255, 255, 0.07);
+      border-top: 2px solid rgba(0, 255, 255, 0.3);
+    }
+
+    @media (min-width: 768px) {
+      .panel-misiones {
+        border-top: none;
+        border-left: 2px solid rgba(0, 255, 255, 0.3);
+      }
     }
 
     .panel-misiones h2 {
       text-align: center;
-      margin-bottom: 20px;
+      color: #00ffff;
     }
+
+    #tablero-estrellas {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    #tablero-estrellas img {
+  width: 40px;
+  height: 40px;
+  visibility: hidden;
+  animation: aparecerEstrella 0.5s ease-in-out;
+}
 
     .panel-misiones ul {
       list-style: none;
       padding: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
     .panel-misiones li {
-      background-color: rgba(255, 255, 255, 0.2);
-      margin: 10px 0;
-      padding: 10px;
-      border-radius: 10px;
+      background-color: rgba(0, 255, 255, 0.2);
+      padding: 12px;
+      border-radius: 12px;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: background-color 0.3s, transform 0.3s;
+      font-size: 1.1em;
+      text-align: center;
     }
 
     .panel-misiones li:hover {
       background-color: rgba(0, 195, 255, 0.5);
+      transform: scale(1.05);
     }
-  </style>
+
+    .panel-misiones li.completado {
+      background-color: rgba(0, 255, 0, 0.4);
+      color: #fff;
+      font-weight: bold;
+      text-shadow: 0 0 8px #0f0;
+    }
+
+    #comandante {
+  font-size: 1.8em;
+  color: #00f0ff;
+  margin-bottom: 20px;
+  text-shadow: 0 0 8px #00f0ff;
+  text-align: center;
+  margin-top: 0;
+}
+
+    #insignia {
+  text-align: center;
+  margin-top: 20px;
+  display: none;
+  animation: aparecer 1s ease-in-out forwards;
+}
+  @keyframes aparecer {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+  to { opacity: 1; transform: scale(1); }
+}
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes aparecerEstrella {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes aparecerEstrella {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+</style>
 </head>
 <body>
-  <div class="historia">
-    <h1>Planeta 1: Misión Estelar</h1>
-    <p>
-      Has aterrizado en el misterioso Planeta 1, donde una energía antigua mantiene la vida a salvo. Sin embargo, este mundo está en peligro: 
-      una sombra cósmica amenaza con extinguir la luz estelar. Para salvar el planeta, debes completar 4 misiones clave que te otorgarán las 
-      4 Estrellas Sagradas. Solo quien las reúna todas, podrá restaurar el equilibrio del universo y evitar la catástrofe.
-    </p>
-    <p>
-      Cada misión pondrá a prueba tu valentía, inteligencia y creatividad. ¡Prepárate, comandante!
-    </p>
+  <header>Planeta 1: Misión Estelar</header>
+  <div class="contenedor">
+    <div class="historia">
+      <h2 id="comandante" style="text-align:center; margin-top:0; color:#00ffff;">Bienvenido comandante</h2>
+      <p>Has aterrizado en el misterioso Planeta 1, donde una energía antigua mantiene la vida a salvo. Sin embargo, este mundo está en peligro: una sombra cósmica amenaza con extinguir la luz estelar. Para salvar el planeta, debes completar 4 misiones clave que te otorgarán las 4 Estrellas Sagradas. Solo quien las reúna todas, podrá restaurar el equilibrio del universo y evitar la catástrofe.</p>
+      <p>Cada misión pondrá a prueba tu valentía, inteligencia y creatividad. ¡Prepárate, comandante!</p>
+    </div>
+    <div class="panel-misiones">
+      <div id="tablero-estrellas">
+        <img id="estrella1" src="" alt="">
+        <img id="estrella2" src="" alt="">
+        <img id="estrella3" src="" alt="">
+        <img id="estrella4" src="" alt="">
+      </div>
+      <h2 style="text-align:center; color:#00ffff;">Misiones</h2>
+      <ul>
+        <li id="m1" onclick="completarMision(1)">Misión 1</li>
+        <li id="m2" onclick="completarMision(2)">Misión 2</li>
+        <li id="m3" onclick="completarMision(3)">Misión 3</li>
+        <li id="m4" onclick="completarMision(4)">Misión 4</li>
+      </ul>
+      <div id="insignia">
+        <p style="font-size: 1.3em; color: #00ffcc; text-shadow: 0 0 10px #00ffff;">🎖️ Felicitaciones, has ganado la Insignia Galáctica del Planeta 1</p>
+        <p style="font-size: 1.1em; color: #ffffff; margin-top: 10px;">🚀 ¡Has ascendido de rango! Ahora eres oficialmente un <strong>Almirante Galáctico</strong>.</p>
+        <p style="font-size: 1.1em; color: #00ffff; margin-top: 10px;">Bien hecho, <span id="nombreAlmirante"></span> 👨‍🚀</p>
+        <img src="insignia.jpg" alt="Insignia del Planeta 1" style="width: 120px; margin-top: 10px;">
+      </div>
+    </div>
   </div>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const nombre = params.get("nombre");
 
-  <div class="panel-misiones">
-    <h2>Misiones</h2>
-    <ul>
-      <li onclick="alert('Misión 1: Resolver el laberinto de energía estelar')">Misión 1</li>
-      <li onclick="alert('Misión 2: Recolectar los cristales de conocimiento')">Misión 2</li>
-      <li onclick="alert('Misión 3: Enfrentar la simulación de tormenta cuántica')">Misión 3</li>
-      <li onclick="alert('Misión 4: Activar la torre de luz para salvar el planeta')">Misión 4</li>
-    </ul>
-  </div>
+    if (nombre) {
+      document.getElementById("comandante").textContent = "Bienvenido comandante " + nombre;
+    }
+    
+
+    let misionesCompletadas = 0;
+
+    function completarMision(num) {
+      const mision = document.getElementById("m" + num);
+      if (!mision.classList.contains("completado")) {
+        const estrella = document.getElementById("estrella" + num);
+        estrella.src = "estrella.png";
+        estrella.style.visibility = "visible";
+        mision.classList.add("completado");
+        misionesCompletadas++;
+        alert("Misión " + num + " completada. Has ganado una estrella.");
+      } else {
+        alert("¡Ya has completado esta misión!");
+      }
+
+      if (misionesCompletadas >= 4) {
+        if (nombre) {
+          document.getElementById("comandante").textContent = "Bienvenido Almirante " + nombre;
+        }
+        document.getElementById("tablero-estrellas").innerHTML = '<img src="insignia.jpg" alt="Insignia del Planeta 1" style="width: 80px;">';
+        document.getElementById("insignia").style.display = "block";
+        if (nombre) {
+          document.getElementById("nombreAlmirante").textContent = nombre;
+        }
+        alert("✨ Has completado todas las misiones. ¡Has ascendido de Comandante a Almirante! ✨");
+        setTimeout(() => {
+          document.body.style.transition = "opacity 2s ease";
+          document.body.style.opacity = "0";
+          setTimeout(() => {
+            window.location.href = "../";
+          }, 13000);
+        }, 2000);
+        }, 2000);
+      }
+    }
+  </script>
 </body>
 </html>
-
