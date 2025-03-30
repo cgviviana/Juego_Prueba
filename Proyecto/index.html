@@ -22,6 +22,12 @@
       text-shadow: 2px 2px 10px black;
     }
 
+    #comandante {
+      font-size: 1.8em;
+      margin-top: 10px;
+      color: #ffe;
+    }
+
     .contenedor-planetas {
       display: flex;
       justify-content: center;
@@ -57,7 +63,9 @@
   </style>
 </head>
 <body>
-  <h1>Bienvenido a la Constelación Areandina</h1>
+  <h1>Constelación Areandina</h1>
+  <h2 id="comandante"></h2>
+
   <div class="contenedor-planetas">
     <div class="planeta" onclick="viajar('Planeta 1', 'planeta1.html')">
       <p>Planeta 1</p>
@@ -74,6 +82,15 @@
   </div>
 
   <script>
+    // Mostrar el nombre del estudiante
+    const params = new URLSearchParams(window.location.search);
+    const nombre = params.get("nombre");
+
+    if (nombre) {
+      document.getElementById("comandante").innerText = "Bienvenido comandante " + nombre;
+    }
+
+    // Función de viaje con alerta
     function viajar(nombre, enlace) {
       alert("🪐 Estás viajando al " + nombre + "… ¡Prepárate para el salto estelar!");
       window.location.href = enlace;
