@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Ingreso a la Constelación</title>
+  <title>Ingreso a la Constelación Areandina</title>
   <style>
     body {
       margin: 0;
@@ -68,13 +68,17 @@
 
       if (nombre === "") {
         alert("Por favor, ingresa tu nombre.");
-      } else if (clave !== "000") {
-        alert("Contraseña incorrecta. Pista: es 000");
-      } else {
-        const nombreCodificado = encodeURIComponent(nombre);
-        // ✅ Redirección corregida a tu portal alojado
-        window.location.href = `https://cgviviana.github.io/Juego_Prueba/Proyecto/portal.html?nombre=${nombreCodificado}`;
+        return;
       }
+
+      if (clave !== "000") {
+        alert("Contraseña incorrecta. Pista: es 000");
+        return;
+      }
+
+      const nombreCodificado = encodeURIComponent(nombre);
+      // 🔁 Redirección correcta a index.html con el nombre
+      window.location.href = `index.html?nombre=${nombreCodificado}`;
     }
   </script>
 </body>
