@@ -27,7 +27,7 @@
     </style>
 </head>
 <body>
-    <h1>Bienvenido al Juego de Cultura General</h1>
+    <h1>Bienvenido al Juego de Objetivos</h1> <!-- Cambié el título aquí para que coincida con el de 'Objetivos' -->
     <p>Ingresa tu nombre para comenzar:</p>
     <input type="text" id="nombre" placeholder="Escribe tu nombre" required>
     <br>
@@ -35,16 +35,16 @@
 
     <script>
         function iniciarJuego() {
-            let nombre = document.getElementById("nombre").value;
+            let nombre = document.getElementById("nombre").value; // Captura el nombre
 
-            if (nombre) {
-                // Guardar el nombre del estudiante en localStorage
+            if (nombre.trim() !== "") {
+                // Si el nombre no está vacío, guardar el nombre en localStorage
                 localStorage.setItem("nombreEstudiante", nombre);
 
-                // Redirigir al estudiante a la página del juego
-                window.location.href = "https://cgviviana.github.io/Juego_Prueba/DatosScratch/Ingreso/juego.html"; // Cambiar por la URL correcta del juego
+                // Redirigir a la página de Objetivos (este es el enlace correcto)
+                window.location.href = "https://cgviviana.github.io/Juego_Prueba/Objetivos/";  // Ajusta esta URL
             } else {
-                alert("Por favor ingresa tu nombre");
+                alert("Por favor ingresa tu nombre antes de continuar.");
             }
         }
     </script>
