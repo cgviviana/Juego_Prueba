@@ -1,1 +1,329 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Alarma Kawaii</title>
+
+<style>
+    body {
+        font-family: "Comic Sans MS", Arial, sans-serif;
+        background: linear-gradient(135deg, #ffe6f2, #e6f0ff);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+    }
+
+    .container {
+        background: #ffffffcc;
+        backdrop-filter: blur(6px);
+        padding: 25px;
+        width: 390px;
+        border-radius: 25px;
+        box-shadow: 0 0 25px rgba(255,180,230,0.5);
+        text-align: center;
+    }
+
+    h2 {
+        color: #ff7ab8;
+        font-size: 26px;
+        margin-bottom: 5px;
+    }
+
+    .clock {
+        font-size: 48px;
+        color: #777;
+        margin-bottom: 5px;
+    }
+
+    button {
+        background: #ffb3d9;
+        border: none;
+        padding: 12px;
+        width: 100%;
+        border-radius: 15px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-bottom: 12px;
+        transition: .3s;
+    }
+
+    button:hover {
+        background: #ff99cc;
+    }
+
+    #stopBtn {
+        background: #ff8585;
+        display: none;
+    }
+
+    #configPanel {
+        display: none;
+        background: #fff0fa;
+        border-radius: 20px;
+        padding: 15px;
+        margin-top: 10px;
+        border: 2px solid #ffd6e9;
+    }
+
+    label {
+        font-weight: bold;
+        color: #ff5fa2;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 8px;
+        border-radius: 12px;
+        margin-top: 5px;
+        border: 1px solid #ffb5d9;
+    }
+
+    #activeAlarms {
+        margin-top: 10px;
+        background: #fff;
+        padding: 15px;
+        border-radius: 15px;
+        border: 1px solid #ffd4ea;
+        min-height: 40px;
+    }
+
+    .alarmItem {
+        background: #ffe6f7;
+        padding: 10px;
+        border-radius: 12px;
+        margin-bottom: 8px;
+        color: #444;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>⏰ Alarma Kawaii</h2>
+    <div class="clock" id="clock">00:00:00</div>
+
+    <div id="activeAlarms"></div>
+
+    <button onclick="toggleConfig()">Configurar alarma 💖</button>
+
+    <div id="configPanel">
+
+        <label>Nombre de la alarma:</label>
+        <input id="alarmName" placeholder="Pausa bonita 💕">
+
+        <label>Tipo:</label>
+        <select id="type">
+            <option value="interval">Cada X minutos</option>
+            <option value="once">Una sola vez</option>
+        </select>
+
+        <label>Intervalo (minutos):</label>
+        <input type="number" id="interval" value="40">
+
+        <label>Hora inicio:</label>
+        <input type="time" id="startTime" value="12:00">
+
+        <label>Hora fin:</label>
+        <input type="time" id="endTime" value="15:00">
+
+        <label>Volumen:</label>
+        <input type="range" id="volume" min="0" max="1" step="0.1" value="1">
+
+        <label>Repeticiones:</label>
+        <input type="number" id="reps" value="3" min="1">
+
+        <label>Modo sonido:</label>
+        <select id="soundMode">
+            <option value="pop">Pop kawaii</option>
+            <option value="bell">Campanita</option>
+            <option value="sparkle">Brillito mágico</option>
+            <option value="voice">Decir nombre</option>
+        </select>
+
+        <button onclick="startAlarm()" style="background:#c6ffc6;">Guardar ✔</button>
+    </div>
+
+    <button id="stopBtn" onclick="stopAlarm()">Detener Alarma ❌</button>
+</div>
+
+<!-- sonidos kawaii -->
+<audio id="popSound" src="https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3"></audio>
+<audio id="bellSound" src="https://assets.mixkit.co/sfx/preview/mixkit-soft-magic-bell-1051.mp3"></audio>
+<audio id="sparkleSound" src="https://assets.mixkit.co/sfx/preview/mixkit-magical-sparkle-857.mp3"></audio>
+
+<script>
+let alarms = [];
+let speakInterval = null;
+let editingId = null;
+
+// reloj en vivo
+setInterval(() => {
+    document.getElementById("clock").innerText = new Date().toLocaleTimeString();
+}, 1000);
+
+function toggleConfig() {
+    const p = document.getElementById("configPanel");
+    p.style.display = p.style.display === "none" ? "block" : "none";
+}
+
+function insideSchedule(start, end) {
+    const now = new Date();
+    const t = now.toTimeString().slice(0,5);
+    return t >= start && t <= end;
+}
+
+function playKawaii(mode, volume, reps, text) {
+    stopAlarm();
+    document.getElementById("stopBtn").style.display = "block";
+
+    let sound;
+    if (mode === "pop") sound = document.getElementById("popSound");
+    if (mode === "bell") sound = document.getElementById("bellSound");
+    if (mode === "sparkle") sound = document.getElementById("sparkleSound");
+
+    let count = 0;
+
+    // VOZ
+    if (mode === "voice") {
+        speakInterval = setInterval(() => {
+            let msg = new SpeechSynthesisUtterance(text);
+            msg.volume = volume;
+            speechSynthesis.speak(msg);
+
+            count++;
+            if (count >= reps) stopAlarm();
+        }, 1300);
+        return;
+    }
+
+    // SONIDOS NORMALES
+    sound.volume = volume;
+
+    speakInterval = setInterval(() => {
+        sound.currentTime = 0;
+        sound.play();
+        count++;
+        if (count >= reps) stopAlarm();
+    }, 700);
+}
+
+function stopAlarm() {
+    clearInterval(speakInterval);
+    speechSynthesis.cancel();
+    document.getElementById("stopBtn").style.display = "none";
+}
+
+function startAlarm() {
+    const name = document.getElementById("alarmName").value || "Alarma";
+    const type = document.getElementById("type").value;
+    const mins = parseInt(document.getElementById("interval").value);
+    const start = document.getElementById("startTime").value;
+    const end = document.getElementById("endTime").value;
+    const volume = parseFloat(document.getElementById("volume").value);
+    const reps = parseInt(document.getElementById("reps").value);
+    const sound = document.getElementById("soundMode").value;
+
+    if (editingId) {
+        let a = alarms.find(x => x.id === editingId);
+        a.name = name;
+        a.type = type;
+        a.mins = mins;
+        a.start = start;
+        a.end = end;
+        a.volume = volume;
+        a.reps = reps;
+        a.sound = sound;
+        a.next = Date.now() + mins * 60 * 1000;
+
+        editingId = null;
+
+    } else {
+        const id = Date.now();
+        alarms.push({
+            id, name, type, mins, start, end,
+            next: Date.now() + mins * 60 * 1000,
+            volume, reps, sound
+        });
+    }
+
+    renderAlarms();
+}
+
+setInterval(() => {
+    const now = Date.now();
+
+    alarms.forEach(a => {
+        if (!insideSchedule(a.start, a.end)) return;
+
+        if (now >= a.next) {
+            playKawaii(a.sound, a.volume, a.reps, a.name);
+
+            if (a.type === "once") {
+                alarms = alarms.filter(x => x.id !== a.id);
+                renderAlarms();
+            } else {
+                a.next = now + a.mins * 60 * 1000;
+            }
+        }
+    });
+}, 1000);
+
+function editAlarm(id) {
+    const a = alarms.find(x => x.id === id);
+    if (!a) return;
+
+    document.getElementById("alarmName").value = a.name;
+    document.getElementById("type").value = a.type;
+    document.getElementById("interval").value = a.mins;
+    document.getElementById("startTime").value = a.start;
+    document.getElementById("endTime").value = a.end;
+    document.getElementById("volume").value = a.volume;
+    document.getElementById("reps").value = a.reps;
+    document.getElementById("soundMode").value = a.sound;
+
+    document.getElementById("configPanel").style.display = "block";
+    editingId = id;
+}
+
+function deleteAlarm(id) {
+    alarms = alarms.filter(a => a.id !== id);
+    renderAlarms();
+}
+
+function renderAlarms() {
+    const box = document.getElementById("activeAlarms");
+    box.innerHTML = "";
+
+    if (alarms.length === 0) {
+        box.innerHTML = "<i>No hay alarmas activas 💭</i>";
+        return;
+    }
+
+    alarms.forEach(a => {
+        box.innerHTML += `
+            <div class="alarmItem">
+                <b>${a.name}</b> 💕<br>
+                ${a.type === "interval" ? `Cada ${a.mins} min` : "Una vez"}<br>
+                ${a.start} → ${a.end}<br>
+                Sonido: ${a.sound} 🎵<br><br>
+
+                <button onclick="editAlarm(${a.id})" 
+                style="background:#b7d5ff; width:48%; display:inline-block; border-radius:12px;">
+                    Editar ✏️
+                </button>
+
+                <button onclick="deleteAlarm(${a.id})" 
+                style="background:#ff9aaa; width:48%; display:inline-block; border-radius:12px;">
+                    Eliminar ❌
+                </button>
+            </div>`;
+    });
+}
+</script>
+
+</body>
+</html>
+
