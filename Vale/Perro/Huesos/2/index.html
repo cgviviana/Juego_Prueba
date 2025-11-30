@@ -1,1 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Huesos del Perro por Números</title>
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:#111;
+  color:#fff;
+  text-align:center;
+}
+.panel{
+  max-width:1100px;
+  margin:40px auto;
+  background:#1f1f1f;
+  border-radius:16px;
+  padding:30px;
+  box-shadow:0 0 20px #000;
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap;
+}
+.game-box{flex:1; min-width:320px;}
+.img-box{flex:1; min-width:320px;}
+
+h2{color:#00ffff;}
+
+.niveles button{
+  margin:6px;
+  padding:10px 16px;
+  border:none;
+  border-radius:8px;
+  background:#444;
+  color:#fff;
+  font-weight:bold;
+  cursor:pointer;
+}
+.niveles .activo{background:#00aaff;}
+
+.pista{margin:18px 0; font-size:1.2rem;}
+.lineas{font-size:2rem; letter-spacing:10px; margin:20px 0;}
+
+input{
+  padding:10px;
+  font-size:1.1rem;
+  text-align:center;
+  border-radius:6px;
+  border:none;
+  width:220px;
+}
+
+button{
+  padding:10px 18px;
+  margin:8px;
+  border:none;
+  border-radius:8px;
+  font-weight:bold;
+  cursor:pointer;
+  background:#6ba8ff;
+  color:#fff;
+}
+
+#msg{font-size:1.4rem;margin-top:20px;}
+.ok{color:#00cc66;}
+.bad{color:#ff4444;}
+
+.img-box img{
+  max-width:100%;
+  border-radius:12px;
+  box-shadow:0 0 15px #000;
+}
+</style>
+</head>
+<body>
+
+<div class="panel">
+
+  <!-- JUEGO -->
+  <div class="game-box">
+    <h2>Huesos del Perro (por NÚMEROS)</h2>
+
+    <div class="niveles">
+      <button onclick="setNivel(0)" id="b0" class="activo">Cabeza</button>
+      <button onclick="setNivel(1)" id="b1">Tronco</button>
+      <button onclick="setNivel(2)" id="b2">Extremidades</button>
+    </div>
+
+    <div class="pista" id="pista"></div>
+    <div class="lineas" id="lineas"></div>
+
+    <input id="respuesta" placeholder="Escribe el hueso">
+    <br><br>
+    <button onclick="verificar()">Comprobar</button>
+    <button onclick="reintentar()">Reintentar</button>
+    <button onclick="siguiente()">Seguir ➜</button>
+
+    <div id="msg"></div>
+  </div>
+
+  <!-- IMAGEN -->
+  <div class="img-box">
+    <h3 style="color:#00ffff;">Imagen numerada</h3>
+    <input type="file" id="imgInput" accept="image/*"><br><br>
+    <img id="imgRef">
+  </div>
+
+</div>
+
+<script>
+/*
+ORDEN REAL DE TU LÁMINA:
+1  CRANEO
+2  VERTEBRA CERVICAL
+3  VERTEBRA TORACICA
+4  ESCAPULA
+5  VERTEBRA LUMBAR
+6  ILION
+7  SACRO
+8  ISQUION
+9  VERTEBRA CAUDAL
+10 FEMUR
+11 FIBULA
+12 TARSO
+13 METATARSO
+14 FALANGE
+15 TIBIA
+16 ROTULA
+17 PUBIS
+18 COSTILLA OSEA
+19 COSTILLA
+20 CUBITO
+21 FALANGE
+22 METACARPO
+23 MANO
+24 RADIO
+25 HUMERO
+26 EJE
+27 ATLAS
+28 MANDIBULA
+*/
+
+const niveles = [
+
+  // NIVEL 1 – CABEZA
+  [
+    {numero:1,  palabra:"CRANEO",     pista:"Protege el cerebro"},
+    {numero:26, palabra:"EJE",        pista:"Segunda vértebra cervical"},
+    {numero:27, palabra:"ATLAS",      pista:"Primera vértebra cervical"},
+    {numero:28, palabra:"MANDIBULA",  pista:"Hueso inferior de la boca"}
+  ],
+
+  // NIVEL 2 – TRONCO
+  [
+    {numero:2,  palabra:"VERTEBRA CERVICAL", pista:"Vértebras del cuello"},
+    {numero:3,  palabra:"VERTEBRA TORACICA", pista:"Vértebras del tórax"},
+    {numero:4,  palabra:"ESCAPULA",          pista:"Hombro del miembro anterior"},
+    {numero:5,  palabra:"VERTEBRA LUMBAR",   pista:"Región baja de la columna"},
+    {numero:7,  palabra:"SACRO",             pista:"Une la columna con la pelvis"},
+    {numero:9,  palabra:"VERTEBRA CAUDAL",   pista:"Vértebras de la cola"},
+    {numero:18, palabra:"COSTILLA OSEA",     pista:"Porción ósea de la costilla"},
+    {numero:19, palabra:"COSTILLA",          pista:"Protege pulmones y corazón"}
+  ],
+
+  // NIVEL 3 – EXTREMIDADES Y PELVIS
+  [
+    {numero:6,  palabra:"ILION",     pista:"Parte superior de la pelvis"},
+    {numero:8,  palabra:"ISQUION",   pista:"Parte posterior de la pelvis"},
+    {numero:17, palabra:"PUBIS",     pista:"Parte inferior de la pelvis"},
+    {numero:10, palabra:"FEMUR",     pista:"Hueso del muslo"},
+    {numero:16, palabra:"ROTULA",    pista:"Hueso de la rodilla"},
+    {numero:15, palabra:"TIBIA",     pista:"Hueso principal de la pierna"},
+    {numero:11, palabra:"FIBULA",    pista:"Hueso lateral de la pierna"},
+    {numero:12, palabra:"TARSO",     pista:"Huesos del tobillo"},
+    {numero:13, palabra:"METATARSO", pista:"Huesos del pie trasero"},
+    {numero:14, palabra:"FALANGE",   pista:"Huesos de los dedos"},
+    {numero:22, palabra:"METACARPO", pista:"Huesos de la mano"},
+    {numero:21, palabra:"FALANGE",   pista:"Falanges de la mano"},
+    {numero:23, palabra:"MANO",      pista:"Extremidad anterior distal"},
+    {numero:20, palabra:"CUBITO",    pista:"Hueso del antebrazo"},
+    {numero:24, palabra:"RADIO",     pista:"Hueso principal del antebrazo"},
+    {numero:25, palabra:"HUMERO",    pista:"Hueso del brazo"}
+  ]
+];
+
+let nivel = 0;
+let i = 0;
+
+function setNivel(n){
+  nivel = n;
+  i = 0;
+  document.querySelectorAll(".niveles button").forEach(b=>b.classList.remove("activo"));
+  document.getElementById("b"+n).classList.add("activo");
+  cargar();
+}
+
+function cargar(){
+  const data = niveles[nivel][i];
+  document.getElementById("pista").textContent =
+    "Número " + data.numero + " – " + data.pista;
+
+  document.getElementById("lineas").textContent =
+    data.palabra.replace(/[A-ZÁÉÍÓÚÑ]/gi,"_");
+
+  document.getElementById("respuesta").value = "";
+  document.getElementById("msg").textContent = "";
+  document.getElementById("msg").className = "";
+}
+
+function verificar(){
+  const data = niveles[nivel][i];
+  const user = document.getElementById("respuesta").value.toUpperCase().trim();
+  const msg = document.getElementById("msg");
+
+  if(user === data.palabra){
+    msg.textContent = "✔ Correcto";
+    msg.className = "ok";
+  } else {
+    msg.textContent = "✘ Incorrecto";
+    msg.className = "bad";
+  }
+}
+
+function reintentar(){
+  document.getElementById("respuesta").value = "";
+  document.getElementById("msg").textContent = "";
+  document.getElementById("msg").className = "";
+}
+
+function siguiente(){
+  if(i < niveles[nivel].length - 1){
+    i++;
+    cargar();
+  }
+}
+
+// CARGAR IMAGEN YA NUMERADA DESDE TU PC
+document.getElementById("imgInput").addEventListener("change", e=>{
+  document.getElementById("imgRef").src =
+    URL.createObjectURL(e.target.files[0]);
+});
+
+cargar();
+</script>
+
+</body>
+</html>
 
