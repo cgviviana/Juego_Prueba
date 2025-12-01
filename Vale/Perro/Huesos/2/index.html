@@ -2,266 +2,270 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Ahorcado </title>
+<title>Osteología Canina - Preparatorio</title>
 
 <style>
 body{
   margin:0;
   font-family:Arial;
-  background:url("selva.jpg") center/cover no-repeat fixed;
+  background:url("selva.jpg") no-repeat center center fixed;
+  background-size:cover;
   color:#fff;
-  text-align:center;
 }
 
 .panel{
-  max-width:1100px;
-  margin:30px auto;
-  background:rgba(25,25,25,0.92);
+  max-width:1200px;
+  margin:40px auto;
+  background:rgba(20,20,20,0.82);
   border-radius:16px;
   padding:24px;
   box-shadow:0 0 20px #000;
-  display:flex;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
   gap:20px;
-  flex-wrap:wrap;
 }
 
-.game-box{flex:1;min-width:320px}
-.img-box{flex:1;min-width:320px}
+h2{color:#00ffff;text-align:center}
 
-h2{color:#00ffff}
-
-.niveles button{
-  margin:4px;
-  padding:10px 14px;
-  border:none;
-  border-radius:8px;
-  background:#444;
-  color:#fff;
-  font-weight:bold;
-  cursor:pointer;
-}
-.niveles .activo{background:#00aaff}
-
-.pista{margin:10px 0;font-size:1.1rem}
-.lineas{font-size:2rem;letter-spacing:10px;margin:12px 0}
-
-input{
-  padding:8px;
-  font-size:1.1rem;
+/* ===== BOTONES NIVEL ===== */
+.niveles{
   text-align:center;
-  border-radius:6px;
-  border:none;
-  width:80px;
+  margin-bottom:25px;
 }
-
-button{
-  padding:10px 16px;
+.niveles button{
   margin:6px;
+  padding:10px 18px;
   border:none;
-  border-radius:8px;
+  border-radius:10px;
+  background:#2f8f2f;
+  color:#fff;
   font-weight:bold;
   cursor:pointer;
-  background:#6ba8ff;
-  color:#fff;
+}
+.niveles .activo{
+  background:#46c646;
 }
 
-#errores{color:#ff4444}
-#intentos{font-size:.95rem}
-#msg{font-size:1.2rem;margin-top:8px}
-.ok{color:#00cc66}
-.bad{color:#ff4444}
+/* ===== BOTONES LISTA ===== */
+.lista button{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  width:50%;
+  margin:8px auto;
+  padding:8px 12px;
+  border:none;
+  border-radius:8px;
+  background:#143a5b;
+  color:#fff;
+  font-weight:bold;
+  cursor:pointer;
+  text-align:left;
+}
+.lista button::after{
+  content:"👆";
+  font-size:1.1rem;
+}
 
+/* ===== IMAGEN ===== */
+.img-box{
+  text-align:center;
+}
 .img-box img{
   max-width:100%;
   border-radius:12px;
   box-shadow:0 0 15px #000;
 }
-
-/* ===== PROGRESO ABAJO (TEXTO DEBAJO) ===== */
-.progreso-box{
-  margin-top:16px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:6px;
-}
-
-.barra{
-  width:200px;
-  height:12px;
-  background:#333;
+.btn-juego{
+  margin-top:12px;
+  padding:12px 26px;
+  font-size:1.1rem;
+  border:none;
   border-radius:10px;
-  overflow:hidden;
+  background:#46c646;
+  color:#000;
+  font-weight:bold;
+  cursor:pointer;
 }
 
-.barra-inner{
-  height:100%;
-  width:0%;
-  background:linear-gradient(90deg,#00ffcc,#00aaff);
-  transition:width .3s;
+/* ===== POPUP ===== */
+#popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.7);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+#popup-box{
+  background:#222;
+  padding:20px;
+  border-radius:14px;
+  max-width:420px;
+  text-align:center;
+}
+#popup-box h3{
+  color:#00ffff;
 }
 
-.progreso-texto{
-  font-size:0.95rem;
-  color:#00ffcc;
+/* ===== FOOTER ===== */
+footer{
+  margin:20px auto 30px;
+  text-align:center;
+  font-size:.85rem;
+  color:#e5e7eb;
+  opacity:.95;
+}
+.footer-inner{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:6px 14px;
+  border-radius:999px;
+  background:rgba(15,23,42,0.85);
+  box-shadow:0 0 8px rgba(0,0,0,0.6);
+}
+footer strong{
+  color:#00ffff;
+}
+.logo-pet{
+  width:22px;
+  height:22px;
+  color:#facc15;
 }
 </style>
 </head>
 
 <body>
 
+<!-- SPRITE SVG HUELLITA -->
+<svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+  <defs>
+    <symbol id="logo-pata" viewBox="0 0 24 24">
+      <path d="M9 15c0-1.7 1.3-3 3-3s3 1.3 3 3-1.2 3.2-3 3.5c-1.8-.3-3-1.8-3-3.5z" fill="currentColor"/>
+      <circle cx="7.2" cy="10" r="1.6" fill="currentColor"/>
+      <circle cx="10.5" cy="8.5" r="1.7" fill="currentColor"/>
+      <circle cx="13.5" cy="8.5" r="1.7" fill="currentColor"/>
+      <circle cx="16.8" cy="10" r="1.6" fill="currentColor"/>
+    </symbol>
+  </defs>
+</svg>
+
 <div class="panel">
 
-  <!-- JUEGO -->
-  <div class="game-box">
-    <h2>Ahorcadito </h2>
+  <!-- IZQUIERDA -->
+  <div>
+    <h2>Osteología canina</h2>
 
     <div class="niveles">
-      <button onclick="setNivel(0)" id="b0" class="activo">Cabeza</button>
-      <button onclick="setNivel(1)" id="b1">Tronco</button>
-      <button onclick="setNivel(2)" id="b2">Extremidades</button>
+      <button id="b0" class="activo" onclick="verNivel(0)">Cabeza</button>
+      <button id="b1" onclick="verNivel(1)">Tronco</button>
+      <button id="b2" onclick="verNivel(2)">Extremidades</button>
     </div>
 
-    <div class="pista" id="pista"></div>
-    <div class="lineas" id="lineas"></div>
-
-    <div>
-      <input id="letra" maxlength="1" placeholder="A">
-      <button onclick="probarLetra()">Probar</button>
-    </div>
-
-    <div id="intentos"></div>
-    <div id="errores"></div>
-
-    <button onclick="siguiente()">Seguir ➜</button>
-    <div id="msg"></div>
-
-    <!-- ✅ BARRA + TEXTO DEBAJO -->
-    <div class="progreso-box">
-      <div class="barra">
-        <div class="barra-inner" id="barra"></div>
-      </div>
-      <div class="progreso-texto" id="textoProgreso"></div>
-    </div>
+    <div class="lista" id="lista"></div>
   </div>
 
-  <!-- IMAGEN -->
+  <!-- DERECHA -->
   <div class="img-box">
-    <h3 style="color:#00ffff">Imagen – Osteología canina</h3>
     <img src="imagen.jpg">
+    <br>
+    <a href="https://cgviviana.github.io/Juego_Prueba/Vale/Perro/Huesos/2/">
+      <button class="btn-juego">▶ EMPEZAR JUEGO</button>
+    </a>
   </div>
 
 </div>
 
+<!-- POPUP -->
+<div id="popup">
+  <div id="popup-box">
+    <h3 id="popTitulo"></h3>
+    <p id="popTexto"></p>
+    <button onclick="cerrarPop()">Cerrar</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <svg class="logo-pet"><use href="#logo-pata"></use></svg>
+    Aprendiendo con <strong>Michy y Kiara</strong>
+    <svg class="logo-pet"><use href="#logo-pata"></use></svg>
+  </div>
+</footer>
+
 <script>
 const niveles = [
+
+/* CABEZA */
 [
-  {numero:1, palabra:"CRANEO", pista:"Protege el cerebro"},
-  {numero:26, palabra:"EJE", pista:"Segunda vértebra cervical"},
-  {numero:27, palabra:"ATLAS", pista:"Primera vértebra cervical"},
-  {numero:28, palabra:"MANDIBULA", pista:"Hueso inferior de la boca"},
-  {numero:2, palabra:"VERTEBRACERVICAL", pista:"Vértebras del cuello"},
-  {numero:3, palabra:"VERTEBRATORACICA", pista:"Vértebras del tórax"},
-  {numero:4, palabra:"ESCAPULA", pista:"Hombro del miembro anterior"}
+{n:1, t:"CRÁNEO", d:"Protege el cerebro. Hueso plano, fuerte, forma ovalada."},
+{n:2, t:"VÉRTEBRA CERVICAL", d:"Sostiene el cuello. Hueso irregular."},
+{n:3, t:"VÉRTEBRA TORÁCICA", d:"Sostiene el tórax. Hueso irregular."},
+{n:4, t:"ESCÁPULA", d:"Une el brazo al tronco. Hueso plano."},
+{n:26, t:"EJE", d:"Permite girar la cabeza. Hueso irregular."},
+{n:27, t:"ATLAS", d:"Sostiene la cabeza. Hueso irregular."},
+{n:28, t:"MANDÍBULA", d:"Permite masticar. Hueso irregular."}
 ],
+
+/* TRONCO */
 [
-  {numero:5, palabra:"VERTEBRALUMBAR", pista:"Región baja de la columna"},
-  {numero:7, palabra:"SACRO", pista:"Une la columna con la pelvis"},
-  {numero:9, palabra:"VERTEBRACAUDAL", pista:"Vértebras de la cola"},
-  {numero:18, palabra:"COSTILLAOSEA", pista:"Porción ósea de la costilla"},
-  {numero:19, palabra:"COSTILLA", pista:"Arcos que protegen pulmones y corazón"}
+{n:5, t:"VÉRTEBRA LUMBAR", d:"Soporta peso. Hueso irregular."},
+{n:7, t:"SACRO", d:"Conecta columna y pelvis. Hueso fusionado."},
+{n:9, t:"VÉRTEBRA CAUDAL", d:"Forma la cola. Hueso irregular."},
+{n:18,t:"COSTILLA ÓSEA", d:"Protege pulmones. Hueso plano."},
+{n:19,t:"COSTILLA", d:"Protege corazón y pulmones. Hueso plano."}
 ],
+
+/* EXTREMIDADES */
 [
-  {numero:6, palabra:"ILION", pista:"Parte superior de la pelvis"},
-  {numero:8, palabra:"ISQUION", pista:"Parte posterior de la pelvis"},
-  {numero:17, palabra:"PUBIS", pista:"Parte inferior de la pelvis"},
-  {numero:10, palabra:"FEMUR", pista:"Hueso del muslo"},
-  {numero:16, palabra:"ROTULA", pista:"Hueso de la rodilla"},
-  {numero:15, palabra:"TIBIA", pista:"Hueso principal de la pierna"},
-  {numero:11, palabra:"FIBULA", pista:"Hueso lateral de la pierna"},
-  {numero:12, palabra:"TARSO", pista:"Huesos del tobillo"},
-  {numero:13, palabra:"METATARSO", pista:"Huesos del pie trasero"},
-  {numero:14, palabra:"FALANGE", pista:"Dedos del pie"},
-  {numero:22, palabra:"METACARPO", pista:"Huesos de la mano"},
-  {numero:21, palabra:"FALANGE", pista:"Dedos de la mano"},
-  {numero:23, palabra:"MANO", pista:"Extremidad anterior distal"},
-  {numero:20, palabra:"CUBITO", pista:"Hueso del antebrazo"},
-  {numero:24, palabra:"RADIO", pista:"Hueso principal del antebrazo"},
-  {numero:25, palabra:"HUMERO", pista:"Hueso del brazo"}
+{n:6, t:"ILION", d:"Parte superior de la pelvis."},
+{n:8, t:"ISQUION", d:"Parte posterior de la pelvis."},
+{n:17,t:"PUBIS", d:"Parte inferior de la pelvis."},
+{n:10,t:"FÉMUR", d:"Hueso del muslo. Hueso largo."},
+{n:16,t:"RÓTULA", d:"Protege la rodilla."},
+{n:15,t:"TIBIA", d:"Soporta peso. Hueso largo."},
+{n:11,t:"FÍBULA", d:"Soporte lateral."},
+{n:12,t:"TARSO", d:"Tobillo."},
+{n:13,t:"METATARSO", d:"Pie trasero."},
+{n:14,t:"FALANGE", d:"Dedos del pie."},
+{n:22,t:"METACARPO", d:"Mano."},
+{n:21,t:"FALANGE", d:"Dedos de la mano."},
+{n:23,t:"MANO", d:"Extremidad distal."},
+{n:20,t:"CÚBITO", d:"Antebrazo."},
+{n:24,t:"RADIO", d:"Antebrazo principal."},
+{n:25,t:"HÚMERO", d:"Brazo."}
 ]
 ];
 
-let nivel=0,i=0,palabra="",estado=[],errores=[],intentos=6;
-
-function setNivel(n){
-  nivel=n;i=0;
+function verNivel(n){
   document.querySelectorAll(".niveles button").forEach(b=>b.classList.remove("activo"));
   document.getElementById("b"+n).classList.add("activo");
-  cargar();
+
+  const lista=document.getElementById("lista");
+  lista.innerHTML="";
+
+  niveles[n].forEach(h=>{
+    const btn=document.createElement("button");
+    btn.textContent=h.n+". "+h.t;
+    btn.onclick=()=>verPop(h.n+". "+h.t,h.d);
+    lista.appendChild(btn);
+  });
 }
 
-function cargar(){
-  const d=niveles[nivel][i];
-  palabra=d.palabra;
-  estado=Array(palabra.length).fill("_");
-  errores=[];
-  intentos=6;
-  document.getElementById("pista").textContent="Número "+d.numero+" – "+d.pista;
-  document.getElementById("msg").textContent="";
-  actualizarBarra();
-  actualizar();
+function verPop(t,p){
+  document.getElementById("popTitulo").textContent=t;
+  document.getElementById("popTexto").textContent=p;
+  document.getElementById("popup").style.display="flex";
 }
 
-function actualizar(){
-  document.getElementById("lineas").textContent=estado.join(" ");
-  document.getElementById("errores").textContent="Errores: "+errores.join(", ");
-  document.getElementById("intentos").textContent="Intentos restantes: "+intentos;
-  document.getElementById("letra").value="";
+function cerrarPop(){
+  document.getElementById("popup").style.display="none";
 }
 
-function actualizarBarra(){
-  const total=niveles[nivel].length;
-  const progreso=i+1;
-  document.getElementById("barra").style.width=(i/total)*100+"%";
-  document.getElementById("textoProgreso").textContent =
-    progreso+" de "+total+" preguntas";
-}
-
-function probarLetra(){
-  const l=document.getElementById("letra").value.toUpperCase();
-  if(!l||intentos===0)return;
-
-  if(palabra.includes(l)){
-    for(let j=0;j<palabra.length;j++) if(palabra[j]===l) estado[j]=l;
-  }else{
-    if(!errores.includes(l)){errores.push(l);intentos--;}
-  }
-  actualizar();
-
-  if(!estado.includes("_")){
-    document.getElementById("msg").textContent="✔ Correcto";
-    document.getElementById("msg").className="ok";
-  }
-
-  if(intentos===0){
-    document.getElementById("msg").textContent="✘ Respuesta: "+palabra;
-    document.getElementById("msg").className="bad";
-  }
-}
-
-function siguiente(){
-  if(i<niveles[nivel].length-1){
-    i++;
-    cargar();
-  } else {
-    document.getElementById("barra").style.width="100%";
-    document.getElementById("textoProgreso").textContent =
-      niveles[nivel].length+" de "+niveles[nivel].length+" preguntas";
-    document.getElementById("msg").textContent="✅ Nivel completado";
-  }
-}
-
-cargar();
+verNivel(0);
 </script>
 
 </body>
