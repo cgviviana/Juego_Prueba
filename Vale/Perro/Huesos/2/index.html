@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Ahorcado – 28 Huesos del Perro</title>
+<title>Ahorcado </title>
 
 <style>
 body{
@@ -77,17 +77,17 @@ button{
   box-shadow:0 0 15px #000;
 }
 
-/* ===== PROGRESO ABAJO ===== */
+/* ===== PROGRESO ABAJO (TEXTO DEBAJO) ===== */
 .progreso-box{
   margin-top:16px;
   display:flex;
+  flex-direction:column;
   align-items:center;
-  justify-content:center;
-  gap:12px;
+  gap:6px;
 }
 
 .barra{
-  width:160px;
+  width:200px;
   height:12px;
   background:#333;
   border-radius:10px;
@@ -136,7 +136,7 @@ button{
     <button onclick="siguiente()">Seguir ➜</button>
     <div id="msg"></div>
 
-    <!-- ✅ BARRA + TEXTO JUNTOS ABAJO -->
+    <!-- ✅ BARRA + TEXTO DEBAJO -->
     <div class="progreso-box">
       <div class="barra">
         <div class="barra-inner" id="barra"></div>
@@ -147,7 +147,7 @@ button{
 
   <!-- IMAGEN -->
   <div class="img-box">
-    <h3 style="color:#00ffff">Imagen numerada</h3>
+    <h3 style="color:#00ffff">Imagen – Huesos del Perro</h3>
     <img src="imagen.jpg">
   </div>
 
