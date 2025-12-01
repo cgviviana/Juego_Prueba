@@ -2,297 +2,216 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Ordenar Huesos del Perro</title>
+<title>Huesos del Perro - Preparatorio</title>
+
 <style>
 body{
   margin:0;
-  font-family:Segoe UI, sans-serif;
-  background:#1a1a1a;
+  font-family:Arial;
+  background:url("selva.jpg") center/cover no-repeat fixed;
+  color:#fff;
 }
-.bg{
-  position:fixed;
-  inset:0;
-  background:linear-gradient(120deg,#000,#222);
-  z-index:-1;
+
+.panel{
+  max-width:1200px;
+  margin:30px auto;
+  background:rgba(20,20,20,.92);
+  border-radius:16px;
+  padding:24px;
+  box-shadow:0 0 20px #000;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:20px;
 }
-.game-wrapper{
-  max-width:980px;
-  margin:40px auto;
-  background:rgba(255,255,255,0.9);
-  border-radius:14px;
-  padding:20px 30px;
-  box-shadow:0 4px 18px rgba(0,0,0,0.25);
-}
-.header-box{
-  display:flex;
-  justify-content:space-between;
-  border-bottom:2px solid #ddd;
-  padding-bottom:10px;
-}
-.title{font-size:1.4rem;font-weight:bold;color:#222}
-.info{text-align:right;font-size:.9rem}
-.timer{
-  margin-top:6px;
-  font-size:1rem;
-  font-weight:bold;
-  padding:6px 12px;
-  background:#fff;
-  border-radius:18px;
-  border:2px solid #ddd;
-  display:inline-block;
-}
-.levels{
-  margin:15px 0;
+
+h2{color:#00ffff;text-align:center}
+
+.niveles{
   text-align:center;
+  margin-bottom:12px;
 }
-.levels button{
+
+.niveles button{
   margin:4px;
-  padding:8px 14px;
+  padding:10px 16px;
   border:none;
   border-radius:8px;
-  font-weight:bold;
-  cursor:pointer;
   background:#444;
   color:#fff;
-}
-.levels button.active{
-  background:#6ba8ff;
-}
-.clue-box{
-  margin-top:18px;
-  padding:14px;
-  background:#f7f7f7;
-  border-left:4px solid #6ba8ff;
-  border-radius:8px;
-  font-size:1rem;
-}
-.letters-container{
-  margin-top:28px;
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:10px;
-}
-.letter{
-  width:60px;
-  height:60px;
-  background:#fff;
-  border-radius:8px;
-  font-size:1.6rem;
   font-weight:bold;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  box-shadow:0 4px 8px rgba(0,0,0,0.15);
   cursor:pointer;
 }
-.answer-container{
-  margin-top:25px;
-  display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:10px;
-  min-height:70px;
-}
-.slot{
-  width:60px;
-  height:60px;
-  background:#eaeaea;
-  border-radius:8px;
-  border:2px dashed #bdbdbd;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:1.6rem;
-  font-weight:bold;
-}
-.btns{
-  margin-top:30px;
-  display:flex;
-  justify-content:center;
-  gap:14px;
-}
-button{
-  padding:10px 20px;
-  background:#6ba8ff;
-  color:#fff;
-  font-size:1rem;
-  font-weight:bold;
+.niveles .activo{background:#00aaff}
+
+.lista button{
+  display:block;
+  width:100%;
+  margin:6px 0;
+  padding:10px;
   border:none;
   border-radius:8px;
+  background:#6ba8ff;
+  color:#fff;
+  font-weight:bold;
+  cursor:pointer;
+  text-align:left;
+}
+
+.img-box{
+  text-align:center;
+}
+
+.img-box img{
+  max-width:100%;
+  border-radius:12px;
+  box-shadow:0 0 15px #000;
+}
+
+.btn-juego{
+  margin-top:12px;
+  padding:14px 24px;
+  font-size:1.1rem;
+  border:none;
+  border-radius:10px;
+  background:#00cc66;
+  color:#000;
+  font-weight:bold;
   cursor:pointer;
 }
-#feedback{
-  font-size:1.3rem;
-  margin-top:20px;
-  text-align:center;
-  font-weight:bold;
+
+/* ===== POPUP ===== */
+#popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.7);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
 }
-.ok{color:#009b4c;}
-.bad{color:#cc0000;}
+
+#popup-box{
+  background:#222;
+  padding:20px;
+  border-radius:14px;
+  max-width:420px;
+  text-align:center;
+}
+
+#popup-box h3{color:#00ffff}
 </style>
 </head>
+
 <body>
 
-<div class="bg"></div>
+<div class="panel">
 
-<div class="game-wrapper">
+  <!-- ===== IZQUIERDA: LISTA ===== -->
+  <div>
+    <h2>Huesos del Perro</h2>
 
-  <div class="header-box">
-    <div class="title">Ordena los huesos del perro</div>
-    <div class="info">
-      Palabra <span id="qNum">1</span>/<span id="qTotal">1</span><br>
-      <div class="timer">⏱ <span id="time">60</span>s</div>
+    <div class="niveles">
+      <button id="b0" class="activo" onclick="verNivel(0)">Cabeza</button>
+      <button id="b1" onclick="verNivel(1)">Tronco</button>
+      <button id="b2" onclick="verNivel(2)">Extremidades</button>
     </div>
+
+    <div class="lista" id="lista"></div>
   </div>
 
-  <div class="levels">
-    <button onclick="setLevel(0)" id="btn0" class="active">Cabeza</button>
-    <button onclick="setLevel(1)" id="btn1">Tronco</button>
-    <button onclick="setLevel(2)" id="btn2">Extremidades</button>
+  <!-- ===== DERECHA: IMAGEN + BOTÓN ===== -->
+  <div class="img-box">
+    <img src="imagen.jpg">
+    <br>
+    <button class="btn-juego" onclick="empezarJuego()">▶ EMPEZAR JUEGO</button>
   </div>
-
-  <div class="clue-box" id="clueText"></div>
-  <div class="letters-container" id="lettersPool"></div>
-  <div class="answer-container" id="answerSlots"></div>
-
-  <div class="btns">
-    <button onclick="checkAnswer()">✔ Comprobar</button>
-    <button onclick="resetWord()">⟲ Reiniciar</button>
-    <button onclick="nextWord()">Siguiente ➜</button>
-  </div>
-
-  <div id="feedback"></div>
 
 </div>
 
+<!-- ===== POPUP ===== -->
+<div id="popup">
+  <div id="popup-box">
+    <h3 id="popTitulo"></h3>
+    <p id="popTexto"></p>
+    <button onclick="cerrarPop()">Cerrar</button>
+  </div>
+</div>
+
 <script>
-const levels = [
-  [
-    {answer:"CRANEO",clue:"Protege el cerebro."},
-    {answer:"MANDIBULA",clue:"Hueso inferior de la boca."},
-    {answer:"MAXILAR",clue:"Hueso superior con dientes."},
-    {answer:"ATLAS",clue:"Primera vértebra cervical."},
-    {answer:"EJE",clue:"Segunda vértebra cervical."}
-  ],
-  [
-    {answer:"VERTEBRA CERVICAL",clue:"Vértebras del cuello."},
-    {answer:"VERTEBRA TORACICA",clue:"Vértebras del tórax."},
-    {answer:"VERTEBRA LUMBAR",clue:"Región baja de la columna."},
-    {answer:"SACRO",clue:"Une columna con pelvis."},
-    {answer:"COSTILLA",clue:"Protege pulmones y corazón."}
-  ],
-  [
-    {answer:"FEMUR",clue:"Hueso del muslo."},
-    {answer:"TIBIA",clue:"Hueso principal de la pierna."},
-    {answer:"FIBULA",clue:"Hueso lateral de la pierna."},
-    {answer:"TARSO",clue:"Huesos del tobillo."},
-    {answer:"METATARSO",clue:"Huesos del pie trasero."}
-  ]
+const niveles = [
+
+/* ===== NIVEL 1 – CABEZA (7) ===== */
+[
+{n:1, t:"CRÁNEO", d:"Protege el cerebro. Hueso plano, fuerte, forma ovalada."},
+{n:2, t:"VÉRTEBRA CERVICAL", d:"Sostiene el cuello. Hueso irregular."},
+{n:3, t:"VÉRTEBRA TORÁCICA", d:"Sostiene el tórax. Hueso irregular."},
+{n:4, t:"ESCÁPULA", d:"Une el brazo al tronco. Hueso plano."},
+{n:26, t:"EJE", d:"Permite girar la cabeza. Hueso irregular."},
+{n:27, t:"ATLAS", d:"Sostiene la cabeza. Hueso irregular."},
+{n:28, t:"MANDÍBULA", d:"Permite masticar. Hueso irregular."}
+],
+
+/* ===== NIVEL 2 – TRONCO (5) ===== */
+[
+{n:5, t:"VÉRTEBRA LUMBAR", d:"Soporta peso. Hueso irregular."},
+{n:7, t:"SACRO", d:"Conecta columna y pelvis. Hueso fusionado."},
+{n:9, t:"VÉRTEBRA CAUDAL", d:"Forma la cola. Hueso irregular."},
+{n:18, t:"COSTILLA ÓSEA", d:"Protege pulmones. Hueso plano."},
+{n:19, t:"COSTILLA", d:"Protege corazón y pulmones. Hueso plano."}
+],
+
+/* ===== NIVEL 3 – EXTREMIDADES (16) ===== */
+[
+{n:6, t:"ILION", d:"Parte superior de la pelvis."},
+{n:8, t:"ISQUION", d:"Parte posterior de la pelvis."},
+{n:17, t:"PUBIS", d:"Parte inferior de la pelvis."},
+{n:10, t:"FÉMUR", d:"Hueso del muslo. Hueso largo."},
+{n:16, t:"RÓTULA", d:"Protege la rodilla."},
+{n:15, t:"TIBIA", d:"Soporta peso. Hueso largo."},
+{n:11, t:"FÍBULA", d:"Soporte lateral."},
+{n:12, t:"TARSO", d:"Tobillo."},
+{n:13, t:"METATARSO", d:"Pie trasero."},
+{n:14, t:"FALANGE", d:"Dedos del pie."},
+{n:22, t:"METACARPO", d:"Mano."},
+{n:21, t:"FALANGE", d:"Dedos de la mano."},
+{n:23, t:"MANO", d:"Extremidad distal."},
+{n:20, t:"CÚBITO", d:"Antebrazo."},
+{n:24, t:"RADIO", d:"Antebrazo principal."},
+{n:25, t:"HÚMERO", d:"Brazo."}
+]
 ];
 
-let currentLevel=0;
-let words=levels[0];
-let index=0;
-let timer;
-let timeLeft=60;
+function verNivel(n){
+  document.querySelectorAll(".niveles button").forEach(b=>b.classList.remove("activo"));
+  document.getElementById("b"+n).classList.add("activo");
 
-function setLevel(n){
-  currentLevel=n;
-  words=levels[n];
-  index=0;
-  document.querySelectorAll(".levels button").forEach(b=>b.classList.remove("active"));
-  document.getElementById("btn"+n).classList.add("active");
-  loadWord();
-}
+  const lista = document.getElementById("lista");
+  lista.innerHTML = "";
 
-document.getElementById("qTotal").textContent=words.length;
-
-function loadWord(){
-  const data=words[index];
-  document.getElementById("qNum").textContent=index+1;
-  document.getElementById("qTotal").textContent=words.length;
-  document.getElementById("clueText").textContent=data.clue;
-
-  const pool=document.getElementById("lettersPool");
-  const slots=document.getElementById("answerSlots");
-  pool.innerHTML="";
-  slots.innerHTML="";
-  document.getElementById("feedback").textContent="";
-
-  const letters=data.answer.replace(/ /g,"").split("").sort(()=>Math.random()-0.5);
-  letters.forEach(ch=>{
-    const div=document.createElement("div");
-    div.className="letter";
-    div.textContent=ch;
-    div.onclick=()=>moveToSlot(div);
-    pool.appendChild(div);
+  niveles[n].forEach(h=>{
+    const btn = document.createElement("button");
+    btn.textContent = h.n + ". " + h.t;
+    btn.onclick = ()=>verPop(h.n+". "+h.t, h.d);
+    lista.appendChild(btn);
   });
-
-  for(let i=0;i<data.answer.replace(/ /g,"").length;i++){
-    const div=document.createElement("div");
-    div.className="slot";
-    div.onclick=()=>returnLetter(div);
-    slots.appendChild(div);
-  }
-  resetTimer();
 }
 
-function moveToSlot(letter){
-  const slots=[...document.querySelectorAll(".slot")];
-  const slot=slots.find(s=>s.textContent==="");
-  if(!slot)return;
-  slot.textContent=letter.textContent;
-  letter.remove();
+function verPop(t,p){
+  document.getElementById("popTitulo").textContent = t;
+  document.getElementById("popTexto").textContent = p;
+  document.getElementById("popup").style.display = "flex";
 }
 
-function returnLetter(slot){
-  if(!slot.textContent)return;
-  const pool=document.getElementById("lettersPool");
-  const div=document.createElement("div");
-  div.className="letter";
-  div.textContent=slot.textContent;
-  div.onclick=()=>moveToSlot(div);
-  pool.appendChild(div);
-  slot.textContent="";
+function cerrarPop(){
+  document.getElementById("popup").style.display = "none";
 }
 
-function checkAnswer(){
-  const correct=words[index].answer.replace(/ /g,"");
-  let user="";
-  document.querySelectorAll(".slot").forEach(s=>user+=s.textContent);
-  const fb=document.getElementById("feedback");
-  if(user===correct){
-    fb.textContent="✔ Correcto";
-    fb.className="ok";
-    clearInterval(timer);
-  }else{
-    fb.textContent="✘ Incorrecto";
-    fb.className="bad";
-  }
+function empezarJuego(){
+  alert("Aquí conectamos con el juego del ahorcado.");
 }
 
-function resetWord(){loadWord();}
-function nextWord(){if(index<words.length-1){index++;loadWord();}}
-
-function resetTimer(){
-  clearInterval(timer);
-  timeLeft=60;
-  document.getElementById("time").textContent=timeLeft;
-  timer=setInterval(()=>{
-    timeLeft--;
-    document.getElementById("time").textContent=timeLeft;
-    if(timeLeft<=0){
-      clearInterval(timer);
-      document.getElementById("feedback").textContent="⏱ Tiempo agotado";
-      document.getElementById("feedback").className="bad";
-    }
-  },1000);
-}
-
-loadWord();
+verNivel(0);
 </script>
 
 </body>
 </html>
-
