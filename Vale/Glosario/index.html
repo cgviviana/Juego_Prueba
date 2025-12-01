@@ -13,7 +13,7 @@ body{
 
 .contenedor{
   max-width:900px;
-  margin:50px auto;
+  margin:50px auto 20px;
   background:rgba(20,20,20,0.88);
   border-radius:16px;
   padding:26px;
@@ -28,13 +28,25 @@ h1{
 }
 
 .panel-juego{
-  margin-top:24px;
+  margin-top:16px;
 }
 
+/* SELECT CATEGORÍA */
+.select-categoria{
+  margin-bottom:8px;
+}
+.select-categoria select{
+  padding:8px 12px;
+  border-radius:8px;
+  border:none;
+  font-weight:bold;
+}
+
+/* TARJETA */
 .tarjeta{
   width:100%;
   max-width:420px;
-  height:230px;
+  height:220px;
   margin:0 auto 20px;
   perspective:1000px;
 }
@@ -64,6 +76,8 @@ h1{
   justify-content:center;
   padding:18px;
   box-sizing:border-box;
+  /* MARCO BLANCO INTERNO */
+  box-shadow: inset 0 0 0 3px #fff;
 }
 
 .frente{
@@ -75,18 +89,11 @@ h1{
   margin:4px 0 0;
 }
 
-.categoria{
-  display:flex;
-  align-items:center;
-  gap:6px;
+#categoria{
   font-size:.8rem;
   color:#a7f3d0;
   margin-bottom:6px;
-}
-
-.categoria svg{
-  width:18px;
-  height:18px;
+  display:block;
 }
 
 .reverso{
@@ -100,7 +107,7 @@ h1{
 }
 
 .controles{
-  margin-top:14px;
+  margin-top:4px;
 }
 
 .controles button{
@@ -115,70 +122,54 @@ h1{
 }
 
 .marcador{
-  margin-top:10px;
+  margin-top:6px;
   color:#ddd;
+}
+
+/* FOOTER */
+footer{
+  margin:0 auto 18px;
+  text-align:center;
+  font-size:.85rem;
+  color:#e5e7eb;
+  opacity:.9;
+}
+
+.footer-inner{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 14px;
+  border-radius:999px;
+  background:rgba(15,23,42,0.85);
+  box-shadow:0 0 8px rgba(0,0,0,0.6);
+}
+
+footer span strong{
+  color:#00ffff;
+}
+
+.logo-pet{
+  width:22px;
+  height:22px;
+  color:#facc15;
 }
 </style>
 </head>
 <body>
 
-<!-- SPRITE SVG PARA ICONOS DE CATEGORÍA -->
+<!-- SPRITE SVG LOGO HUELLITA -->
 <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
   <defs>
-    <!-- Ciencias básicas: libro -->
-    <symbol id="i-basicas" viewBox="0 0 24 24">
-      <path d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 0-3-3V4z" 
-            fill="none" stroke="currentColor" stroke-width="2"/>
-      <path d="M8 7h6" fill="none" stroke="currentColor" stroke-width="1.6"/>
-    </symbol>
-    <!-- Estructura: hueso -->
-    <symbol id="i-estructura" viewBox="0 0 24 24">
-      <path d="M7 7a2.5 2.5 0 1 0-3 3l2 2 6 6 2 2a2.5 2.5 0 1 0 3-3l-2-2-6-6-2-2z"
-            fill="none" stroke="currentColor" stroke-width="2"/>
-    </symbol>
-    <!-- Clínica: cruz -->
-    <symbol id="i-clinica" viewBox="0 0 24 24">
-      <path d="M10 4h4v5h5v4h-5v7h-4v-7H5v-4h5z"
-            fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linejoin="round"/>
-    </symbol>
-    <!-- Patología: célula lesionada -->
-    <symbol id="i-patologia" viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
-      <path d="M9 10l2 1-1 3m3-4 2 1-1 3" 
-            fill="none" stroke="currentColor" stroke-width="1.6"/>
-    </symbol>
-    <!-- Micro / Parasitos: microbio -->
-    <symbol id="i-micro" viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/>
-      <path d="M12 5v2M12 17v2M5 12h2M17 12h2M7 7l1.5 1.5M15.5 15.5 17 17M15.5 8.5 17 7M7 17l1.5-1.5"
-            fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-    </symbol>
-    <!-- Farmacología: pastilla -->
-    <symbol id="i-farmaco" viewBox="0 0 24 24">
-      <rect x="5" y="7" width="14" height="10" rx="5" ry="5"
-            fill="none" stroke="currentColor" stroke-width="2"/>
-      <path d="M9 12h6" fill="none" stroke="currentColor" stroke-width="1.8"/>
-    </symbol>
-    <!-- Procedimientos: bisturí -->
-    <symbol id="i-proced" viewBox="0 0 24 24">
-      <path d="M6 18l7-7 3 3-7 7H6z" fill="none" stroke="currentColor" stroke-width="2"/>
-      <path d="M5 20h6" fill="none" stroke="currentColor" stroke-width="1.6"/>
-    </symbol>
-    <!-- Reproducción: símbolo combinado -->
-    <symbol id="i-repro" viewBox="0 0 24 24">
-      <circle cx="10" cy="10" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/>
-      <path d="M10 13.5v3M8.5 17H11.5" 
-            fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-      <path d="M14 7l3-3M15 4h2.5M15 4v2.5"
-            fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-    </symbol>
-    <!-- Producción: vaca simple -->
-    <symbol id="i-produccion" viewBox="0 0 24 24">
-      <rect x="6" y="9" width="12" height="7" rx="2" ry="2"
-            fill="none" stroke="currentColor" stroke-width="2"/>
-      <path d="M8 16v3M16 16v3M7 9V7M17 9V7" 
-            fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+    <symbol id="logo-pata" viewBox="0 0 24 24">
+      <!-- almohadilla -->
+      <path d="M9 15c0-1.7 1.3-3 3-3s3 1.3 3 3-1.2 3.2-3 3.5c-1.8-.3-3-1.8-3-3.5z"
+            fill="currentColor"/>
+      <!-- dedos -->
+      <circle cx="7.2" cy="10" r="1.6" fill="currentColor"/>
+      <circle cx="10.5" cy="8.5" r="1.7" fill="currentColor"/>
+      <circle cx="13.5" cy="8.5" r="1.7" fill="currentColor"/>
+      <circle cx="16.8" cy="10" r="1.6" fill="currentColor"/>
     </symbol>
   </defs>
 </svg>
@@ -187,15 +178,28 @@ h1{
   <h1>Juego de Tarjetas - Glosario Veterinario</h1>
   <p>Haz clic en la tarjeta para ver la definición</p>
 
+  <div class="select-categoria">
+    <select id="selectorCategoria" onchange="aplicarFiltro()">
+      <option value="Todos">Todas las clasificaciones</option>
+      <option value="Ciencias básicas">Ciencias básicas</option>
+      <option value="Estructura">Estructura</option>
+      <option value="Clínica">Clínica</option>
+      <option value="Patología">Patología</option>
+      <option value="Microbiología">Microbiología</option>
+      <option value="Parasitología">Parasitología</option>
+      <option value="Farmacología">Farmacología</option>
+      <option value="Procedimientos">Procedimientos</option>
+      <option value="Reproducción">Reproducción</option>
+      <option value="Producción">Producción</option>
+    </select>
+  </div>
+
   <div class="panel-juego">
 
     <div class="tarjeta" id="tarjeta" onclick="voltear()">
       <div class="tarjeta-inner" id="tarjetaInner">
         <div class="cara frente">
-          <div class="categoria">
-            <svg><use id="categoriaIcon" href="#i-estructura"></use></svg>
-            <span id="categoria">Estructura</span>
-          </div>
+          <span id="categoria">Estructura</span>
           <h2 id="termino">Osteología</h2>
         </div>
         <div class="cara reverso">
@@ -215,6 +219,14 @@ h1{
     </div>
   </div>
 </div>
+
+<footer>
+  <div class="footer-inner">
+    <svg class="logo-pet"><use href="#logo-pata"></use></svg>
+    <span>Aprendiendo con <strong>Michy y Kiara</strong></span>
+    <svg class="logo-pet"><use href="#logo-pata"></use></svg>
+  </div>
+</footer>
 
 <script>
 const tarjetas = [
@@ -261,40 +273,32 @@ const tarjetas = [
   {t:"Bienestar animal", d:"Calidad de vida.", c:"Producción"}
 ];
 
-const iconosCategoria = {
-  "Ciencias básicas":"i-basicas",
-  "Estructura":"i-estructura",
-  "Clínica":"i-clinica",
-  "Patología":"i-patologia",
-  "Microbiología":"i-micro",
-  "Parasitología":"i-micro",
-  "Farmacología":"i-farmaco",
-  "Procedimientos":"i-proced",
-  "Reproducción":"i-repro",
-  "Producción":"i-produccion"
-};
-
 let indice = 0;
+let tarjetasFiltradas = tarjetas.slice();
+
 const totalEl   = document.getElementById("total");
 const numEl     = document.getElementById("num");
 const terminoEl = document.getElementById("termino");
 const defEl     = document.getElementById("definicion");
 const catEl     = document.getElementById("categoria");
-const iconEl    = document.getElementById("categoriaIcon");
 const tarjeta   = document.getElementById("tarjeta");
 
-totalEl.textContent = tarjetas.length;
-
 function mostrar(){
-  const datos = tarjetas[indice];
+  if (tarjetasFiltradas.length === 0){
+    terminoEl.textContent   = "Sin tarjetas";
+    defEl.textContent       = "No hay términos en esta clasificación.";
+    catEl.textContent       = "";
+    numEl.textContent       = 0;
+    totalEl.textContent     = 0;
+    tarjeta.classList.remove("volteada");
+    return;
+  }
+  const datos = tarjetasFiltradas[indice];
   terminoEl.textContent = datos.t;
-  defEl.textContent     = datos.d;
   catEl.textContent     = datos.c;
+  defEl.textContent     = datos.d;
   numEl.textContent     = indice + 1;
-
-  const iconId = iconosCategoria[datos.c] || "i-basicas";
-  iconEl.setAttribute("href", "#" + iconId);
-
+  totalEl.textContent   = tarjetasFiltradas.length;
   tarjeta.classList.remove("volteada");
 }
 
@@ -303,22 +307,37 @@ function voltear(){
 }
 
 function siguiente(){
-  indice = (indice + 1) % tarjetas.length;
+  if (tarjetasFiltradas.length === 0) return;
+  indice = (indice + 1) % tarjetasFiltradas.length;
   mostrar();
 }
 
 function anterior(){
-  indice = (indice - 1 + tarjetas.length) % tarjetas.length;
+  if (tarjetasFiltradas.length === 0) return;
+  indice = (indice - 1 + tarjetasFiltradas.length) % tarjetasFiltradas.length;
   mostrar();
 }
 
 function mezclar(){
-  tarjetas.sort(()=>Math.random() - 0.5);
+  if (tarjetasFiltradas.length === 0) return;
+  tarjetasFiltradas.sort(()=>Math.random() - 0.5);
   indice = 0;
   mostrar();
 }
 
-mostrar();
+function aplicarFiltro(){
+  const cat = document.getElementById("selectorCategoria").value;
+  if(cat === "Todos"){
+    tarjetasFiltradas = tarjetas.slice();
+  } else {
+    tarjetasFiltradas = tarjetas.filter(t => t.c === cat);
+  }
+  indice = 0;
+  mostrar();
+}
+
+// inicio
+aplicarFiltro();
 </script>
 
 </body>
