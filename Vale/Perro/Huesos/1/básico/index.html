@@ -33,24 +33,25 @@ h2{color:#00ffff;text-align:center}
 
 .niveles button{
   margin:4px;
-  padding:10px 16px;
+  padding:8px 12px;
+  width:50%;
   border:none;
-  border-radius:8px;
-  background:#444;
+  border-radius:6px;
+  background:#143a5b; /* AZUL OSCURO COMO TU MUESTRA */
   color:#fff;
   font-weight:bold;
   cursor:pointer;
 }
-.niveles .activo{background:#00aaff}
+.niveles .activo{background:#1f5c8a}
 
 .lista button{
   display:block;
-  width:100%;
-  margin:6px 0;
-  padding:10px;
+  width:50%;
+  margin:6px auto;
+  padding:8px;
   border:none;
-  border-radius:8px;
-  background:#6ba8ff;
+  border-radius:6px;
+  background:#143a5b;
   color:#fff;
   font-weight:bold;
   cursor:pointer;
@@ -69,12 +70,12 @@ h2{color:#00ffff;text-align:center}
 
 .btn-juego{
   margin-top:12px;
-  padding:14px 24px;
+  padding:12px 24px;
   font-size:1.1rem;
   border:none;
   border-radius:10px;
-  background:#00cc66;
-  color:#000;
+  background:#1f5c8a;
+  color:#fff;
   font-weight:bold;
   cursor:pointer;
 }
@@ -106,7 +107,7 @@ h2{color:#00ffff;text-align:center}
 
 <div class="panel">
 
-  <!-- ===== IZQUIERDA: LISTA ===== -->
+  <!-- ===== IZQUIERDA ===== -->
   <div>
     <h2>Huesos del Perro</h2>
 
@@ -119,11 +120,13 @@ h2{color:#00ffff;text-align:center}
     <div class="lista" id="lista"></div>
   </div>
 
-  <!-- ===== DERECHA: IMAGEN + BOTÓN ===== -->
+  <!-- ===== DERECHA ===== -->
   <div class="img-box">
     <img src="imagen.jpg">
     <br>
-    <button class="btn-juego" onclick="empezarJuego()">▶ EMPEZAR JUEGO</button>
+    <a href="https://cgviviana.github.io/Juego_Prueba/Vale/Perro/Huesos/2/">
+      <button class="btn-juego">▶ EMPEZAR JUEGO</button>
+    </a>
   </div>
 
 </div>
@@ -140,7 +143,7 @@ h2{color:#00ffff;text-align:center}
 <script>
 const niveles = [
 
-/* ===== NIVEL 1 – CABEZA (7) ===== */
+/* ===== CABEZA ===== */
 [
 {n:1, t:"CRÁNEO", d:"Protege el cerebro. Hueso plano, fuerte, forma ovalada."},
 {n:2, t:"VÉRTEBRA CERVICAL", d:"Sostiene el cuello. Hueso irregular."},
@@ -151,7 +154,7 @@ const niveles = [
 {n:28, t:"MANDÍBULA", d:"Permite masticar. Hueso irregular."}
 ],
 
-/* ===== NIVEL 2 – TRONCO (5) ===== */
+/* ===== TRONCO ===== */
 [
 {n:5, t:"VÉRTEBRA LUMBAR", d:"Soporta peso. Hueso irregular."},
 {n:7, t:"SACRO", d:"Conecta columna y pelvis. Hueso fusionado."},
@@ -160,7 +163,7 @@ const niveles = [
 {n:19, t:"COSTILLA", d:"Protege corazón y pulmones. Hueso plano."}
 ],
 
-/* ===== NIVEL 3 – EXTREMIDADES (16) ===== */
+/* ===== EXTREMIDADES ===== */
 [
 {n:6, t:"ILION", d:"Parte superior de la pelvis."},
 {n:8, t:"ISQUION", d:"Parte posterior de la pelvis."},
@@ -204,10 +207,6 @@ function verPop(t,p){
 
 function cerrarPop(){
   document.getElementById("popup").style.display = "none";
-}
-
-function empezarJuego(){
-  alert("Aquí conectamos con el juego del ahorcado.");
 }
 
 verNivel(0);
