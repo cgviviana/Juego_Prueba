@@ -2,208 +2,323 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Disciplinas Anatómicas</title>
+<title>Juego de Tarjetas - Glosario Veterinario</title>
 <style>
 body{
   margin:0;
-  font-family:Arial, sans-serif;
+  font-family:Arial, Helvetica, sans-serif;
   background:url("selva.jpg") no-repeat center center fixed;
   background-size:cover;
 }
 
-h2{
-  text-align:center;
-  padding:20px 10px;
-  color:#fff;
-  text-shadow:0 2px 6px #000;
-}
-
-.grid{
-  max-width:840px;
-  margin:0 auto 40px;
-  display:grid;
-  grid-template-columns:repeat(4, 1fr);
-  gap:18px;
-  padding:20px;
-  justify-content:center;
-}
-
-/* TARJETA */
-.card{
+.contenedor{
+  max-width:900px;
+  margin:50px auto;
+  background:rgba(20,20,20,0.88);
   border-radius:16px;
-  padding:18px 14px 20px;
-  text-align:center;
+  padding:26px;
+  box-shadow:0 0 20px #000;
   color:#fff;
-  box-shadow:0 8px 18px rgba(0,0,0,.35);
+  text-align:center;
+}
+
+h1{
+  color:#00ffff;
+  margin-bottom:10px;
+}
+
+.panel-juego{
+  margin-top:24px;
+}
+
+.tarjeta{
+  width:100%;
+  max-width:420px;
+  height:230px;
+  margin:0 auto 20px;
+  perspective:1000px;
+}
+
+.tarjeta-inner{
+  width:100%;
+  height:100%;
+  position:relative;
+  transform-style:preserve-3d;
+  transition:transform 0.7s;
   cursor:pointer;
-  transition:transform .2s;
 }
 
-.card:hover{
-  transform:scale(1.05);
+.tarjeta.volteada .tarjeta-inner{
+  transform:rotateY(180deg);
 }
 
-.icono{
-  width:70px;
-  height:70px;
-  margin:0 auto 10px;
-  background:#fff;
-  border-radius:50%;
+.cara{
+  position:absolute;
+  width:100%;
+  height:100%;
+  backface-visibility:hidden;
+  border-radius:14px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  box-sizing:border-box;
+}
+
+.frente{
+  background:#143a5b;
+}
+
+.frente h2{
+  color:#00ffff;
+  margin:4px 0 0;
+}
+
+.categoria{
   display:flex;
   align-items:center;
-  justify-content:center;
-  font-size:32px;
+  gap:6px;
+  font-size:.8rem;
+  color:#a7f3d0;
+  margin-bottom:6px;
+}
+
+.categoria svg{
+  width:18px;
+  height:18px;
+}
+
+.reverso{
+  background:#2f8f2f;
+  color:#000;
+  transform:rotateY(180deg);
+}
+
+.reverso p{
+  font-size:0.95rem;
+}
+
+.controles{
+  margin-top:14px;
+}
+
+.controles button{
+  margin:6px;
+  padding:10px 20px;
+  border:none;
+  border-radius:10px;
+  background:#46c646;
   color:#000;
   font-weight:bold;
-}
-
-.card h3{
-  margin:6px 0 6px;
-  font-size:1rem;
-}
-
-.card p{
-  margin:0;
-  font-size:.85rem;
-}
-
-/* COLORES */
-.c1{background:#5b7cff;}
-.c2{background:#38bdf8;}
-.c3{background:#34d399;}
-.c4{background:#60a5fa;}
-.c5{background:#a78bfa;}
-.c6{background:#fb7185;}
-.c7{background:#fbbf24;}
-.c8{background:#4ade80;}
-.c9{background:#f472b6;}
-.c10{background:#22c55e;}
-.c11{background:#fb923c;}
-.c12{background:#818cf8;}
-
-/* POPUP */
-#popup{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.6);
-  display:none;
-  justify-content:center;
-  align-items:center;
-  z-index:999;
-}
-
-#popup-box{
-  background:#fff;
-  border-radius:14px;
-  padding:22px;
-  max-width:380px;
-  text-align:center;
-}
-
-#popup-box h3{
-  margin-bottom:10px;
-  color:#1e3a8a;
-}
-
-#popup-box p{
-  color:#333;
-  font-size:.9rem;
-}
-
-#popup-box button{
-  margin-top:14px;
-  padding:8px 22px;
-  border:none;
-  border-radius:8px;
-  background:#2563eb;
-  color:#fff;
   cursor:pointer;
 }
 
-/* RESPONSIVE */
-@media(max-width:900px){
-  .grid{grid-template-columns:repeat(3,1fr);}
-}
-@media(max-width:600px){
-  .grid{grid-template-columns:repeat(2,1fr);}
+.marcador{
+  margin-top:10px;
+  color:#ddd;
 }
 </style>
 </head>
-
 <body>
 
-<h2>Disciplinas Anatómicas y Clínicas</h2>
+<!-- SPRITE SVG PARA ICONOS DE CATEGORÍA -->
+<svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+  <defs>
+    <!-- Ciencias básicas: libro -->
+    <symbol id="i-basicas" viewBox="0 0 24 24">
+      <path d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 0-3-3V4z" 
+            fill="none" stroke="currentColor" stroke-width="2"/>
+      <path d="M8 7h6" fill="none" stroke="currentColor" stroke-width="1.6"/>
+    </symbol>
+    <!-- Estructura: hueso -->
+    <symbol id="i-estructura" viewBox="0 0 24 24">
+      <path d="M7 7a2.5 2.5 0 1 0-3 3l2 2 6 6 2 2a2.5 2.5 0 1 0 3-3l-2-2-6-6-2-2z"
+            fill="none" stroke="currentColor" stroke-width="2"/>
+    </symbol>
+    <!-- Clínica: cruz -->
+    <symbol id="i-clinica" viewBox="0 0 24 24">
+      <path d="M10 4h4v5h5v4h-5v7h-4v-7H5v-4h5z"
+            fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linejoin="round"/>
+    </symbol>
+    <!-- Patología: célula lesionada -->
+    <symbol id="i-patologia" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
+      <path d="M9 10l2 1-1 3m3-4 2 1-1 3" 
+            fill="none" stroke="currentColor" stroke-width="1.6"/>
+    </symbol>
+    <!-- Micro / Parasitos: microbio -->
+    <symbol id="i-micro" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/>
+      <path d="M12 5v2M12 17v2M5 12h2M17 12h2M7 7l1.5 1.5M15.5 15.5 17 17M15.5 8.5 17 7M7 17l1.5-1.5"
+            fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </symbol>
+    <!-- Farmacología: pastilla -->
+    <symbol id="i-farmaco" viewBox="0 0 24 24">
+      <rect x="5" y="7" width="14" height="10" rx="5" ry="5"
+            fill="none" stroke="currentColor" stroke-width="2"/>
+      <path d="M9 12h6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+    </symbol>
+    <!-- Procedimientos: bisturí -->
+    <symbol id="i-proced" viewBox="0 0 24 24">
+      <path d="M6 18l7-7 3 3-7 7H6z" fill="none" stroke="currentColor" stroke-width="2"/>
+      <path d="M5 20h6" fill="none" stroke="currentColor" stroke-width="1.6"/>
+    </symbol>
+    <!-- Reproducción: símbolo combinado -->
+    <symbol id="i-repro" viewBox="0 0 24 24">
+      <circle cx="10" cy="10" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/>
+      <path d="M10 13.5v3M8.5 17H11.5" 
+            fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+      <path d="M14 7l3-3M15 4h2.5M15 4v2.5"
+            fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+    </symbol>
+    <!-- Producción: vaca simple -->
+    <symbol id="i-produccion" viewBox="0 0 24 24">
+      <rect x="6" y="9" width="12" height="7" rx="2" ry="2"
+            fill="none" stroke="currentColor" stroke-width="2"/>
+      <path d="M8 16v3M16 16v3M7 9V7M17 9V7" 
+            fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+    </symbol>
+  </defs>
+</svg>
 
-<div class="grid">
+<div class="contenedor">
+  <h1>Juego de Tarjetas - Glosario Veterinario</h1>
+  <p>Haz clic en la tarjeta para ver la definición</p>
 
-  <div class="card c1" onclick="ver('Osteología','Estudia los huesos.')">
-    <div class="icono">🦴</div><h3>Osteología</h3><p>Huesos</p>
-  </div>
+  <div class="panel-juego">
 
-  <div class="card c2" onclick="ver('Miología','Estudia los músculos.')">
-    <div class="icono">💪</div><h3>Miología</h3><p>Músculos</p>
-  </div>
+    <div class="tarjeta" id="tarjeta" onclick="voltear()">
+      <div class="tarjeta-inner" id="tarjetaInner">
+        <div class="cara frente">
+          <div class="categoria">
+            <svg><use id="categoriaIcon" href="#i-estructura"></use></svg>
+            <span id="categoria">Estructura</span>
+          </div>
+          <h2 id="termino">Osteología</h2>
+        </div>
+        <div class="cara reverso">
+          <p id="definicion">Estudio de los huesos.</p>
+        </div>
+      </div>
+    </div>
 
-  <div class="card c3" onclick="ver('Artrología','Estudia las articulaciones.')">
-    <div class="icono">⚙️</div><h3>Artrología</h3><p>Articulaciones</p>
-  </div>
+    <div class="controles">
+      <button onclick="anterior()">⬅ Anterior</button>
+      <button onclick="siguiente()">Siguiente ➡</button>
+      <button onclick="mezclar()">🔀 Mezclar</button>
+    </div>
 
-  <div class="card c4" onclick="ver('Neurología','Sistema nervioso.')">
-    <div class="icono">🧠</div><h3>Neurología</h3><p>Sistema nervioso</p>
-  </div>
-
-  <div class="card c5" onclick="ver('Cardiología','Estudio del corazón.')">
-    <div class="icono">❤️</div><h3>Cardiología</h3><p>Corazón</p>
-  </div>
-
-  <div class="card c6" onclick="ver('Neumología','Estudia los pulmones.')">
-    <div class="icono">🫁</div><h3>Neumología</h3><p>Pulmones</p>
-  </div>
-
-  <div class="card c7" onclick="ver('Gastroenterología','Sistema digestivo.')">
-    <div class="icono">🍽️</div><h3>Gastroenterología</h3><p>Digestión</p>
-  </div>
-
-  <div class="card c8" onclick="ver('Patología','Estudia las enfermedades.')">
-    <div class="icono">🦠</div><h3>Patología</h3><p>Enfermedad</p>
-  </div>
-
-  <div class="card c9" onclick="ver('Inmunología','Defensas del cuerpo.')">
-    <div class="icono">🛡️</div><h3>Inmunología</h3><p>Defensas</p>
-  </div>
-
-  <div class="card c10" onclick="ver('Parasitología','Estudia parásitos.')">
-    <div class="icono">🪱</div><h3>Parasitología</h3><p>Parásitos</p>
-  </div>
-
-  <div class="card c11" onclick="ver('Epidemiología','Distribución de enfermedades.')">
-    <div class="icono">📊</div><h3>Epidemiología</h3><p>Estadística</p>
-  </div>
-
-  <div class="card c12" onclick="ver('Microbiología','Bacterias y virus.')">
-    <div class="icono">🔬</div><h3>Microbiología</h3><p>Microorganismos</p>
-  </div>
-
-</div>
-
-<!-- POPUP -->
-<div id="popup">
-  <div id="popup-box">
-    <h3 id="pt"></h3>
-    <p id="pd"></p>
-    <button onclick="cerrar()">Cerrar</button>
+    <div class="marcador">
+      Tarjeta <span id="num">1</span> de <span id="total">0</span>
+    </div>
   </div>
 </div>
 
 <script>
-function ver(t,d){
-  document.getElementById("pt").textContent=t;
-  document.getElementById("pd").textContent=d;
-  document.getElementById("popup").style.display="flex";
+const tarjetas = [
+  // BÁSICAS / ESTRUCTURA
+  {t:"Anatomía", d:"Estructura del cuerpo animal.", c:"Ciencias básicas"},
+  {t:"Fisiología", d:"Función de órganos y sistemas.", c:"Ciencias básicas"},
+  {t:"Osteología", d:"Estudio de los huesos.", c:"Estructura"},
+  {t:"Miología", d:"Estudio de los músculos.", c:"Estructura"},
+  {t:"Artrología", d:"Estudio de las articulaciones.", c:"Estructura"},
+
+  {t:"Signo clínico", d:"Manifestación observable de enfermedad.", c:"Clínica"},
+  {t:"Síntoma", d:"Manifestación subjetiva del paciente.", c:"Clínica"},
+  {t:"Diagnóstico", d:"Identificación de una enfermedad.", c:"Clínica"},
+  {t:"Pronóstico", d:"Evolución esperada del paciente.", c:"Clínica"},
+  {t:"Tratamiento", d:"Conjunto de medidas terapéuticas.", c:"Clínica"},
+
+  {t:"Patología", d:"Estudio de las enfermedades.", c:"Patología"},
+  {t:"Etiología", d:"Causa de una enfermedad.", c:"Patología"},
+  {t:"Necrosis", d:"Muerte del tejido.", c:"Patología"},
+  {t:"Zoonosis", d:"Enfermedad transmisible al humano.", c:"Patología"},
+
+  {t:"Microbiología", d:"Estudio de bacterias, virus y hongos.", c:"Microbiología"},
+  {t:"Parasitología", d:"Estudio de los parásitos.", c:"Parasitología"},
+  {t:"Helmintología", d:"Estudio de gusanos parásitos.", c:"Parasitología"},
+
+  {t:"Farmacología", d:"Estudio de los medicamentos.", c:"Farmacología"},
+  {t:"Antibiótico", d:"Medicamento contra bacterias.", c:"Farmacología"},
+  {t:"Analgésico", d:"Medicamento contra el dolor.", c:"Farmacología"},
+
+  {t:"Cirugía veterinaria", d:"Intervención quirúrgica.", c:"Procedimientos"},
+  {t:"Cateterización", d:"Acceso vascular.", c:"Procedimientos"},
+  {t:"Fluidoterapia", d:"Administración de líquidos.", c:"Procedimientos"},
+  {t:"Necropsia", d:"Autopsia en animales.", c:"Procedimientos"},
+  {t:"Eutanasia", d:"Muerte humanitaria.", c:"Procedimientos"},
+
+  {t:"Ginecología veterinaria", d:"Sistema reproductor femenino.", c:"Reproducción"},
+  {t:"Andrología veterinaria", d:"Sistema reproductor masculino.", c:"Reproducción"},
+  {t:"Gestación", d:"Embarazo.", c:"Reproducción"},
+  {t:"Parto", d:"Nacimiento.", c:"Reproducción"},
+
+  {t:"Zootecnia", d:"Producción animal.", c:"Producción"},
+  {t:"Nutrición animal", d:"Alimentación.", c:"Producción"},
+  {t:"Sanidad animal", d:"Control sanitario.", c:"Producción"},
+  {t:"Bienestar animal", d:"Calidad de vida.", c:"Producción"}
+];
+
+const iconosCategoria = {
+  "Ciencias básicas":"i-basicas",
+  "Estructura":"i-estructura",
+  "Clínica":"i-clinica",
+  "Patología":"i-patologia",
+  "Microbiología":"i-micro",
+  "Parasitología":"i-micro",
+  "Farmacología":"i-farmaco",
+  "Procedimientos":"i-proced",
+  "Reproducción":"i-repro",
+  "Producción":"i-produccion"
+};
+
+let indice = 0;
+const totalEl   = document.getElementById("total");
+const numEl     = document.getElementById("num");
+const terminoEl = document.getElementById("termino");
+const defEl     = document.getElementById("definicion");
+const catEl     = document.getElementById("categoria");
+const iconEl    = document.getElementById("categoriaIcon");
+const tarjeta   = document.getElementById("tarjeta");
+
+totalEl.textContent = tarjetas.length;
+
+function mostrar(){
+  const datos = tarjetas[indice];
+  terminoEl.textContent = datos.t;
+  defEl.textContent     = datos.d;
+  catEl.textContent     = datos.c;
+  numEl.textContent     = indice + 1;
+
+  const iconId = iconosCategoria[datos.c] || "i-basicas";
+  iconEl.setAttribute("href", "#" + iconId);
+
+  tarjeta.classList.remove("volteada");
 }
-function cerrar(){
-  document.getElementById("popup").style.display="none";
+
+function voltear(){
+  tarjeta.classList.toggle("volteada");
 }
+
+function siguiente(){
+  indice = (indice + 1) % tarjetas.length;
+  mostrar();
+}
+
+function anterior(){
+  indice = (indice - 1 + tarjetas.length) % tarjetas.length;
+  mostrar();
+}
+
+function mezclar(){
+  tarjetas.sort(()=>Math.random() - 0.5);
+  indice = 0;
+  mostrar();
+}
+
+mostrar();
 </script>
 
 </body>
