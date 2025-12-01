@@ -1,1 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Disciplinas Anatómicas</title>
+<style>
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:url("selva.jpg") no-repeat center center fixed;
+  background-size:cover;
+}
 
+h2{
+  text-align:center;
+  padding:20px 10px;
+  color:#fff;
+  text-shadow:0 2px 6px #000;
+}
+
+.grid{
+  max-width:840px;
+  margin:0 auto 40px;
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:18px;
+  padding:20px;
+  justify-content:center;
+}
+
+/* TARJETA */
+.card{
+  border-radius:16px;
+  padding:18px 14px 20px;
+  text-align:center;
+  color:#fff;
+  box-shadow:0 8px 18px rgba(0,0,0,.35);
+  cursor:pointer;
+  transition:transform .2s;
+}
+
+.card:hover{
+  transform:scale(1.05);
+}
+
+.icono{
+  width:70px;
+  height:70px;
+  margin:0 auto 10px;
+  background:#fff;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:32px;
+  color:#000;
+  font-weight:bold;
+}
+
+.card h3{
+  margin:6px 0 6px;
+  font-size:1rem;
+}
+
+.card p{
+  margin:0;
+  font-size:.85rem;
+}
+
+/* COLORES */
+.c1{background:#5b7cff;}
+.c2{background:#38bdf8;}
+.c3{background:#34d399;}
+.c4{background:#60a5fa;}
+.c5{background:#a78bfa;}
+.c6{background:#fb7185;}
+.c7{background:#fbbf24;}
+.c8{background:#4ade80;}
+.c9{background:#f472b6;}
+.c10{background:#22c55e;}
+.c11{background:#fb923c;}
+.c12{background:#818cf8;}
+
+/* POPUP */
+#popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+}
+
+#popup-box{
+  background:#fff;
+  border-radius:14px;
+  padding:22px;
+  max-width:380px;
+  text-align:center;
+}
+
+#popup-box h3{
+  margin-bottom:10px;
+  color:#1e3a8a;
+}
+
+#popup-box p{
+  color:#333;
+  font-size:.9rem;
+}
+
+#popup-box button{
+  margin-top:14px;
+  padding:8px 22px;
+  border:none;
+  border-radius:8px;
+  background:#2563eb;
+  color:#fff;
+  cursor:pointer;
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .grid{grid-template-columns:repeat(3,1fr);}
+}
+@media(max-width:600px){
+  .grid{grid-template-columns:repeat(2,1fr);}
+}
+</style>
+</head>
+
+<body>
+
+<h2>Disciplinas Anatómicas y Clínicas</h2>
+
+<div class="grid">
+
+  <div class="card c1" onclick="ver('Osteología','Estudia los huesos.')">
+    <div class="icono">🦴</div><h3>Osteología</h3><p>Huesos</p>
+  </div>
+
+  <div class="card c2" onclick="ver('Miología','Estudia los músculos.')">
+    <div class="icono">💪</div><h3>Miología</h3><p>Músculos</p>
+  </div>
+
+  <div class="card c3" onclick="ver('Artrología','Estudia las articulaciones.')">
+    <div class="icono">⚙️</div><h3>Artrología</h3><p>Articulaciones</p>
+  </div>
+
+  <div class="card c4" onclick="ver('Neurología','Sistema nervioso.')">
+    <div class="icono">🧠</div><h3>Neurología</h3><p>Sistema nervioso</p>
+  </div>
+
+  <div class="card c5" onclick="ver('Cardiología','Estudio del corazón.')">
+    <div class="icono">❤️</div><h3>Cardiología</h3><p>Corazón</p>
+  </div>
+
+  <div class="card c6" onclick="ver('Neumología','Estudia los pulmones.')">
+    <div class="icono">🫁</div><h3>Neumología</h3><p>Pulmones</p>
+  </div>
+
+  <div class="card c7" onclick="ver('Gastroenterología','Sistema digestivo.')">
+    <div class="icono">🍽️</div><h3>Gastroenterología</h3><p>Digestión</p>
+  </div>
+
+  <div class="card c8" onclick="ver('Patología','Estudia las enfermedades.')">
+    <div class="icono">🦠</div><h3>Patología</h3><p>Enfermedad</p>
+  </div>
+
+  <div class="card c9" onclick="ver('Inmunología','Defensas del cuerpo.')">
+    <div class="icono">🛡️</div><h3>Inmunología</h3><p>Defensas</p>
+  </div>
+
+  <div class="card c10" onclick="ver('Parasitología','Estudia parásitos.')">
+    <div class="icono">🪱</div><h3>Parasitología</h3><p>Parásitos</p>
+  </div>
+
+  <div class="card c11" onclick="ver('Epidemiología','Distribución de enfermedades.')">
+    <div class="icono">📊</div><h3>Epidemiología</h3><p>Estadística</p>
+  </div>
+
+  <div class="card c12" onclick="ver('Microbiología','Bacterias y virus.')">
+    <div class="icono">🔬</div><h3>Microbiología</h3><p>Microorganismos</p>
+  </div>
+
+</div>
+
+<!-- POPUP -->
+<div id="popup">
+  <div id="popup-box">
+    <h3 id="pt"></h3>
+    <p id="pd"></p>
+    <button onclick="cerrar()">Cerrar</button>
+  </div>
+</div>
+
+<script>
+function ver(t,d){
+  document.getElementById("pt").textContent=t;
+  document.getElementById("pd").textContent=d;
+  document.getElementById("popup").style.display="flex";
+}
+function cerrar(){
+  document.getElementById("popup").style.display="none";
+}
+</script>
+
+</body>
+</html>
