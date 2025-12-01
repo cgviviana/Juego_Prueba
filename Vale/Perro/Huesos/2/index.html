@@ -2,239 +2,168 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Ahorcado – Huesos del Perro</title>
+<title>Ahorcado – 28 Huesos del Perro</title>
 <style>
-body{
-  margin:0;
-  font-family:Arial;
-  background:#111;
-  color:#fff;
-  text-align:center;
-}
-.panel{
-  max-width:1100px;
-  margin:40px auto;
-  background:#1f1f1f;
-  border-radius:16px;
-  padding:30px;
-  box-shadow:0 0 20px #000;
-  display:flex;
-  gap:20px;
-  flex-wrap:wrap;
-}
-.game-box{flex:1; min-width:320px;}
-.img-box{flex:1; min-width:320px;}
+body{margin:0;font-family:Arial;background:#111;color:#fff;text-align:center}
+.panel{max-width:1100px;margin:30px auto;background:#1f1f1f;border-radius:16px;padding:24px;box-shadow:0 0 20px #000;display:flex;gap:20px;flex-wrap:wrap}
+.game-box{flex:1;min-width:320px}
+.img-box{flex:1;min-width:320px}
+h2{color:#00ffff}
+.niveles button{margin:4px;padding:10px 14px;border:none;border-radius:8px;background:#444;color:#fff;font-weight:bold;cursor:pointer}
+.niveles .activo{background:#00aaff}
+.pista{margin:10px 0;font-size:1.1rem}
+.lineas{font-size:2rem;letter-spacing:10px;margin:12px 0}
+input{padding:8px;font-size:1.1rem;text-align:center;border-radius:6px;border:none;width:80px}
+button{padding:10px 16px;margin:6px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;background:#6ba8ff;color:#fff}
+#errores{color:#ff4444}
+#intentos{font-size:.95rem}
+#msg{font-size:1.2rem;margin-top:8px}
+.ok{color:#00cc66}.bad{color:#ff4444}
+.img-box img{max-width:100%;border-radius:12px;box-shadow:0 0 15px #000}
 
-h2{color:#00ffff;}
-.niveles button{
-  margin:6px;
-  padding:10px 16px;
-  border:none;
-  border-radius:8px;
-  background:#444;
-  color:#fff;
-  font-weight:bold;
-  cursor:pointer;
-}
-.niveles .activo{background:#00aaff;}
-
-.pista{margin:12px 0; font-size:1.2rem;}
-.lineas{font-size:2rem; letter-spacing:12px; margin:14px 0;}
-
-input{
-  padding:10px;
-  font-size:1.1rem;
-  text-align:center;
-  border-radius:6px;
-  border:none;
-  width:80px;
-}
-button{
-  padding:10px 18px;
-  margin:6px;
-  border:none;
-  border-radius:8px;
-  font-weight:bold;
-  cursor:pointer;
-  background:#6ba8ff;
-  color:#fff;
-}
-
-#errores{color:#ff4444; font-size:1.1rem;}
-#intentos{font-size:1rem;}
-
-#msg{font-size:1.4rem;margin-top:10px;}
-.ok{color:#00cc66;}
-.bad{color:#ff4444;}
-
-.img-box img{
-  max-width:100%;
-  border-radius:12px;
-  box-shadow:0 0 15px #000;
-}
-
-/* BARRA DE PROGRESO */
-.barra{
-  width:100%;
-  height:16px;
-  background:#333;
-  border-radius:10px;
-  overflow:hidden;
-  margin:10px 0 18px;
-}
-.barra-inner{
-  height:100%;
-  width:0%;
-  background:linear-gradient(90deg,#00ffcc,#00aaff);
-  transition:width .3s;
-}
+.barra{width:100%;height:14px;background:#333;border-radius:10px;overflow:hidden;margin:10px 0}
+.barra-inner{height:100%;width:0%;background:linear-gradient(90deg,#00ffcc,#00aaff);transition:width .3s}
 </style>
 </head>
 <body>
 
 <div class="panel">
 
-<!-- JUEGO -->
-<div class="game-box">
-  <h2>Ahorcado – Huesos del Perro</h2>
+  <div class="game-box">
+    <h2>Ahorcado – 28 Huesos del Perro</h2>
 
-  <div class="niveles">
-    <button onclick="setNivel(0)" id="b0" class="activo">Cabeza</button>
-    <button onclick="setNivel(1)" id="b1">Tronco</button>
-    <button onclick="setNivel(2)" id="b2">Extremidades</button>
+    <div class="niveles">
+      <button onclick="setNivel(0)" id="b0" class="activo">Cabeza</button>
+      <button onclick="setNivel(1)" id="b1">Tronco</button>
+      <button onclick="setNivel(2)" id="b2">Extremidades</button>
+    </div>
+
+    <div class="barra"><div class="barra-inner" id="barra"></div></div>
+
+    <div class="pista" id="pista"></div>
+    <div class="lineas" id="lineas"></div>
+
+    <div>
+      <input id="letra" maxlength="1" placeholder="A">
+      <button onclick="probarLetra()">Probar</button>
+    </div>
+
+    <div id="intentos"></div>
+    <div id="errores"></div>
+
+    <button onclick="siguiente()">Seguir ➜</button>
+    <div id="msg"></div>
   </div>
 
-  <!-- BARRA DE PROGRESO -->
-  <div class="barra">
-    <div class="barra-inner" id="barra"></div>
+  <div class="img-box">
+    <h3 style="color:#00ffff">Imagen numerada</h3>
+    <img src="imagen.jpg">
   </div>
-
-  <div class="pista" id="pista"></div>
-  <div class="lineas" id="lineas"></div>
-
-  <div>
-    <input id="letra" maxlength="1" placeholder="A">
-    <button onclick="probarLetra()">Probar</button>
-  </div>
-
-  <div id="intentos"></div>
-  <div id="errores"></div>
-
-  <button onclick="siguiente()">Seguir ➜</button>
-
-  <div id="msg"></div>
-</div>
-
-<!-- IMAGEN -->
-<div class="img-box">
-  <h3 style="color:#00ffff;">Imagen numerada</h3>
-  <img src="imagen.jpg">
-</div>
 
 </div>
 
 <script>
+/* ORDEN 1–28 SEGÚN TU LÁMINA */
 const niveles = [
-  [
-    {numero:1, palabra:"CRANEO", pista:"Protege el cerebro"},
-    {numero:26, palabra:"EJE", pista:"Segunda vértebra cervical"},
-    {numero:27, palabra:"ATLAS", pista:"Primera vértebra cervical"},
-    {numero:28, palabra:"MANDIBULA", pista:"Hueso inferior de la boca"}
-  ],
-  [
-    {numero:2, palabra:"VERTEBRACERVICAL", pista:"Vértebras del cuello"},
-    {numero:3, palabra:"VERTEBRATORACICA", pista:"Vértebras del tórax"},
-    {numero:4, palabra:"ESCAPULA", pista:"Hombro del miembro anterior"},
-    {numero:5, palabra:"VERTEBRALUMBAR", pista:"Región baja de la columna"}
-  ],
-  [
-    {numero:6, palabra:"ILION", pista:"Parte superior de la pelvis"},
-    {numero:10, palabra:"FEMUR", pista:"Hueso del muslo"},
-    {numero:15, palabra:"TIBIA", pista:"Hueso principal de la pierna"},
-    {numero:12, palabra:"TARSO", pista:"Huesos del tobillo"}
-  ]
+
+/* NIVEL 1 — CABEZA */
+[
+  {numero:1, palabra:"CRANEO", pista:"Protege el cerebro"},
+  {numero:26, palabra:"EJE", pista:"Segunda vértebra cervical"},
+  {numero:27, palabra:"ATLAS", pista:"Primera vértebra cervical"},
+  {numero:28, palabra:"MANDIBULA", pista:"Hueso inferior de la boca"},
+  {numero:2, palabra:"VERTEBRACERVICAL", pista:"Vértebras del cuello"},
+  {numero:3, palabra:"VERTEBRATORACICA", pista:"Vértebras del tórax"},
+  {numero:4, palabra:"ESCAPULA", pista:"Hombro del miembro anterior"}
+],
+
+/* NIVEL 2 — TRONCO */
+[
+  {numero:5, palabra:"VERTEBRALUMBAR", pista:"Región baja de la columna"},
+  {numero:7, palabra:"SACRO", pista:"Une la columna con la pelvis"},
+  {numero:9, palabra:"VERTEBRACAUDAL", pista:"Vértebras de la cola"},
+  {numero:18, palabra:"COSTILLAOSEA", pista:"Porción ósea de la costilla"},
+  {numero:19, palabra:"COSTILLA", pista:"Arcos que protegen pulmones y corazón"}
+],
+
+/* NIVEL 3 — EXTREMIDADES Y PELVIS */
+[
+  {numero:6, palabra:"ILION", pista:"Parte superior de la pelvis"},
+  {numero:8, palabra:"ISQUION", pista:"Parte posterior de la pelvis"},
+  {numero:17, palabra:"PUBIS", pista:"Parte inferior de la pelvis"},
+  {numero:10, palabra:"FEMUR", pista:"Hueso del muslo"},
+  {numero:16, palabra:"ROTULA", pista:"Hueso de la rodilla"},
+  {numero:15, palabra:"TIBIA", pista:"Hueso principal de la pierna"},
+  {numero:11, palabra:"FIBULA", pista:"Hueso lateral de la pierna"},
+  {numero:12, palabra:"TARSO", pista:"Huesos del tobillo"},
+  {numero:13, palabra:"METATARSO", pista:"Huesos del pie trasero"},
+  {numero:14, palabra:"FALANGE", pista:"Dedos del pie"},
+  {numero:22, palabra:"METACARPO", pista:"Huesos de la mano"},
+  {numero:21, palabra:"FALANGE", pista:"Dedos de la mano"},
+  {numero:23, palabra:"MANO", pista:"Extremidad anterior distal"},
+  {numero:20, palabra:"CUBITO", pista:"Hueso del antebrazo"},
+  {numero:24, palabra:"RADIO", pista:"Hueso principal del antebrazo"},
+  {numero:25, palabra:"HUMERO", pista:"Hueso del brazo"}
+]
 ];
 
-let nivel = 0;
-let i = 0;
-let palabra = "";
-let estado = [];
-let errores = [];
-let intentos = 6;
+let nivel=0,i=0,palabra="",estado=[],errores=[],intentos=6;
 
 function setNivel(n){
-  nivel = n;
-  i = 0;
+  nivel=n;i=0;
   document.querySelectorAll(".niveles button").forEach(b=>b.classList.remove("activo"));
   document.getElementById("b"+n).classList.add("activo");
   cargar();
 }
 
 function cargar(){
-  const data = niveles[nivel][i];
-  palabra = data.palabra;
-  estado = Array(palabra.length).fill("_");
-  errores = [];
-  intentos = 6;
-
-  document.getElementById("pista").textContent =
-    "Número " + data.numero + " – " + data.pista;
-
-  document.getElementById("msg").textContent = "";
-  actualizarBarra();
-  actualizar();
+  const d=niveles[nivel][i];
+  palabra=d.palabra;
+  estado=Array(palabra.length).fill("_");
+  errores=[];intentos=6;
+  document.getElementById("pista").textContent="Número "+d.numero+" – "+d.pista;
+  document.getElementById("msg").textContent="";
+  actualizarBarra();actualizar();
 }
 
 function actualizar(){
-  document.getElementById("lineas").textContent = estado.join(" ");
-  document.getElementById("errores").textContent = "Errores: " + errores.join(", ");
-  document.getElementById("intentos").textContent = "Intentos restantes: " + intentos;
-  document.getElementById("letra").value = "";
+  document.getElementById("lineas").textContent=estado.join(" ");
+  document.getElementById("errores").textContent="Errores: "+errores.join(", ");
+  document.getElementById("intentos").textContent="Intentos restantes: "+intentos;
+  document.getElementById("letra").value="";
 }
 
 function actualizarBarra(){
-  const total = niveles[nivel].length;
-  const porcentaje = (i / total) * 100;
-  document.getElementById("barra").style.width = porcentaje + "%";
+  const total=niveles[nivel].length;
+  document.getElementById("barra").style.width=(i/total)*100+"%";
 }
 
 function probarLetra(){
-  const l = document.getElementById("letra").value.toUpperCase();
-  if(!l) return;
+  const l=document.getElementById("letra").value.toUpperCase();
+  if(!l||intentos===0)return;
 
   if(palabra.includes(l)){
-    for(let j=0;j<palabra.length;j++){
-      if(palabra[j] === l){
-        estado[j] = l;
-      }
-    }
-  } else {
-    if(!errores.includes(l)){
-      errores.push(l);
-      intentos--;
-    }
+    for(let j=0;j<palabra.length;j++) if(palabra[j]===l) estado[j]=l;
+  }else{
+    if(!errores.includes(l)){errores.push(l);intentos--;}
   }
-
   actualizar();
 
   if(!estado.includes("_")){
-    document.getElementById("msg").textContent = "✔ Correcto";
-    document.getElementById("msg").className = "ok";
+    document.getElementById("msg").textContent="✔ Correcto";
+    document.getElementById("msg").className="ok";
   }
-
-  if(intentos === 0){
-    document.getElementById("msg").textContent = "✘ Respuesta: " + palabra;
-    document.getElementById("msg").className = "bad";
+  if(intentos===0){
+    document.getElementById("msg").textContent="✘ Respuesta: "+palabra;
+    document.getElementById("msg").className="bad";
   }
 }
 
 function siguiente(){
-  if(i < niveles[nivel].length - 1){
-    i++;
-    cargar();
-  } else {
-    document.getElementById("barra").style.width = "100%";
-    document.getElementById("msg").textContent = "✅ Nivel completado";
+  if(i<niveles[nivel].length-1){i++;cargar();}
+  else{
+    document.getElementById("barra").style.width="100%";
+    document.getElementById("msg").textContent="✅ Nivel completado";
   }
 }
 
@@ -243,3 +172,4 @@ cargar();
 
 </body>
 </html>
+
