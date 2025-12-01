@@ -99,18 +99,17 @@ button{
     <div id="msg"></div>
   </div>
 
-  <!-- IMAGEN -->
+  <!-- IMAGEN (SE CARGA SOLA) -->
   <div class="img-box">
     <h3 style="color:#00ffff;">Imagen numerada</h3>
-    <input type="file" id="imgInput" accept="image/*"><br><br>
-    <img id="imgRef">
+    <img id="imgRef" src="imagen.jpg">
   </div>
 
 </div>
 
 <script>
 /*
-ORDEN REAL DE TU LÁMINA:
+ORDEN DE TU LÁMINA:
 1  CRANEO
 2  VERTEBRA CERVICAL
 3  VERTEBRA TORACICA
@@ -234,12 +233,6 @@ function siguiente(){
     cargar();
   }
 }
-
-// CARGAR IMAGEN YA NUMERADA DESDE TU PC
-document.getElementById("imgInput").addEventListener("change", e=>{
-  document.getElementById("imgRef").src =
-    URL.createObjectURL(e.target.files[0]);
-});
 
 cargar();
 </script>
