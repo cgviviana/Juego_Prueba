@@ -120,6 +120,35 @@ h2{
   cursor:pointer;
 }
 
+/* FOOTER */
+footer{
+  margin:0 auto 18px;
+  text-align:center;
+  font-size:.85rem;
+  color:#e5e7eb;
+  opacity:.95;
+}
+
+.footer-inner{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 14px;
+  border-radius:999px;
+  background:rgba(15,23,42,0.85);
+  box-shadow:0 0 8px rgba(0,0,0,0.6);
+}
+
+footer span strong{
+  color:#00ffff;
+}
+
+.logo-pet{
+  width:22px;
+  height:22px;
+  color:#facc15;
+}
+
 /* RESPONSIVE */
 @media(max-width:900px){
   .grid{grid-template-columns:repeat(3,1fr);}
@@ -131,6 +160,19 @@ h2{
 </head>
 
 <body>
+
+<!-- SPRITE SVG HUELLITA -->
+<svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+  <defs>
+    <symbol id="logo-pata" viewBox="0 0 24 24">
+      <path d="M9 15c0-1.7 1.3-3 3-3s3 1.3 3 3-1.2 3.2-3 3.5c-1.8-.3-3-1.8-3-3.5z" fill="currentColor"/>
+      <circle cx="7.2" cy="10" r="1.6" fill="currentColor"/>
+      <circle cx="10.5" cy="8.5" r="1.7" fill="currentColor"/>
+      <circle cx="13.5" cy="8.5" r="1.7" fill="currentColor"/>
+      <circle cx="16.8" cy="10" r="1.6" fill="currentColor"/>
+    </symbol>
+  </defs>
+</svg>
 
 <h2>Disciplinas Anatómicas y Clínicas</h2>
 
@@ -195,13 +237,14 @@ h2{
   </div>
 </div>
 
-  <footer>
+<footer>
   <div class="footer-inner">
     <svg class="logo-pet"><use href="#logo-pata"></use></svg>
     <span>Aprendiendo con <strong>Michy y Kiara</strong></span>
     <svg class="logo-pet"><use href="#logo-pata"></use></svg>
   </div>
 </footer>
+
 <script>
 function ver(t,d){
   document.getElementById("pt").textContent=t;
@@ -215,3 +258,4 @@ function cerrar(){
 
 </body>
 </html>
+
