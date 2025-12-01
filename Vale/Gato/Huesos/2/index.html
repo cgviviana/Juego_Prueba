@@ -1,1 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Ahorcadito – Osteología Felina</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:url("selva.jpg") center/cover no-repeat fixed;
+  color:#fff;
+  text-align:center;
+}
+
+.panel{
+  max-width:1100px;
+  margin:30px auto;
+  background:rgba(25,25,25,0.92);
+  border-radius:16px;
+  padding:24px;
+  box-shadow:0 0 20px #000;
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap;
+}
+
+.game-box{flex:1;min-width:320px}
+.img-box{flex:1;min-width:320px}
+
+h2{color:#00ffff}
+
+.niveles button{
+  margin:4px;
+  padding:10px 14px;
+  border:none;
+  border-radius:8px;
+  background:#444;
+  color:#fff;
+  font-weight:bold;
+  cursor:pointer;
+}
+.niveles .activo{background:#00aaff}
+
+.pista{margin:10px 0;font-size:1.1rem}
+.lineas{font-size:2rem;letter-spacing:10px;margin:12px 0}
+
+input{
+  padding:8px;
+  font-size:1.1rem;
+  text-align:center;
+  border-radius:6px;
+  border:none;
+  width:80px;
+}
+
+button{
+  padding:10px 16px;
+  margin:6px;
+  border:none;
+  border-radius:8px;
+  font-weight:bold;
+  cursor:pointer;
+  background:#6ba8ff;
+  color:#fff;
+}
+
+#errores{color:#ff4444}
+#intentos{font-size:.95rem}
+#msg{font-size:1.2rem;margin-top:8px}
+.ok{color:#00cc66}
+.bad{color:#ff4444}
+
+.img-box img{
+  max-width:100%;
+  border-radius:12px;
+  box-shadow:0 0 15px #000;
+}
+
+/* ===== PROGRESO ===== */
+.progreso-box{
+  margin-top:16px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+}
+.barra{
+  width:200px;
+  height:12px;
+  background:#333;
+  border-radius:10px;
+  overflow:hidden;
+}
+.barra-inner{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#00ffcc,#00aaff);
+  transition:width .3s;
+}
+.progreso-texto{
+  font-size:0.95rem;
+  color:#00ffcc;
+}
+
+/* ===== FOOTER ===== */
+footer{
+  margin:20px auto 30px;
+  text-align:center;
+  font-size:.85rem;
+  color:#e5e7eb;
+}
+.footer-inner{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:6px 14px;
+  border-radius:999px;
+  background:rgba(15,23,42,0.85);
+  box-shadow:0 0 8px rgba(0,0,0,0.6);
+}
+footer strong{color:#00ffff}
+.logo-pet{width:22px;height:22px;color:#facc15}
+</style>
+</head>
+
+<body>
+
+<!-- SPRITE SVG HUELLITA -->
+<svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+  <defs>
+    <symbol id="logo-pata" viewBox="0 0 24 24">
+      <path d="M9 15c0-1.7 1.3-3 3-3s3 1.3 3 3-1.2 3.2-3 3.5c-1.8-.3-3-1.8-3-3.5z" fill="currentColor"/>
+      <circle cx="7.2" cy="10" r="1.6" fill="currentColor"/>
+      <circle cx="10.5" cy="8.5" r="1.7" fill="currentColor"/>
+      <circle cx="13.5" cy="8.5" r="1.7" fill="currentColor"/>
+      <circle cx="16.8" cy="10" r="1.6" fill="currentColor"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="panel">
+
+  <!-- JUEGO -->
+  <div class="game-box">
+    <h2>Ahorcadito – Osteología Felina</h2>
+
+    <div class="niveles">
+      <button onclick="setNivel(0)" id="b0" class="activo">Columna</button>
+      <button onclick="setNivel(1)" id="b1">Tronco</button>
+      <button onclick="setNivel(2)" id="b2">Extremidades</button>
+    </div>
+
+    <div class="pista" id="pista"></div>
+    <div class="lineas" id="lineas"></div>
+
+    <div>
+      <input id="letra" maxlength="1" placeholder="A">
+      <button onclick="probarLetra()">Probar</button>
+    </div>
+
+    <div id="intentos"></div>
+    <div id="errores"></div>
+
+    <button onclick="siguiente()">Seguir ➜</button>
+    <div id="msg"></div>
+
+    <div class="progreso-box">
+      <div class="barra">
+        <div class="barra-inner" id="barra"></div>
+      </div>
+      <div class="progreso-texto" id="textoProgreso"></div>
+    </div>
+  </div>
+
+  <!-- IMAGEN -->
+  <div class="img-box">
+    <h3 style="color:#00ffff">Imagen Osteología Felina</h3>
+    <img src="imagen.jpg">
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <svg class="logo-pet"><use href="#logo-pata"></use></svg>
+    Aprendiendo con <strong>Michy y Kiara</strong>
+    <svg class="logo-pet"><use href="#logo-pata"></use></svg>
+  </div>
+</footer>
+
+<script>
+const niveles = [
+[
+  {numero:1, palabra:"VERTEBRASCERVICALES", pista:"Vértebras del cuello"},
+  {numero:2, palabra:"VERTEBRASTORACICAS", pista:"Vértebras del tórax"},
+  {numero:3, palabra:"VERTEBRASLUMBARES", pista:"Vértebras de la región lumbar"},
+  {numero:4, palabra:"VERTEBRASCAUDALES", pista:"Vértebras de la cola"}
+],
+[
+  {numero:5, palabra:"COSTILLA", pista:"Costilla número 10"},
+  {numero:"5'", palabra:"ARCOCOSTAL", pista:"Arco formado por costillas"},
+  {numero:6, palabra:"ESTERNON", pista:"Hueso central del tórax"}
+],
+[
+  {numero:7, palabra:"ESCAPULA", pista:"Hombro"},
+  {numero:8, palabra:"HUMERO", pista:"Hueso del brazo"},
+  {numero:9, palabra:"RADIO", pista:"Hueso anterior del antebrazo"},
+  {numero:10, palabra:"CUBITO", pista:"Hueso posterior del antebrazo"},
+  {numero:11, palabra:"CARPO", pista:"Muñeca"},
+  {numero:12, palabra:"METACARPIANOS", pista:"Huesos de la mano"},
+  {numero:13, palabra:"FALANGES", pista:"Dedos"},
+  {numero:14, palabra:"COXAL", pista:"Cadera"},
+  {numero:15, palabra:"FEMUR", pista:"Muslo"},
+  {numero:16, palabra:"TIBIA", pista:"Pierna"},
+  {numero:17, palabra:"PERONE", pista:"Hueso lateral de la pierna"},
+  {numero:18, palabra:"TARSO", pista:"Tobillo"},
+  {numero:19, palabra:"METATARSIANOS", pista:"Pie posterior"}
+]
+];
+
+let nivel=0,i=0,palabra="",estado=[],errores=[],intentos=6;
+
+function setNivel(n){
+  nivel=n;i=0;
+  document.querySelectorAll(".niveles button").forEach(b=>b.classList.remove("activo"));
+  document.getElementById("b"+n).classList.add("activo");
+  cargar();
+}
+
+function cargar(){
+  const d=niveles[nivel][i];
+  palabra=d.palabra;
+  estado=Array(palabra.length).fill("_");
+  errores=[];
+  intentos=6;
+  document.getElementById("pista").textContent="Número "+d.numero+" – "+d.pista;
+  document.getElementById("msg").textContent="";
+  actualizarBarra();
+  actualizar();
+}
+
+function actualizar(){
+  document.getElementById("lineas").textContent=estado.join(" ");
+  document.getElementById("errores").textContent="Errores: "+errores.join(", ");
+  document.getElementById("intentos").textContent="Intentos restantes: "+intentos;
+  document.getElementById("letra").value="";
+}
+
+function actualizarBarra(){
+  const total=niveles[nivel].length;
+  const progreso=i+1;
+  document.getElementById("barra").style.width=(i/total)*100+"%";
+  document.getElementById("textoProgreso").textContent =
+    progreso+" de "+total+" preguntas";
+}
+
+function probarLetra(){
+  const l=document.getElementById("letra").value.toUpperCase();
+  if(!l||intentos===0)return;
+
+  if(palabra.includes(l)){
+    for(let j=0;j<palabra.length;j++) if(palabra[j]===l) estado[j]=l;
+  }else{
+    if(!errores.includes(l)){errores.push(l);intentos--;}
+  }
+  actualizar();
+
+  if(!estado.includes("_")){
+    document.getElementById("msg").textContent="✔ Correcto";
+    document.getElementById("msg").className="ok";
+  }
+
+  if(intentos===0){
+    document.getElementById("msg").textContent="✘ Respuesta: "+palabra;
+    document.getElementById("msg").className="bad";
+  }
+}
+
+function siguiente(){
+  if(i<niveles[nivel].length-1){
+    i++;
+    cargar();
+  } else {
+    document.getElementById("barra").style.width="100%";
+    document.getElementById("textoProgreso").textContent =
+      niveles[nivel].length+" de "+niveles[nivel].length+" preguntas";
+    document.getElementById("msg").textContent="✅ Nivel completado";
+  }
+}
+
+cargar();
+</script>
+
+</body>
+</html>
 
