@@ -3,32 +3,113 @@
 <head>
 <meta charset="UTF-8">
 <title>Ahorcado – 28 Huesos del Perro</title>
+
 <style>
-body{margin:0;font-family:Arial;background:#111;color:#fff;text-align:center}
-.panel{max-width:1100px;margin:30px auto;background:#1f1f1f;border-radius:16px;padding:24px;box-shadow:0 0 20px #000;display:flex;gap:20px;flex-wrap:wrap}
+/* ===== FONDO EXTERIOR ===== */
+body{
+  margin:0;
+  font-family:Arial;
+  background:url("selva.jpg") center/cover no-repeat fixed;
+  color:#fff;
+  text-align:center;
+}
+
+/* ===== PANEL PRINCIPAL ===== */
+.panel{
+  max-width:1100px;
+  margin:30px auto;
+  background:rgba(25,25,25,0.92);
+  border-radius:16px;
+  padding:24px;
+  box-shadow:0 0 20px #000;
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap;
+}
+
 .game-box{flex:1;min-width:320px}
 .img-box{flex:1;min-width:320px}
+
 h2{color:#00ffff}
-.niveles button{margin:4px;padding:10px 14px;border:none;border-radius:8px;background:#444;color:#fff;font-weight:bold;cursor:pointer}
+
+.niveles button{
+  margin:4px;
+  padding:10px 14px;
+  border:none;
+  border-radius:8px;
+  background:#444;
+  color:#fff;
+  font-weight:bold;
+  cursor:pointer;
+}
 .niveles .activo{background:#00aaff}
+
 .pista{margin:10px 0;font-size:1.1rem}
 .lineas{font-size:2rem;letter-spacing:10px;margin:12px 0}
-input{padding:8px;font-size:1.1rem;text-align:center;border-radius:6px;border:none;width:80px}
-button{padding:10px 16px;margin:6px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;background:#6ba8ff;color:#fff}
+
+input{
+  padding:8px;
+  font-size:1.1rem;
+  text-align:center;
+  border-radius:6px;
+  border:none;
+  width:80px;
+}
+
+button{
+  padding:10px 16px;
+  margin:6px;
+  border:none;
+  border-radius:8px;
+  font-weight:bold;
+  cursor:pointer;
+  background:#6ba8ff;
+  color:#fff;
+}
+
 #errores{color:#ff4444}
 #intentos{font-size:.95rem}
 #msg{font-size:1.2rem;margin-top:8px}
-.ok{color:#00cc66}.bad{color:#ff4444}
-.img-box img{max-width:100%;border-radius:12px;box-shadow:0 0 15px #000}
 
-.barra{width:100%;height:14px;background:#333;border-radius:10px;overflow:hidden;margin:10px 0}
-.barra-inner{height:100%;width:0%;background:linear-gradient(90deg,#00ffcc,#00aaff);transition:width .3s}
+.ok{color:#00cc66}
+.bad{color:#ff4444}
+
+.img-box img{
+  max-width:100%;
+  border-radius:12px;
+  box-shadow:0 0 15px #000;
+}
+
+/* ===== BARRA ===== */
+.barra{
+  width:100%;
+  height:14px;
+  background:#333;
+  border-radius:10px;
+  overflow:hidden;
+  margin:10px 0
+}
+.barra-inner{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#00ffcc,#00aaff);
+  transition:width .3s
+}
+
+/* ===== TEXTO ABAJO ===== */
+.progreso-texto{
+  font-size:.95rem;
+  margin-top:10px;
+  color:#00ffcc
+}
 </style>
 </head>
+
 <body>
 
 <div class="panel">
 
+  <!-- ===== JUEGO ===== -->
   <div class="game-box">
     <h2>Ahorcado – 28 Huesos del Perro</h2>
 
@@ -38,7 +119,9 @@ button{padding:10px 16px;margin:6px;border:none;border-radius:8px;font-weight:bo
       <button onclick="setNivel(2)" id="b2">Extremidades</button>
     </div>
 
-    <div class="barra"><div class="barra-inner" id="barra"></div></div>
+    <div class="barra">
+      <div class="barra-inner" id="barra"></div>
+    </div>
 
     <div class="pista" id="pista"></div>
     <div class="lineas" id="lineas"></div>
@@ -53,8 +136,12 @@ button{padding:10px 16px;margin:6px;border:none;border-radius:8px;font-weight:bo
 
     <button onclick="siguiente()">Seguir ➜</button>
     <div id="msg"></div>
+
+    <!-- ✅ TEXTO DE PROGRESO ABAJO -->
+    <div class="progreso-texto" id="textoProgreso"></div>
   </div>
 
+  <!-- ===== IMAGEN ===== -->
   <div class="img-box">
     <h3 style="color:#00ffff">Imagen numerada</h3>
     <img src="imagen.jpg">
@@ -63,10 +150,7 @@ button{padding:10px 16px;margin:6px;border:none;border-radius:8px;font-weight:bo
 </div>
 
 <script>
-/* ORDEN 1–28 SEGÚN TU LÁMINA */
 const niveles = [
-
-/* NIVEL 1 — CABEZA */
 [
   {numero:1, palabra:"CRANEO", pista:"Protege el cerebro"},
   {numero:26, palabra:"EJE", pista:"Segunda vértebra cervical"},
@@ -76,8 +160,6 @@ const niveles = [
   {numero:3, palabra:"VERTEBRATORACICA", pista:"Vértebras del tórax"},
   {numero:4, palabra:"ESCAPULA", pista:"Hombro del miembro anterior"}
 ],
-
-/* NIVEL 2 — TRONCO */
 [
   {numero:5, palabra:"VERTEBRALUMBAR", pista:"Región baja de la columna"},
   {numero:7, palabra:"SACRO", pista:"Une la columna con la pelvis"},
@@ -85,8 +167,6 @@ const niveles = [
   {numero:18, palabra:"COSTILLAOSEA", pista:"Porción ósea de la costilla"},
   {numero:19, palabra:"COSTILLA", pista:"Arcos que protegen pulmones y corazón"}
 ],
-
-/* NIVEL 3 — EXTREMIDADES Y PELVIS */
 [
   {numero:6, palabra:"ILION", pista:"Parte superior de la pelvis"},
   {numero:8, palabra:"ISQUION", pista:"Parte posterior de la pelvis"},
@@ -120,10 +200,12 @@ function cargar(){
   const d=niveles[nivel][i];
   palabra=d.palabra;
   estado=Array(palabra.length).fill("_");
-  errores=[];intentos=6;
+  errores=[];
+  intentos=6;
   document.getElementById("pista").textContent="Número "+d.numero+" – "+d.pista;
   document.getElementById("msg").textContent="";
-  actualizarBarra();actualizar();
+  actualizarBarra();
+  actualizar();
 }
 
 function actualizar(){
@@ -135,7 +217,10 @@ function actualizar(){
 
 function actualizarBarra(){
   const total=niveles[nivel].length;
+  const progreso=i+1;
   document.getElementById("barra").style.width=(i/total)*100+"%";
+  document.getElementById("textoProgreso").textContent =
+    progreso+" de "+total+" preguntas";
 }
 
 function probarLetra(){
@@ -153,6 +238,7 @@ function probarLetra(){
     document.getElementById("msg").textContent="✔ Correcto";
     document.getElementById("msg").className="ok";
   }
+
   if(intentos===0){
     document.getElementById("msg").textContent="✘ Respuesta: "+palabra;
     document.getElementById("msg").className="bad";
@@ -160,9 +246,13 @@ function probarLetra(){
 }
 
 function siguiente(){
-  if(i<niveles[nivel].length-1){i++;cargar();}
-  else{
+  if(i<niveles[nivel].length-1){
+    i++;
+    cargar();
+  } else {
     document.getElementById("barra").style.width="100%";
+    document.getElementById("textoProgreso").textContent =
+      niveles[nivel].length+" de "+niveles[nivel].length+" preguntas";
     document.getElementById("msg").textContent="✅ Nivel completado";
   }
 }
@@ -172,4 +262,3 @@ cargar();
 
 </body>
 </html>
-
