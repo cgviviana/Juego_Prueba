@@ -8,14 +8,15 @@
 body{
   margin:0;
   font-family:Arial;
-  background:url("selva.jpg") center/cover no-repeat fixed;
+  background:url("selva.jpg") no-repeat center center fixed;
+  background-size:cover;
   color:#fff;
 }
 
 .panel{
   max-width:1200px;
-  margin:30px auto;
-  background:rgba(20,20,20,.92);
+  margin:40px auto;
+  background:rgba(20,20,20,0.82);
   border-radius:16px;
   padding:24px;
   box-shadow:0 0 20px #000;
@@ -26,31 +27,37 @@ body{
 
 h2{color:#00ffff;text-align:center}
 
+/* ===== BOTONES NIVEL (VERDES) ===== */
 .niveles{
   text-align:center;
-  margin-bottom:12px;
+  margin-bottom:25px;
 }
 
 .niveles button{
-  margin:4px;
-  padding:8px 12px;
-  width:50%;
+  margin:6px;
+  padding:10px 18px;
   border:none;
-  border-radius:6px;
-  background:#143a5b; /* AZUL OSCURO COMO TU MUESTRA */
+  border-radius:10px;
+  background:#2f8f2f;
   color:#fff;
   font-weight:bold;
   cursor:pointer;
 }
-.niveles .activo{background:#1f5c8a}
 
+.niveles .activo{
+  background:#46c646;
+}
+
+/* ===== BOTONES NUMERADOS (AZULES + ICONO) ===== */
 .lista button{
-  display:block;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
   width:50%;
-  margin:6px auto;
-  padding:8px;
+  margin:8px auto;
+  padding:8px 12px;
   border:none;
-  border-radius:6px;
+  border-radius:8px;
   background:#143a5b;
   color:#fff;
   font-weight:bold;
@@ -58,6 +65,12 @@ h2{color:#00ffff;text-align:center}
   text-align:left;
 }
 
+.lista button::after{
+  content:"👆";
+  font-size:1.1rem;
+}
+
+/* ===== IMAGEN DERECHA ===== */
 .img-box{
   text-align:center;
 }
@@ -70,12 +83,12 @@ h2{color:#00ffff;text-align:center}
 
 .btn-juego{
   margin-top:12px;
-  padding:12px 24px;
+  padding:12px 26px;
   font-size:1.1rem;
   border:none;
   border-radius:10px;
-  background:#1f5c8a;
-  color:#fff;
+  background:#46c646;
+  color:#000;
   font-weight:bold;
   cursor:pointer;
 }
@@ -107,7 +120,7 @@ h2{color:#00ffff;text-align:center}
 
 <div class="panel">
 
-  <!-- ===== IZQUIERDA ===== -->
+  <!-- IZQUIERDA -->
   <div>
     <h2>Huesos del Perro</h2>
 
@@ -120,7 +133,7 @@ h2{color:#00ffff;text-align:center}
     <div class="lista" id="lista"></div>
   </div>
 
-  <!-- ===== DERECHA ===== -->
+  <!-- DERECHA -->
   <div class="img-box">
     <img src="imagen.jpg">
     <br>
@@ -143,7 +156,7 @@ h2{color:#00ffff;text-align:center}
 <script>
 const niveles = [
 
-/* ===== CABEZA ===== */
+/* CABEZA */
 [
 {n:1, t:"CRÁNEO", d:"Protege el cerebro. Hueso plano, fuerte, forma ovalada."},
 {n:2, t:"VÉRTEBRA CERVICAL", d:"Sostiene el cuello. Hueso irregular."},
@@ -154,33 +167,33 @@ const niveles = [
 {n:28, t:"MANDÍBULA", d:"Permite masticar. Hueso irregular."}
 ],
 
-/* ===== TRONCO ===== */
+/* TRONCO */
 [
 {n:5, t:"VÉRTEBRA LUMBAR", d:"Soporta peso. Hueso irregular."},
 {n:7, t:"SACRO", d:"Conecta columna y pelvis. Hueso fusionado."},
 {n:9, t:"VÉRTEBRA CAUDAL", d:"Forma la cola. Hueso irregular."},
-{n:18, t:"COSTILLA ÓSEA", d:"Protege pulmones. Hueso plano."},
-{n:19, t:"COSTILLA", d:"Protege corazón y pulmones. Hueso plano."}
+{n:18,t:"COSTILLA ÓSEA", d:"Protege pulmones. Hueso plano."},
+{n:19,t:"COSTILLA", d:"Protege corazón y pulmones. Hueso plano."}
 ],
 
-/* ===== EXTREMIDADES ===== */
+/* EXTREMIDADES */
 [
 {n:6, t:"ILION", d:"Parte superior de la pelvis."},
 {n:8, t:"ISQUION", d:"Parte posterior de la pelvis."},
-{n:17, t:"PUBIS", d:"Parte inferior de la pelvis."},
-{n:10, t:"FÉMUR", d:"Hueso del muslo. Hueso largo."},
-{n:16, t:"RÓTULA", d:"Protege la rodilla."},
-{n:15, t:"TIBIA", d:"Soporta peso. Hueso largo."},
-{n:11, t:"FÍBULA", d:"Soporte lateral."},
-{n:12, t:"TARSO", d:"Tobillo."},
-{n:13, t:"METATARSO", d:"Pie trasero."},
-{n:14, t:"FALANGE", d:"Dedos del pie."},
-{n:22, t:"METACARPO", d:"Mano."},
-{n:21, t:"FALANGE", d:"Dedos de la mano."},
-{n:23, t:"MANO", d:"Extremidad distal."},
-{n:20, t:"CÚBITO", d:"Antebrazo."},
-{n:24, t:"RADIO", d:"Antebrazo principal."},
-{n:25, t:"HÚMERO", d:"Brazo."}
+{n:17,t:"PUBIS", d:"Parte inferior de la pelvis."},
+{n:10,t:"FÉMUR", d:"Hueso del muslo. Hueso largo."},
+{n:16,t:"RÓTULA", d:"Protege la rodilla."},
+{n:15,t:"TIBIA", d:"Soporta peso. Hueso largo."},
+{n:11,t:"FÍBULA", d:"Soporte lateral."},
+{n:12,t:"TARSO", d:"Tobillo."},
+{n:13,t:"METATARSO", d:"Pie trasero."},
+{n:14,t:"FALANGE", d:"Dedos del pie."},
+{n:22,t:"METACARPO", d:"Mano."},
+{n:21,t:"FALANGE", d:"Dedos de la mano."},
+{n:23,t:"MANO", d:"Extremidad distal."},
+{n:20,t:"CÚBITO", d:"Antebrazo."},
+{n:24,t:"RADIO", d:"Antebrazo principal."},
+{n:25,t:"HÚMERO", d:"Brazo."}
 ]
 ];
 
@@ -188,25 +201,25 @@ function verNivel(n){
   document.querySelectorAll(".niveles button").forEach(b=>b.classList.remove("activo"));
   document.getElementById("b"+n).classList.add("activo");
 
-  const lista = document.getElementById("lista");
-  lista.innerHTML = "";
+  const lista=document.getElementById("lista");
+  lista.innerHTML="";
 
   niveles[n].forEach(h=>{
-    const btn = document.createElement("button");
-    btn.textContent = h.n + ". " + h.t;
-    btn.onclick = ()=>verPop(h.n+". "+h.t, h.d);
+    const btn=document.createElement("button");
+    btn.textContent=h.n+". "+h.t;
+    btn.onclick=()=>verPop(h.n+". "+h.t,h.d);
     lista.appendChild(btn);
   });
 }
 
 function verPop(t,p){
-  document.getElementById("popTitulo").textContent = t;
-  document.getElementById("popTexto").textContent = p;
-  document.getElementById("popup").style.display = "flex";
+  document.getElementById("popTitulo").textContent=t;
+  document.getElementById("popTexto").textContent=p;
+  document.getElementById("popup").style.display="flex";
 }
 
 function cerrarPop(){
-  document.getElementById("popup").style.display = "none";
+  document.getElementById("popup").style.display="none";
 }
 
 verNivel(0);
