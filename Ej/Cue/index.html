@@ -1,1 +1,163 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Libro: Cuello (3 ejercicios)</title>
+  <style>
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#111827;color:#e5e7eb}
+    .app{max-width:820px;margin:0 auto;padding:16px}
+    .header{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+    .header h1{font-size:18px;margin:0}
+    .pill{font-size:12px;padding:6px 10px;border:1px solid #374151;border-radius:999px;color:#cbd5e1}
+    .page{
+      background:#ffffff;color:#111827;border-radius:14px;padding:16px;
+      min-height:520px;box-shadow:0 14px 40px rgba(0,0,0,.35)
+    }
+    .top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+    .num{color:#6b7280;font-weight:bold}
+    h2{margin:0 0 6px 0;font-size:22px}
+    .why{margin:0 0 14px 0;color:#4b5563}
+    .box{border:2px dashed #cbd5e1;border-radius:12px;background:#f8fafc;display:flex;
+         align-items:center;justify-content:center;min-height:240px;overflow:hidden}
+    .box img{width:100%;height:100%;object-fit:contain;display:none;background:#fff}
+    .box .ph{padding:12px;text-align:center;color:#64748b;font-weight:bold}
+    .sectionTitle{margin:14px 0 8px 0;font-weight:800}
+    .steps{margin:0;padding-left:18px}
+    .steps li{margin:6px 0;line-height:1.25}
+    .mini{margin:10px 0 0 0;color:#4b5563;font-size:13px}
+    .controls{display:flex;gap:10px;margin-top:12px}
+    button{
+      flex:1;border:1px solid #374151;background:#111827;color:#e5e7eb;
+      padding:12px;border-radius:12px;font-weight:800;cursor:pointer
+    }
+    button:disabled{opacity:.45;cursor:not-allowed}
+    .progress{height:10px;background:#1f2937;border-radius:999px;overflow:hidden;margin-top:10px}
+    .bar{height:100%;width:0%;background:#38bdf8}
+    .footer{margin:10px 0 0;color:#94a3b8;font-size:12px}
+    .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+         font-size:12px;padding:2px 6px;border-radius:8px;background:#0b1220;color:#e5e7eb}
+  </style>
+</head>
 
+<body>
+  <div class="app">
+    <div class="header">
+      <h1>📘 Cuello fuerte (3 páginas)</h1>
+      <div class="pill" id="pinfo">Página 1/3</div>
+    </div>
+
+    <div class="page" id="page"></div>
+
+    <div class="progress"><div class="bar" id="bar"></div></div>
+
+    <div class="controls">
+      <button id="prev">← Anterior</button>
+      <button id="next">Siguiente →</button>
+    </div>
+
+    <p class="footer">
+      Teclas: <span class="kbd">←</span> <span class="kbd">→</span> · Regla: sin dolor, sin aguantar la respiración.
+    </p>
+  </div>
+
+  <script>
+    // ✅ Cuando tengas imágenes, pon aquí las rutas:
+    // Ejemplo: img: "img/cuello1.jpg"
+    const pages = [
+      {
+        title: "Barbilla atrás acostada",
+        why: "Corrige cabeza adelantada y fortalece el cuello sin moverlo brusco.",
+        img: "", // <-- tu foto/imagen
+        steps: [
+          "Acuéstate boca arriba, cabeza apoyada.",
+          "Mete la barbilla (como hacer papada).",
+          "NO levantes la cabeza del piso.",
+          "Vuelve suave y repite lento."
+        ],
+        dose: "3×10 · Exhala al meter barbilla"
+      },
+      {
+        title: "Isométrico frontal (frente)",
+        why: "Da estabilidad al cuello sin mover la columna cervical.",
+        img: "",
+        steps: [
+          "Siéntate o acuéstate cómoda.",
+          "Pon la mano en la frente.",
+          "Empuja suave contra la mano (la cabeza NO se mueve).",
+          "Sostén y suelta."
+        ],
+        dose: "3×5 segundos · Respira normal (no aguantar aire)"
+      },
+      {
+        title: "Isométrico lateral (lado)",
+        why: "Equilibra el cuello y ayuda a que el torso no cargue a un lado.",
+        img: "",
+        steps: [
+          "Mano en el lado de la cabeza (derecha).",
+          "Empuja suave hacia la mano (sin mover la cabeza).",
+          "Sostén y suelta. Repite al otro lado.",
+          "Todo lento."
+        ],
+        dose: "2×5 s por lado · Respira normal"
+      }
+    ];
+
+    let i = 0;
+    const page = document.getElementById("page");
+    const prev = document.getElementById("prev");
+    const next = document.getElementById("next");
+    const pinfo = document.getElementById("pinfo");
+    const bar = document.getElementById("bar");
+
+    function render(){
+      const p = pages[i];
+      pinfo.textContent = `Página ${i+1}/3`;
+      bar.style.width = `${((i+1)/3)*100}%`;
+
+      page.innerHTML = `
+        <div class="top">
+          <div>
+            <h2>${p.title}</h2>
+            <p class="why">${p.why}</p>
+          </div>
+          <div class="num">${i+1}/3</div>
+        </div>
+
+        <div class="box">
+          <img id="imgSlot" alt="Imagen del ejercicio de cuello" />
+          <div class="ph" id="ph">ESPACIO PARA PONER TU FOTO / IMAGEN<br><small>(cuando la tengas)</small></div>
+        </div>
+
+        <div class="sectionTitle">Cómo se hace</div>
+        <ol class="steps">
+          ${p.steps.map(s => `<li>${s}</li>`).join("")}
+        </ol>
+
+        <p class="mini"><b>Cuánto:</b> ${p.dose}</p>
+      `;
+
+      const img = document.getElementById("imgSlot");
+      const ph = document.getElementById("ph");
+      if (p.img && p.img.trim() !== ""){
+        img.src = p.img;
+        img.style.display = "block";
+        ph.style.display = "none";
+      }
+
+      prev.disabled = i === 0;
+      next.disabled = i === pages.length - 1;
+    }
+
+    prev.onclick = () => { if(i>0){ i--; render(); } };
+    next.onclick = () => { if(i<pages.length-1){ i++; render(); } };
+
+    window.addEventListener("keydown", (e)=>{
+      if(e.key==="ArrowLeft" && i>0){ i--; render(); }
+      if(e.key==="ArrowRight" && i<pages.length-1){ i++; render(); }
+    });
+
+    render();
+  </script>
+</body>
+</html>
