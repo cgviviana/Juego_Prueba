@@ -1,1 +1,314 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Índice semanal de rutinas</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#111c33;
+      --card2:#0f1a2f;
+      --ink:#e7eefc;
+      --muted:#9fb1d6;
+      --line:#233556;
+      --ok:#22c55e;
+      --warn:#38bdf8;
+      --rest:#f59e0b;
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(900px 500px at 20% 10%, rgba(56,189,248,.12), transparent 60%),
+                  radial-gradient(900px 500px at 80% 20%, rgba(34,197,94,.10), transparent 55%),
+                  var(--bg);
+      color:var(--ink);
+      padding:18px;
+    }
+    .wrap{max-width:980px;margin:0 auto}
+    header{
+      display:flex; align-items:flex-end; justify-content:space-between; gap:12px;
+      margin-bottom:14px;
+    }
+    h1{margin:0;font-size:20px;letter-spacing:.2px}
+    .sub{margin:6px 0 0;color:var(--muted);font-size:13px}
+    .pill{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      padding:8px 10px; border-radius:999px;
+      font-size:12px; color:var(--muted);
+      white-space:nowrap;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap:10px;
+    }
+    @media (max-width: 980px){ .grid{grid-template-columns: repeat(3, 1fr);} }
+    @media (max-width: 620px){ .grid{grid-template-columns: repeat(2, 1fr);} }
+
+    .day{
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      padding:12px;
+      cursor:pointer;
+      transition: transform .08s ease, border-color .08s ease;
+      min-height:130px;
+      display:flex; flex-direction:column; gap:10px;
+    }
+    .day:hover{transform: translateY(-1px); border-color:#2f4a7a}
+    .dayTitle{display:flex; align-items:center; justify-content:space-between; gap:10px}
+    .dayTitle b{font-size:14px}
+    .tag{
+      font-size:11px; padding:4px 8px; border-radius:999px;
+      border:1px solid var(--line); color:var(--muted); background: rgba(255,255,255,.03);
+    }
+    .row{display:flex; align-items:center; gap:8px; color:var(--muted); font-size:12px}
+    .icons{display:flex; gap:8px; align-items:center}
+    .ico{
+      width:26px; height:26px; border-radius:10px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      display:grid; place-items:center;
+    }
+    .ico svg{width:16px;height:16px;opacity:.95}
+    .legend{
+      display:flex; flex-wrap:wrap; gap:10px;
+      margin-top:14px; color:var(--muted); font-size:12px;
+    }
+    .legend span{display:flex; align-items:center; gap:6px}
+    .dot{width:10px;height:10px;border-radius:999px;display:inline-block}
+    .dot.ok{background:var(--ok)}
+    .dot.warn{background:var(--warn)}
+    .dot.rest{background:var(--rest)}
+
+    .panel{
+      margin-top:14px;
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.03);
+      padding:14px;
+    }
+    .panel h2{margin:0 0 8px 0;font-size:16px}
+    .panel p{margin:6px 0;color:var(--muted);font-size:13px;line-height:1.35}
+    .links{display:flex; flex-wrap:wrap; gap:10px; margin-top:10px}
+    a.btn{
+      text-decoration:none;
+      color:var(--ink);
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      padding:10px 12px;
+      border-radius: 12px;
+      font-weight:700;
+      font-size:13px;
+      display:inline-flex; align-items:center; gap:8px;
+    }
+    a.btn:hover{border-color:#2f4a7a}
+    .kbd{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size:11px; padding:2px 6px; border-radius:8px;
+      border:1px solid var(--line); background: rgba(0,0,0,.20); color:var(--muted);
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Índice semanal de rutinas</h1>
+      <div class="sub">Haz clic en un día para ver qué rutina sigue. (Íconos SVG incluidos)</div>
+    </div>
+    <div class="pill">Tip: teclas <span class="kbd">1</span>…<span class="kbd">7</span> seleccionan día</div>
+  </header>
+
+  <!-- === SVG ICONS (inline) === -->
+  <!-- Piernas -->
+  <template id="svg-legs">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M9 3c2 2 3 4 3 7v2l2 2v7h-3v-5l-2-2V10C9 8 8 6 7 5l2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M14 14l3 2v5h-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </template>
+
+  <!-- Abdomen -->
+  <template id="svg-core">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 2c3 3 4 6 4 10s-1 7-4 10c-3-3-4-6-4-10S9 5 12 2z" stroke="currentColor" stroke-width="2"/>
+      <path d="M9 10h6M9 14h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </template>
+
+  <!-- Brazos/pecho -->
+  <template id="svg-arms">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M7 14c1-3 3-5 5-5h2c2 0 4 2 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M6 14l-2 6h4l1-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M18 14l2 6h-4l-1-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </template>
+
+  <!-- Cardio -->
+  <template id="svg-cardio">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 21s-7-4.6-9.5-9C.6 8.6 2.5 6 5.3 6c1.6 0 3 .9 3.7 2 0 0 1.1-2 3-2s3 2 3 2c.7-1.1 2.1-2 3.7-2 2.8 0 4.7 2.6 2.8 6-2.5 4.4-9.5 9-9.5 9z"
+            stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    </svg>
+  </template>
+
+  <!-- Descanso -->
+  <template id="svg-rest">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M8 17c6 0 10-4 10-10-6 0-10 4-10 10z" stroke="currentColor" stroke-width="2"/>
+      <path d="M6 18c0 2 2 4 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </template>
+
+  <!-- === DAYS GRID === -->
+  <div class="grid" id="days"></div>
+
+  <div class="legend">
+    <span><i class="dot ok"></i> Fuerza</span>
+    <span><i class="dot warn"></i> Cardio suave</span>
+    <span><i class="dot rest"></i> Descanso</span>
+  </div>
+
+  <!-- === DETAIL PANEL === -->
+  <div class="panel" id="panel">
+    <h2>Selecciona un día</h2>
+    <p>Te mostrará la rutina de ese día y enlaces a tus libros.</p>
+  </div>
+</div>
+
+<script>
+  // === CONFIG: cambia SOLO los nombres de tus archivos si son distintos ===
+  // Si tus libros están en otra carpeta, ajusta estas rutas:
+  const BOOKS = {
+    piernas: "libro_piernas.html",
+    abdomen: "libro_abdominales.html",
+    brazos:  "libro_brazos.html"
+  };
+
+  // Rutina semanal (editable)
+  // iconos: legs/core/arms/cardio/rest
+  const WEEK = [
+    { day:"Lunes",     tag:"Fuerza", color:"ok",   icons:["legs","core","arms"], text:"Fuerza completa (piernas + abdomen + brazos/pecho). Luego cardio suave si quieres." },
+    { day:"Martes",    tag:"Cardio", color:"warn", icons:["cardio","core"],      text:"Cardio suave + abdomen (control). Sin cargas pesadas." },
+    { day:"Miércoles", tag:"Fuerza", color:"ok",   icons:["legs","core","arms"], text:"Fuerza completa (piernas + abdomen + brazos/pecho)." },
+    { day:"Jueves",    tag:"Cardio", color:"warn", icons:["cardio","core"],      text:"Cardio suave + abdomen." },
+    { day:"Viernes",   tag:"Fuerza", color:"ok",   icons:["legs","core","arms"], text:"Fuerza completa (piernas + abdomen + brazos/pecho)." },
+    { day:"Sábado",    tag:"Suave",  color:"warn", icons:["core","rest"],        text:"Día suave: abdomen ligero + movilidad/respiración. Sin exigirte." },
+    { day:"Domingo",   tag:"Descanso",color:"rest",icons:["rest"],               text:"Descanso. Caminata suave opcional." }
+  ];
+
+  const tpl = {
+    legs:  document.getElementById("svg-legs").content.firstElementChild,
+    core:  document.getElementById("svg-core").content.firstElementChild,
+    arms:  document.getElementById("svg-arms").content.firstElementChild,
+    cardio:document.getElementById("svg-cardio").content.firstElementChild,
+    rest:  document.getElementById("svg-rest").content.firstElementChild
+  };
+
+  const daysEl = document.getElementById("days");
+  const panelEl = document.getElementById("panel");
+
+  function cloneSvg(key){
+    return tpl[key].cloneNode(true);
+  }
+
+  function badgeDot(color){
+    const dot = document.createElement("span");
+    dot.className = "dot " + color;
+    dot.style.marginLeft = "6px";
+    return dot;
+  }
+
+  function renderDays(){
+    daysEl.innerHTML = "";
+    WEEK.forEach((d, idx) => {
+      const card = document.createElement("button");
+      card.type = "button";
+      card.className = "day";
+      card.setAttribute("aria-label", d.day);
+
+      const title = document.createElement("div");
+      title.className = "dayTitle";
+
+      const left = document.createElement("div");
+      left.innerHTML = `<b>${d.day}</b>`;
+
+      const right = document.createElement("div");
+      right.className = "tag";
+      right.textContent = d.tag;
+      right.prepend(badgeDot(d.color));
+
+      title.append(left, right);
+
+      const icons = document.createElement("div");
+      icons.className = "icons";
+
+      d.icons.forEach(k => {
+        const wrap = document.createElement("div");
+        wrap.className = "ico";
+        wrap.appendChild(cloneSvg(k));
+        icons.appendChild(wrap);
+      });
+
+      const row = document.createElement("div");
+      row.className = "row";
+      row.innerHTML = `<span>Atajo:</span> <span class="kbd">${idx+1}</span>`;
+
+      card.append(title, icons, row);
+      card.addEventListener("click", () => showDay(idx));
+      daysEl.appendChild(card);
+    });
+  }
+
+  function showDay(i){
+    const d = WEEK[i];
+    panelEl.innerHTML = `
+      <h2>${d.day} – ${d.tag}</h2>
+      <p>${d.text}</p>
+      <div class="links">
+        <a class="btn" href="${BOOKS.piernas}">
+          ${tpl.legs.outerHTML} Piernas
+        </a>
+        <a class="btn" href="${BOOKS.abdomen}">
+          ${tpl.core.outerHTML} Abdomen
+        </a>
+        <a class="btn" href="${BOOKS.brazos}">
+          ${tpl.arms.outerHTML} Brazos & Pecho
+        </a>
+      </div>
+      <p class="sub" style="margin-top:10px">
+        Si tus libros están en otra carpeta, cambia las rutas en el objeto <span class="kbd">BOOKS</span>.
+      </p>
+    `;
+
+    // Reinyectar SVG inline (porque outerHTML se inserta como texto en template string)
+    // Solución simple: reemplazar los placeholders por SVG reales:
+    const btns = panelEl.querySelectorAll("a.btn");
+    const keys = ["legs","core","arms"];
+    btns.forEach((b, idx) => {
+      const first = b.firstChild;
+      if(first && first.nodeType === Node.TEXT_NODE) b.removeChild(first);
+      const svg = cloneSvg(keys[idx]);
+      svg.style.marginRight = "6px";
+      b.prepend(svg);
+    });
+  }
+
+  // Atajos teclado 1..7
+  window.addEventListener("keydown", (e) => {
+    const n = parseInt(e.key, 10);
+    if(n>=1 && n<=7) showDay(n-1);
+  });
+
+  renderDays();
+</script>
+</body>
+</html>
 
