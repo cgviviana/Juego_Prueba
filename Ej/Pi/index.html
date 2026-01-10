@@ -1,162 +1,141 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Libro: Piernas (3 ejercicios)</title>
-  <style>
-    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#111827;color:#e5e7eb}
-    .app{max-width:820px;margin:0 auto;padding:16px}
-    .header{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
-    .header h1{font-size:18px;margin:0}
-    .pill{font-size:12px;padding:6px 10px;border:1px solid #374151;border-radius:999px;color:#cbd5e1}
-    .page{
-      background:#ffffff;color:#111827;border-radius:14px;padding:16px;
-      min-height:520px;box-shadow:0 14px 40px rgba(0,0,0,.35)
-    }
-    .top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-    .num{color:#6b7280;font-weight:bold}
-    h2{margin:0 0 6px 0;font-size:22px}
-    .why{margin:0 0 14px 0;color:#4b5563}
-    .box{border:2px dashed #cbd5e1;border-radius:12px;background:#f8fafc;display:flex;
-         align-items:center;justify-content:center;min-height:220px;overflow:hidden}
-    .box img{width:100%;height:100%;object-fit:contain;display:none}
-    .box .ph{padding:12px;text-align:center;color:#64748b;font-weight:bold}
-    .sectionTitle{margin:14px 0 8px 0;font-weight:800}
-    .steps{margin:0;padding-left:18px}
-    .steps li{margin:6px 0;line-height:1.25}
-    .mini{margin:10px 0 0 0;color:#4b5563;font-size:13px}
-    .controls{display:flex;gap:10px;margin-top:12px}
-    button{
-      flex:1;border:1px solid #374151;background:#111827;color:#e5e7eb;
-      padding:12px;border-radius:12px;font-weight:800;cursor:pointer
-    }
-    button:disabled{opacity:.45;cursor:not-allowed}
-    .progress{height:10px;background:#1f2937;border-radius:999px;overflow:hidden;margin-top:10px}
-    .bar{height:100%;width:0%;background:#22c55e}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rutina – Piernas</title>
+
+<style>
+body{
+  margin:0;
+  font-family: Arial, Helvetica, sans-serif;
+  background:#f6f7fb;
+  color:#111;
+}
+.wrap{
+  max-width:800px;
+  margin:auto;
+  padding:16px;
+}
+h1{
+  margin:0 0 6px 0;
+  font-size:20px;
+}
+.sub{
+  margin:0 0 14px 0;
+  color:#555;
+  font-size:13px;
+}
+.card{
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:14px;
+  padding:14px;
+  margin-bottom:14px;
+}
+h2{
+  margin:0 0 6px 0;
+  font-size:16px;
+}
+p{
+  margin:0 0 10px 0;
+  font-size:13px;
+  color:#333;
+}
+.imgbox{
+  border:2px dashed #ccc;
+  border-radius:12px;
+  height:250px;               /* ✅ MISMO TAMAÑO PARA TODAS */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:10px;
+  background:#fafafa;
+}
+.imgbox img{
+  width:100%;
+  height:250px;               /* ✅ MISMO TAMAÑO PARA TODAS */
+  object-fit:contain;         /* ✅ NO DEFORMA */
+}
+ol{
+  margin:0;
+  padding-left:18px;
+  font-size:13px;
+}
+li{
+  margin:6px 0;
+}
+.note{
+  font-size:12px;
+  color:#666;
+  margin-top:8px;
+}
+</style>
 </head>
 
 <body>
-  <div class="app">
-    <div class="header">
-      <h1>📘 Piernas firmes (3 ejercicios)</h1>
-      <div class="pill" id="pinfo">Página 1/3</div>
-    </div>
+<div class="wrap">
 
-    <div class="page" id="page"></div>
+<h1>Piernas</h1>
+<p class="sub">Rutina segura para fuerza y firmeza (sin impactos)</p>
 
-    <div class="progress"><div class="bar" id="bar"></div></div>
+<!-- EJERCICIO 1 -->
+<div class="card">
+  <h2>1. Extensión de rodilla sentada</h2>
+  <p>Clave para subir escaleras (cuádriceps).</p>
 
-    <div class="controls">
-      <button id="prev">← Anterior</button>
-      <button id="next">Siguiente →</button>
-    </div>
-
-    <p style="margin:10px 0 0;color:#94a3b8;font-size:12px">
-      Tip: Si NO lo sientes en el muslo, hazlo MÁS lento y sostén arriba 5 segundos.
-    </p>
+  <div class="imgbox">
+    <img src="img/extension_rodilla_sentada.jpg" alt="Extensión de rodilla sentada">
   </div>
 
-  <script>
-    // ✅ Cambia aquí las fotos (cuando las tengas):
-    // Ejemplo: img: "img/rodilla.jpg"
-    const pages = [
-      {
-        title: "Extensión de rodilla sentada",
-        why: "Este es el músculo que te sube escaleras: cuádriceps.",
-        img: "", // <-- pon aquí tu foto si quieres
-        steps: [
-          "Siéntate. Espalda apoyada.",
-          "Pon el peso en el empeine (mancuerna o rollito) o usa tobillera.",
-          "Estira la pierna y SOSTÉN 5 segundos arriba.",
-          "Baja lento (3 segundos)."
-        ],
-        dose: "3×10–15 por pierna (lento)"
-      },
-      {
-        title: "Puente corto de glúteo",
-        why: "Glúteo fuerte = menos ‘fofo’ y columna más estable.",
-        img: "",
-        steps: [
-          "Acuéstate boca arriba, rodillas dobladas, pies apoyados.",
-          "Sube la cadera POQUITO (sin arquear la espalda).",
-          "Arriba aprieta glúteos 3 segundos.",
-          "Baja lento (3 segundos)."
-        ],
-        dose: "3×10–12"
-      },
-      {
-        title: "Elevación de talones sentada",
-        why: "Pierna más firme + ayuda al retorno venoso. Reps altas.",
-        img: "",
-        steps: [
-          "Siéntate. Rodillas a 90°.",
-          "Sube talones en 2 segundos.",
-          "Baja talones en 4 segundos (lento).",
-          "Repite sin prisa."
-        ],
-        dose: "3×25–30"
-      }
-    ];
+  <ol>
+    <li>Siéntate con espalda apoyada.</li>
+    <li>Coloca el peso en el empeine (mancuerna/rollito) o usa tobillera.</li>
+    <li>Estira la pierna y <b>sostén 5 segundos</b> arriba.</li>
+    <li>Baja lento (3 segundos).</li>
+  </ol>
 
-    let i = 0;
-    const page = document.getElementById("page");
-    const prev = document.getElementById("prev");
-    const next = document.getElementById("next");
-    const pinfo = document.getElementById("pinfo");
-    const bar = document.getElementById("bar");
+  <p class="note"><b>3 × 10–15 por pierna</b></p>
+</div>
 
-    function render(){
-      const p = pages[i];
-      pinfo.textContent = `Página ${i+1}/3`;
-      bar.style.width = `${((i+1)/3)*100}%`;
+<!-- EJERCICIO 2 -->
+<div class="card">
+  <h2>2. Puente corto de glúteo</h2>
+  <p>Glúteo fuerte = pierna firme + más estabilidad lumbar.</p>
 
-      page.innerHTML = `
-        <div class="top">
-          <div>
-            <h2>${p.title}</h2>
-            <p class="why">${p.why}</p>
-          </div>
-          <div class="num">${i+1}/3</div>
-        </div>
+  <div class="imgbox">
+    <img src="img/puente_gluteo.jpg" alt="Puente de glúteo">
+  </div>
 
-        <div class="box">
-          <img id="imgSlot" alt="Foto del ejercicio" />
-          <div class="ph" id="ph">ESPACIO PARA PONER TU FOTO<br><small>(cuando la tengas)</small></div>
-        </div>
+  <ol>
+    <li>Acuéstate boca arriba, rodillas flexionadas, pies apoyados.</li>
+    <li>Sube la cadera <b>poquito</b> (sin arquear la espalda).</li>
+    <li>Arriba aprieta glúteos <b>3 segundos</b>.</li>
+    <li>Baja lento (3 segundos).</li>
+  </ol>
 
-        <div class="sectionTitle">Cómo se hace</div>
-        <ol class="steps">
-          ${p.steps.map(s => `<li>${s}</li>`).join("")}
-        </ol>
+  <p class="note"><b>3 × 10–12</b></p>
+</div>
 
-        <p class="mini"><b>Cuánto:</b> ${p.dose}</p>
-      `;
+<!-- EJERCICIO 3 -->
+<div class="card">
+  <h2>3. Elevación de talones sentada</h2>
+  <p>Fortalece pantorrilla/sóleo y ayuda al retorno venoso.</p>
 
-      // Si hay imagen, la muestra
-      const img = document.getElementById("imgSlot");
-      const ph = document.getElementById("ph");
-      if (p.img && p.img.trim() !== ""){
-        img.src = p.img;
-        img.style.display = "block";
-        ph.style.display = "none";
-      }
+  <div class="imgbox">
+    <img src="img/talones_sentada.jpg" alt="Elevación de talones sentada">
+  </div>
 
-      prev.disabled = i === 0;
-      next.disabled = i === pages.length - 1;
-    }
+  <ol>
+    <li>Siéntate con pies apoyados y rodillas a 90°.</li>
+    <li>Sube talones en 2 segundos.</li>
+    <li>Baja talones en 4 segundos (lento).</li>
+    <li>Repite sin prisa.</li>
+  </ol>
 
-    prev.onclick = () => { if(i>0){ i--; render(); } };
-    next.onclick = () => { if(i<pages.length-1){ i++; render(); } };
+  <p class="note"><b>3 × 25–30</b></p>
+</div>
 
-    // Teclas
-    window.addEventListener("keydown", (e)=>{
-      if(e.key==="ArrowLeft" && i>0){ i--; render(); }
-      if(e.key==="ArrowRight" && i<pages.length-1){ i++; render(); }
-    });
-
-    render();
-  </script>
+</div>
 </body>
 </html>
