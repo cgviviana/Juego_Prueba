@@ -1,141 +1,390 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rutina – Piernas</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Piernas (Libro)</title>
 
 <style>
-body{
-  margin:0;
-  font-family: Arial, Helvetica, sans-serif;
-  background:#f6f7fb;
-  color:#111;
-}
-.wrap{
-  max-width:800px;
-  margin:auto;
-  padding:16px;
-}
-h1{
-  margin:0 0 6px 0;
-  font-size:20px;
-}
-.sub{
-  margin:0 0 14px 0;
-  color:#555;
-  font-size:13px;
-}
-.card{
-  background:#fff;
-  border:1px solid #ddd;
-  border-radius:14px;
-  padding:14px;
-  margin-bottom:14px;
-}
-h2{
-  margin:0 0 6px 0;
-  font-size:16px;
-}
-p{
-  margin:0 0 10px 0;
-  font-size:13px;
-  color:#333;
-}
-.imgbox{
-  border:2px dashed #ccc;
-  border-radius:12px;
-  height:250px;               /* ✅ MISMO TAMAÑO PARA TODAS */
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin-bottom:10px;
-  background:#fafafa;
-}
-.imgbox img{
-  width:100%;
-  height:250px;               /* ✅ MISMO TAMAÑO PARA TODAS */
-  object-fit:contain;         /* ✅ NO DEFORMA */
-}
-ol{
-  margin:0;
-  padding-left:18px;
-  font-size:13px;
-}
-li{
-  margin:6px 0;
-}
-.note{
-  font-size:12px;
-  color:#666;
-  margin-top:8px;
-}
+  :root{
+    --ink:#0f172a;
+    --muted:#475569;
+    --card:#ffffff;
+    --border:rgba(15,23,42,.14);
+    --shadow: 0 10px 30px rgba(2,6,23,.08);
+    --radius:18px;
+  }
+
+  body{
+    margin:0;
+    font-family: Arial, Helvetica, sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 600px at 15% 10%, rgba(99,102,241,.10), transparent 60%),
+      radial-gradient(900px 500px at 85% 15%, rgba(14,165,233,.10), transparent 55%),
+      radial-gradient(800px 500px at 50% 95%, rgba(34,197,94,.07), transparent 55%),
+      radial-gradient(600px 300px at 25% 55%, rgba(255,255,255,.7), rgba(255,255,255,0) 70%),
+      linear-gradient(180deg, #f8fafc, #f3f4f6);
+  }
+
+  .wrap{ max-width: 980px; margin:auto; padding: 18px; }
+
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 10px 4px 14px 4px;
+  }
+  .crumb{
+    display:flex; align-items:center; gap:10px;
+    font-weight:800; font-size:14px;
+  }
+  .dot{
+    width:10px; height:10px; border-radius:3px;
+    background: linear-gradient(135deg, rgba(59,130,246,.9), rgba(99,102,241,.9));
+    box-shadow: 0 6px 18px rgba(59,130,246,.20);
+  }
+  .pagecounter{ font-size:12px; color: var(--muted); }
+
+  .book{
+    background: rgba(255,255,255,.55);
+    border: 1px solid rgba(15,23,42,.08);
+    border-radius: 22px;
+    box-shadow: var(--shadow);
+    overflow:hidden;
+    backdrop-filter: blur(6px);
+  }
+
+  .page{
+    display:none;
+    padding: 18px;
+    background: rgba(255,255,255,.75);
+    min-height: 560px;
+  }
+  .page.active{ display:block; }
+
+  h1{ margin: 2px 0 6px 0; font-size:22px; }
+  .sub{ margin:0 0 14px 0; color:var(--muted); font-size:13px; }
+
+  .section-title{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom: 10px;
+  }
+  .section-title h2{ margin:0; font-size:16px; }
+  .hint{ font-size:12px; color:var(--muted); }
+
+  .grid{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  @media (min-width: 860px){
+    .grid.two{ grid-template-columns: 1fr 1fr; }
+  }
+
+  .card{
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+    box-shadow: 0 10px 26px rgba(2,6,23,.06);
+  }
+  .card h3, .card h2{ margin:0 0 6px 0; font-size:16px; }
+  .card p{ margin:0 0 10px 0; font-size:13px; color:#334155; }
+
+  .imgbox{
+    border: 2px dashed rgba(15,23,42,.18);
+    border-radius: 14px;
+    height: 240px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom: 10px;
+    background:
+      radial-gradient(700px 240px at 20% 20%, rgba(59,130,246,.07), transparent 55%),
+      radial-gradient(500px 220px at 80% 30%, rgba(14,165,233,.07), transparent 55%),
+      #fbfbfe;
+    overflow:hidden;
+  }
+  .imgbox img{
+    width:100%; height:240px; object-fit:contain;
+  }
+
+  ol{ margin:0; padding-left:18px; font-size:13px; color:#0f172a; }
+  li{ margin:6px 0; }
+  .note{ font-size:12px; color:#475569; margin-top:8px; }
+
+  /* reels */
+  .embed{
+    width:100%;
+    height: 320px;
+    border:0;
+    border-radius: 14px;
+    overflow:hidden;
+    background:#f8fafc;
+  }
+  .embed-wrap{
+    border: 1px solid rgba(15,23,42,.14);
+    border-radius: 16px;
+    overflow:hidden;
+    box-shadow: 0 10px 26px rgba(2,6,23,.05);
+  }
+  .small{
+    font-size:12px; color:var(--muted); margin-top:8px;
+    word-break: break-word;
+  }
+
+  .nav{
+    display:flex;
+    gap: 12px;
+    padding: 14px;
+    border-top: 1px solid rgba(15,23,42,.10);
+    background: rgba(255,255,255,.65);
+    justify-content:space-between;
+  }
+  button, a.btn{
+    border:1px solid rgba(15,23,42,.18);
+    background: rgba(255,255,255,.85);
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 10px 14px;
+    font-weight: 800;
+    cursor:pointer;
+    min-width: 140px;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow: 0 8px 18px rgba(2,6,23,.06);
+  }
+  button.primary{
+    background: linear-gradient(135deg, rgba(59,130,246,.92), rgba(99,102,241,.92));
+    border-color: transparent;
+    color: white;
+  }
+  button:disabled{ opacity:.45; cursor:not-allowed; }
 </style>
 </head>
 
 <body>
 <div class="wrap">
 
-<h1>Piernas</h1>
-<p class="sub">Rutina segura para fuerza y firmeza (sin impactos)</p>
-
-<!-- EJERCICIO 1 -->
-<div class="card">
-  <h2>1. Extensión de rodilla sentada</h2>
-  <p>Clave para subir escaleras (cuádriceps).</p>
-
-  <div class="imgbox">
-    <img src="img/extension_rodilla_sentada.jpg" alt="Extensión de rodilla sentada">
+  <div class="topbar">
+    <div class="crumb"><span class="dot"></span> Piernas</div>
+    <div class="pagecounter" id="counter">1/3</div>
   </div>
 
-  <ol>
-    <li>Siéntate con espalda apoyada.</li>
-    <li>Coloca el peso en el empeine (mancuerna/rollito) o usa tobillera.</li>
-    <li>Estira la pierna y <b>sostén 5 segundos</b> arriba.</li>
-    <li>Baja lento (3 segundos).</li>
-  </ol>
+  <div class="book">
 
-  <p class="note"><b>3 × 10–15 por pierna</b></p>
-</div>
+    <!-- PÁGINA 1: PORTADA (SIN EXPLICACIONES EXTRA) -->
+    <section class="page active" data-page="1">
+      <h1>Piernas</h1>
+      <p class="sub">Rutina segura para fuerza y firmeza (sin impactos)</p>
 
-<!-- EJERCICIO 2 -->
-<div class="card">
-  <h2>2. Puente corto de glúteo</h2>
-  <p>Glúteo fuerte = pierna firme + más estabilidad lumbar.</p>
+      <div class="card">
+        <div class="section-title">
+          <h2>Índice</h2>
+          <span class="hint">Páginas</span>
+        </div>
+        <ol>
+          <li>Portada</li>
+          <li>Ejercicios</li>
+          <li>Reels </li>
+        </ol>
+      </div>
+    </section>
 
-  <div class="imgbox">
-    <img src="img/puente_gluteo.jpg" alt="Puente de glúteo">
+    <!-- PÁGINA 2: EJERCICIOS (TU CONTENIDO) -->
+    <section class="page" data-page="2">
+      <h1>Piernas</h1>
+      <p class="sub">Rutina segura para fuerza y firmeza (sin impactos)</p>
+
+      <div class="grid">
+
+        <div class="card">
+          <h2>1. Extensión de rodilla sentada</h2>
+          <p>Clave para subir escaleras (cuádriceps).</p>
+
+          <div class="imgbox">
+            <img src="img/extension_rodilla_sentada.jpg" alt="Extensión de rodilla sentada">
+          </div>
+
+          <ol>
+            <li>Siéntate con espalda apoyada.</li>
+            <li>Coloca el peso en el empeine (mancuerna/rollito) o usa tobillera.</li>
+            <li>Estira la pierna y <b>sostén 5 segundos</b> arriba.</li>
+            <li>Baja lento (3 segundos).</li>
+          </ol>
+
+          <p class="note"><b>3 × 10–15 por pierna</b></p>
+        </div>
+
+        <div class="card">
+          <h2>2. Puente corto de glúteo</h2>
+          <p>Glúteo fuerte = pierna firme + más estabilidad lumbar.</p>
+
+          <div class="imgbox">
+            <img src="img/puente_gluteo.jpg" alt="Puente de glúteo">
+          </div>
+
+          <ol>
+            <li>Acuéstate boca arriba, rodillas flexionadas, pies apoyados.</li>
+            <li>Sube la cadera <b>poquito</b> (sin arquear la espalda).</li>
+            <li>Arriba aprieta glúteos <b>3 segundos</b>.</li>
+            <li>Baja lento (3 segundos).</li>
+          </ol>
+
+          <p class="note"><b>3 × 10–12</b></p>
+        </div>
+
+        <div class="card">
+          <h2>3. Elevación de talones sentada</h2>
+          <p>Fortalece pantorrilla/sóleo y ayuda al retorno venoso.</p>
+
+          <div class="imgbox">
+            <img src="img/talones_sentada.jpg" alt="Elevación de talones sentada">
+          </div>
+
+          <ol>
+            <li>Siéntate con pies apoyados y rodillas a 90°.</li>
+            <li>Sube talones en 2 segundos.</li>
+            <li>Baja talones en 4 segundos (lento).</li>
+            <li>Repite sin prisa.</li>
+          </ol>
+
+          <p class="note"><b>3 × 25–30</b></p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PÁGINA 3: REELS DE PIERNAS (SOLO LOS QUE ME DISTE) + REGRESAR -->
+    <section class="page" data-page="3">
+      <div class="section-title">
+        <h2>Reels – Piernas</h2>
+        <span class="hint">Reels</span>
+      </div>
+
+      <div class="grid two">
+
+        <div class="card">
+          <h3>Pierna polea</h3>
+          <div class="embed-wrap">
+            <iframe class="embed"
+              src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1244659137711672&show_text=false&width=560"
+              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+              allowfullscreen="true"></iframe>
+          </div>
+          <div class="small">https://www.facebook.com/reel/1244659137711672</div>
+        </div>
+
+        <div class="card">
+          <h3>Piernas varios</h3>
+          <div class="embed-wrap">
+            <iframe class="embed"
+              src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1377815250734941&show_text=false&width=560"
+              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+              allowfullscreen="true"></iframe>
+          </div>
+          <div class="small">https://www.facebook.com/reel/1377815250734941</div>
+        </div>
+
+        <div class="card">
+          <h3>Piernas pared</h3>
+          <div class="embed-wrap">
+            <iframe class="embed"
+              src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F916004390771121&show_text=false&width=560"
+              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+              allowfullscreen="true"></iframe>
+          </div>
+          <div class="small">https://www.facebook.com/reel/916004390771121</div>
+        </div>
+
+        <div class="card">
+          <h3>Piernas pared</h3>
+          <div class="embed-wrap">
+            <iframe class="embed"
+              src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F692179537063163&show_text=false&width=560"
+              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+              allowfullscreen="true"></iframe>
+          </div>
+          <div class="small">https://www.facebook.com/reel/692179537063163</div>
+        </div>
+
+        <div class="card">
+          <h3>Piernas silla</h3>
+          <div class="embed-wrap">
+            <iframe class="embed"
+              src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1407976210958975&show_text=false&width=560"
+              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+              allowfullscreen="true"></iframe>
+          </div>
+          <div class="small">https://www.facebook.com/reel/1407976210958975</div>
+        </div>
+
+        <div class="card">
+          <h3>Piernas silla</h3>
+          <div class="embed-wrap">
+            <iframe class="embed"
+              src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F835764442565721&show_text=false&width=560"
+              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+              allowfullscreen="true"></iframe>
+          </div>
+          <div class="small">https://www.facebook.com/reel/835764442565721</div>
+        </div>
+
+        <div class="card">
+          <h3>Glúteos / Pierna (búlgara en caja)</h3>
+          <div class="embed-wrap">
+            <iframe class="embed"
+              src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1117547667129494&show_text=false&width=560"
+              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+              allowfullscreen="true"></iframe>
+          </div>
+          <div class="small">https://www.facebook.com/reel/1117547667129494</div>
+        </div>
+
+      </div>
+
+      <div style="margin-top:14px;">
+        <a class="btn" href="https://cgviviana.github.io/Juego_Prueba/Ej/Indice/" target="_self">
+          ⟵ Regresar al Índice
+        </a>
+      </div>
+    </section>
+
+    <!-- NAVEGACIÓN -->
+    <div class="nav">
+      <button id="prevBtn">← Anterior</button>
+      <button id="nextBtn" class="primary">Siguiente →</button>
+    </div>
+
   </div>
-
-  <ol>
-    <li>Acuéstate boca arriba, rodillas flexionadas, pies apoyados.</li>
-    <li>Sube la cadera <b>poquito</b> (sin arquear la espalda).</li>
-    <li>Arriba aprieta glúteos <b>3 segundos</b>.</li>
-    <li>Baja lento (3 segundos).</li>
-  </ol>
-
-  <p class="note"><b>3 × 10–12</b></p>
 </div>
 
-<!-- EJERCICIO 3 -->
-<div class="card">
-  <h2>3. Elevación de talones sentada</h2>
-  <p>Fortalece pantorrilla/sóleo y ayuda al retorno venoso.</p>
+<script>
+  const pages = Array.from(document.querySelectorAll(".page"));
+  const counter = document.getElementById("counter");
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  let idx = 0;
 
-  <div class="imgbox">
-    <img src="img/talones_sentada.jpg" alt="Elevación de talones sentada">
-  </div>
+  function show(i){
+    idx = Math.max(0, Math.min(pages.length - 1, i));
+    pages.forEach((p, k) => p.classList.toggle("active", k === idx));
+    counter.textContent = `${idx+1}/${pages.length}`;
+    prevBtn.disabled = idx === 0;
+    nextBtn.disabled = idx === pages.length - 1;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 
-  <ol>
-    <li>Siéntate con pies apoyados y rodillas a 90°.</li>
-    <li>Sube talones en 2 segundos.</li>
-    <li>Baja talones en 4 segundos (lento).</li>
-    <li>Repite sin prisa.</li>
-  </ol>
+  prevBtn.addEventListener("click", () => show(idx - 1));
+  nextBtn.addEventListener("click", () => show(idx + 1));
 
-  <p class="note"><b>3 × 25–30</b></p>
-</div>
+  window.addEventListener("keydown", (e) => {
+    if(e.key === "ArrowLeft") show(idx - 1);
+    if(e.key === "ArrowRight") show(idx + 1);
+  });
 
-</div>
+  show(0);
+</script>
 </body>
 </html>
