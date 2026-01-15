@@ -1,70 +1,320 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Calentamiento – Movilidad</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Calentamiento – Movilidad (Libro)</title>
+
 <style>
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f6f7fb;color:#111}
-.wrap{max-width:800px;margin:auto;padding:16px}
-h1{margin:0 0 6px 0;font-size:20px}
-.sub{margin:0 0 14px 0;color:#555;font-size:13px}
-.card{background:#fff;border:1px solid #ddd;border-radius:14px;padding:14px;margin-bottom:14px}
-h2{margin:0 0 6px 0;font-size:16px}
-p{margin:0 0 10px 0;font-size:13px;color:#333}
-.imgbox{border:2px dashed #ccc;border-radius:12px;height:250px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;background:#fafafa}
-.imgbox img{width:100%;height:250px;object-fit:contain}
-ol{margin:0;padding-left:18px;font-size:13px}
-li{margin:6px 0}
-.note{font-size:12px;color:#666;margin-top:8px}
+  :root{
+    --ink:#0f172a;
+    --muted:#475569;
+    --card:#ffffff;
+    --border:rgba(15,23,42,.14);
+    --shadow: 0 10px 30px rgba(2,6,23,.08);
+    --radius:18px;
+  }
+
+  body{
+    margin:0;
+    font-family: Arial, Helvetica, sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 600px at 15% 10%, rgba(99,102,241,.10), transparent 60%),
+      radial-gradient(900px 500px at 85% 15%, rgba(14,165,233,.10), transparent 55%),
+      radial-gradient(800px 500px at 50% 95%, rgba(34,197,94,.07), transparent 55%),
+      radial-gradient(600px 300px at 25% 55%, rgba(255,255,255,.7), rgba(255,255,255,0) 70%),
+      linear-gradient(180deg, #f8fafc, #f3f4f6);
+  }
+
+  .wrap{ max-width: 980px; margin:auto; padding: 18px; }
+
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 10px 4px 14px 4px;
+  }
+  .crumb{
+    display:flex; align-items:center; gap:10px;
+    font-weight:800; font-size:14px;
+  }
+  .dot{
+    width:10px; height:10px; border-radius:3px;
+    background: linear-gradient(135deg, rgba(59,130,246,.9), rgba(99,102,241,.9));
+    box-shadow: 0 6px 18px rgba(59,130,246,.20);
+  }
+  .pagecounter{ font-size:12px; color: var(--muted); }
+
+  .book{
+    background: rgba(255,255,255,.55);
+    border: 1px solid rgba(15,23,42,.08);
+    border-radius: 22px;
+    box-shadow: var(--shadow);
+    overflow:hidden;
+    backdrop-filter: blur(6px);
+  }
+
+  .page{
+    display:none;
+    padding: 18px;
+    background: rgba(255,255,255,.75);
+    min-height: 560px;
+  }
+  .page.active{ display:block; }
+
+  h1{ margin: 2px 0 6px 0; font-size:22px; }
+  .sub{ margin:0 0 14px 0; color:var(--muted); font-size:13px; }
+
+  .section-title{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom: 10px;
+  }
+  .section-title h2{ margin:0; font-size:16px; }
+  .hint{ font-size:12px; color:var(--muted); }
+
+  .grid{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  @media (min-width: 860px){
+    .grid.two{ grid-template-columns: 1fr 1fr; }
+  }
+
+  .card{
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+    box-shadow: 0 10px 26px rgba(2,6,23,.06);
+  }
+  .card h3, .card h2{ margin:0 0 6px 0; font-size:16px; }
+  .card p{ margin:0 0 10px 0; font-size:13px; color:#334155; }
+
+  .imgbox{
+    border: 2px dashed rgba(15,23,42,.18);
+    border-radius: 14px;
+    height: 240px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom: 10px;
+    background:
+      radial-gradient(700px 240px at 20% 20%, rgba(59,130,246,.07), transparent 55%),
+      radial-gradient(500px 220px at 80% 30%, rgba(14,165,233,.07), transparent 55%),
+      #fbfbfe;
+    overflow:hidden;
+  }
+  .imgbox img{
+    width:100%; height:240px; object-fit:contain;
+  }
+
+  ol{ margin:0; padding-left:18px; font-size:13px; color:#0f172a; }
+  li{ margin:6px 0; }
+  .note{ font-size:12px; color:#475569; margin-top:8px; }
+
+  .embed{
+    width:100%;
+    height: 320px;
+    border:0;
+    border-radius: 14px;
+    overflow:hidden;
+    background:#f8fafc;
+  }
+  .embed-wrap{
+    border: 1px solid rgba(15,23,42,.14);
+    border-radius: 16px;
+    overflow:hidden;
+    box-shadow: 0 10px 26px rgba(2,6,23,.05);
+  }
+  .small{
+    font-size:12px; color:var(--muted); margin-top:8px;
+    word-break: break-word;
+  }
+
+  .nav{
+    display:flex;
+    gap: 12px;
+    padding: 14px;
+    border-top: 1px solid rgba(15,23,42,.10);
+    background: rgba(255,255,255,.65);
+    justify-content:space-between;
+  }
+  button, a.btn{
+    border:1px solid rgba(15,23,42,.18);
+    background: rgba(255,255,255,.85);
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 10px 14px;
+    font-weight: 800;
+    cursor:pointer;
+    min-width: 140px;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow: 0 8px 18px rgba(2,6,23,.06);
+  }
+  button.primary{
+    background: linear-gradient(135deg, rgba(59,130,246,.92), rgba(99,102,241,.92));
+    border-color: transparent;
+    color: white;
+  }
+  button:disabled{ opacity:.45; cursor:not-allowed; }
 </style>
 </head>
+
 <body>
 <div class="wrap">
-<h1>Calentamiento</h1>
-<p class="sub">Movilidad articular (5–7 minutos) antes de cualquier rutina</p>
 
-<div class="card">
-  <h2>1. Tobillos (círculos)</h2>
-  <p>Sentada. 10 círculos por lado.</p>
-  <div class="imgbox"><img src="img/tobillos.jpg" alt="Tobillos"></div>
-  <ol><li>Círculos lentos.</li><li>Sin dolor.</li></ol>
-  <p class="note"><b>1 minuto</b></p>
+  <div class="topbar">
+    <div class="crumb"><span class="dot"></span> Movilidad</div>
+    <div class="pagecounter" id="counter">1/3</div>
+  </div>
+
+  <div class="book">
+
+    <!-- PÁGINA 1: PORTADA -->
+    <section class="page active" data-page="1">
+      <h1>Calentamiento</h1>
+      <p class="sub">Movilidad articular (5–7 minutos) antes de cualquier rutina</p>
+
+      <div class="card">
+        <div class="section-title">
+          <h2>Índice</h2>
+          <span class="hint">Páginas</span>
+        </div>
+        <ol>
+          <li>Portada</li>
+          <li>Ejercicios (imágenes + pasos)</li>
+          <li>Reels de cadera + regresar al índice</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- PÁGINA 2: EJERCICIOS (LOS TUYOS, SIN CAMBIAR CONTENIDO) -->
+    <section class="page" data-page="2">
+      <h1>Calentamiento</h1>
+      <p class="sub">Movilidad articular (5–7 minutos) antes de cualquier rutina</p>
+
+      <div class="grid">
+
+        <div class="card">
+          <h2>1. Tobillos (círculos)</h2>
+          <p>Sentada. 10 círculos por lado.</p>
+          <div class="imgbox"><img src="img/tobillos.jpg" alt="Tobillos"></div>
+          <ol><li>Círculos lentos.</li><li>Sin dolor.</li></ol>
+          <p class="note"><b>1 minuto</b></p>
+        </div>
+
+        <div class="card">
+          <h2>2. Rodillas (extiende y flexiona)</h2>
+          <p>Sentada. Estira y dobla la rodilla.</p>
+          <div class="imgbox"><img src="img/rodillas.jpg" alt="Rodillas"></div>
+          <ol><li>Sube y baja lento.</li><li>Sin bloquear la rodilla.</li></ol>
+          <p class="note"><b>1 minuto</b></p>
+        </div>
+
+        <div class="card">
+          <h2>3. Cadera (rodillas al pecho suave)</h2>
+          <p>Acostada. Lleva una rodilla al pecho y cambia.</p>
+          <div class="imgbox"><img src="img/cadera.jpg" alt="Cadera"></div>
+          <ol><li>Abrazo suave.</li><li>Respira normal.</li></ol>
+          <p class="note"><b>1–2 minutos</b></p>
+        </div>
+
+        <div class="card">
+          <h2>4. Hombros (círculos pequeños)</h2>
+          <p>De pie o sentada. 10 círculos adelante y atrás.</p>
+          <div class="imgbox"><img src="img/hombros.jpg" alt="Hombros"></div>
+          <ol><li>Movimiento pequeño.</li><li>Sin elevar los hombros.</li></ol>
+          <p class="note"><b>1 minuto</b></p>
+        </div>
+
+        <div class="card">
+          <h2>5. Respiración (prepara columna)</h2>
+          <p>Acostada. Inhala por nariz, exhala largo.</p>
+          <div class="imgbox"><img src="img/respiracion.jpg" alt="Respiración"></div>
+          <ol><li>Inhala 3–4 s.</li><li>Exhala 5–6 s.</li></ol>
+          <p class="note"><b>1 minuto</b></p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PÁGINA 3: REELS DE CADERA (SOLO LOS 2 LINKS QUE DISTE) + REGRESAR -->
+    <section class="page" data-page="3">
+      <div class="section-title">
+        <h2>Reels – Movilidad Cadera</h2>
+        <span class="hint">Embebidos</span>
+      </div>
+
+      <div class="grid two">
+
+        <div class="card">
+          <h3>Cadera</h3>
+          <div class="embed-wrap">
+            <iframe class="embed"
+              src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F764746960000576&show_text=false&width=560"
+              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+              allowfullscreen="true"></iframe>
+          </div>
+          <div class="small">https://www.facebook.com/reel/764746960000576</div>
+        </div>
+
+        <div class="card">
+          <h3>Cadera</h3>
+          <div class="embed-wrap">
+            <iframe class="embed"
+              src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F853646487444291&show_text=false&width=560"
+              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+              allowfullscreen="true"></iframe>
+          </div>
+          <div class="small">https://www.facebook.com/reel/853646487444291</div>
+        </div>
+
+      </div>
+
+      <div style="margin-top:14px;">
+        <a class="btn" href="https://cgviviana.github.io/Juego_Prueba/Ej/Indice/" target="_self">
+          ⟵ Regresar al Índice
+        </a>
+      </div>
+    </section>
+
+    <!-- NAVEGACIÓN -->
+    <div class="nav">
+      <button id="prevBtn">← Anterior</button>
+      <button id="nextBtn" class="primary">Siguiente →</button>
+    </div>
+
+  </div>
 </div>
 
-<div class="card">
-  <h2>2. Rodillas (extiende y flexiona)</h2>
-  <p>Sentada. Estira y dobla la rodilla.</p>
-  <div class="imgbox"><img src="img/rodillas.jpg" alt="Rodillas"></div>
-  <ol><li>Sube y baja lento.</li><li>Sin bloquear la rodilla.</li></ol>
-  <p class="note"><b>1 minuto</b></p>
-</div>
+<script>
+  const pages = Array.from(document.querySelectorAll(".page"));
+  const counter = document.getElementById("counter");
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  let idx = 0;
 
-<div class="card">
-  <h2>3. Cadera (rodillas al pecho suave)</h2>
-  <p>Acostada. Lleva una rodilla al pecho y cambia.</p>
-  <div class="imgbox"><img src="img/cadera.jpg" alt="Cadera"></div>
-  <ol><li>Abrazo suave.</li><li>Respira normal.</li></ol>
-  <p class="note"><b>1–2 minutos</b></p>
-</div>
+  function show(i){
+    idx = Math.max(0, Math.min(pages.length - 1, i));
+    pages.forEach((p, k) => p.classList.toggle("active", k === idx));
+    counter.textContent = `${idx+1}/${pages.length}`;
+    prevBtn.disabled = idx === 0;
+    nextBtn.disabled = idx === pages.length - 1;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 
-<div class="card">
-  <h2>4. Hombros (círculos pequeños)</h2>
-  <p>De pie o sentada. 10 círculos adelante y atrás.</p>
-  <div class="imgbox"><img src="img/hombros.jpg" alt="Hombros"></div>
-  <ol><li>Movimiento pequeño.</li><li>Sin elevar los hombros.</li></ol>
-  <p class="note"><b>1 minuto</b></p>
-</div>
+  prevBtn.addEventListener("click", () => show(idx - 1));
+  nextBtn.addEventListener("click", () => show(idx + 1));
 
-<div class="card">
-  <h2>5. Respiración (prepara columna)</h2>
-  <p>Acostada. Inhala por nariz, exhala largo.</p>
-  <div class="imgbox"><img src="img/respiracion.jpg" alt="Respiración"></div>
-  <ol><li>Inhala 3–4 s.</li><li>Exhala 5–6 s.</li></ol>
-  <p class="note"><b>1 minuto</b></p>
-</div>
+  window.addEventListener("keydown", (e) => {
+    if(e.key === "ArrowLeft") show(idx - 1);
+    if(e.key === "ArrowRight") show(idx + 1);
+  });
 
-</div>
+  show(0);
+</script>
 </body>
 </html>
-
