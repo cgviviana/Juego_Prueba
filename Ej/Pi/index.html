@@ -48,7 +48,7 @@
     background: rgba(255,255,255,.55);
     border: 1px solid rgba(15,23,42,.08);
     border-radius: 22px;
-    box-shadow: var(--shadow);
+    box-shadow: 0 10px 30px rgba(2,6,23,.08);
     overflow:hidden;
     backdrop-filter: blur(6px);
   }
@@ -126,6 +126,7 @@
     border-radius: 16px;
     overflow:hidden;
     box-shadow: 0 10px 26px rgba(2,6,23,.05);
+    background:#f8fafc;
   }
   .small{
     font-size:12px; color:var(--muted); margin-top:8px;
@@ -161,6 +162,46 @@
     color: white;
   }
   button:disabled{ opacity:.45; cursor:not-allowed; }
+
+  /* controles reel */
+  .reelBtns{display:flex; gap:10px; margin-top:10px; flex-wrap:wrap}
+  .miniBtn{
+    padding:10px 12px; border-radius:999px;
+    border:1px solid rgba(15,23,42,.18);
+    background: rgba(255,255,255,.9);
+    font-weight:800; cursor:pointer;
+  }
+  .miniBtn.on{
+    background: rgba(59,130,246,.12);
+    border-color: rgba(59,130,246,.35);
+  }
+  .durWrap{
+    display:flex; align-items:center; gap:8px;
+    padding:6px 10px;
+    border-radius:999px;
+    border:1px solid rgba(15,23,42,.18);
+    background: rgba(255,255,255,.9);
+    font-size:12px;
+  }
+  .durWrap input{
+    width:72px;
+    padding:6px 8px;
+    border-radius:10px;
+    border:1px solid rgba(15,23,42,.18);
+    font-weight:700;
+  }
+  .linkRow{ margin-top:8px; font-size:12px; }
+  .linkRow a{ color:#1d4ed8; text-decoration:none; font-weight:800; }
+  .linkRow a:hover{ text-decoration:underline; }
+
+  /* timer embebido */
+  .timerFrame{
+    width:100%;
+    height: 180px;
+    border:0;
+    border-radius: 14px;
+    background:#f8fafc;
+  }
 </style>
 </head>
 
@@ -174,7 +215,7 @@
 
   <div class="book">
 
-    <!-- PÁGINA 1: PORTADA (SIN EXPLICACIONES EXTRA) -->
+    <!-- PÁGINA 1: PORTADA -->
     <section class="page active" data-page="1">
       <h1>Piernas</h1>
       <p class="sub">Rutina segura para fuerza y firmeza (sin impactos)</p>
@@ -187,12 +228,12 @@
         <ol>
           <li>Portada</li>
           <li>Ejercicios</li>
-          <li>Reels </li>
+          <li>Reels</li>
         </ol>
       </div>
     </section>
 
-    <!-- PÁGINA 2: EJERCICIOS (TU CONTENIDO) -->
+    <!-- PÁGINA 2: EJERCICIOS (SIN CAMBIOS) -->
     <section class="page" data-page="2">
       <h1>Piernas</h1>
       <p class="sub">Rutina segura para fuerza y firmeza (sin impactos)</p>
@@ -202,142 +243,237 @@
         <div class="card">
           <h2>1. Extensión de rodilla sentada</h2>
           <p>Clave para subir escaleras (cuádriceps).</p>
-
           <div class="imgbox">
             <img src="img/extension_rodilla_sentada.jpg" alt="Extensión de rodilla sentada">
           </div>
-
           <ol>
             <li>Siéntate con espalda apoyada.</li>
             <li>Coloca el peso en el empeine (mancuerna/rollito) o usa tobillera.</li>
             <li>Estira la pierna y <b>sostén 5 segundos</b> arriba.</li>
             <li>Baja lento (3 segundos).</li>
           </ol>
-
           <p class="note"><b>3 × 10–15 por pierna</b></p>
         </div>
 
         <div class="card">
           <h2>2. Puente corto de glúteo</h2>
           <p>Glúteo fuerte = pierna firme + más estabilidad lumbar.</p>
-
           <div class="imgbox">
             <img src="img/puente_gluteo.jpg" alt="Puente de glúteo">
           </div>
-
           <ol>
             <li>Acuéstate boca arriba, rodillas flexionadas, pies apoyados.</li>
             <li>Sube la cadera <b>poquito</b> (sin arquear la espalda).</li>
             <li>Arriba aprieta glúteos <b>3 segundos</b>.</li>
             <li>Baja lento (3 segundos).</li>
           </ol>
-
           <p class="note"><b>3 × 10–12</b></p>
         </div>
 
         <div class="card">
           <h2>3. Elevación de talones sentada</h2>
           <p>Fortalece pantorrilla/sóleo y ayuda al retorno venoso.</p>
-
           <div class="imgbox">
             <img src="img/talones_sentada.jpg" alt="Elevación de talones sentada">
           </div>
-
           <ol>
             <li>Siéntate con pies apoyados y rodillas a 90°.</li>
             <li>Sube talones en 2 segundos.</li>
             <li>Baja talones en 4 segundos (lento).</li>
             <li>Repite sin prisa.</li>
           </ol>
-
           <p class="note"><b>3 × 25–30</b></p>
         </div>
 
       </div>
     </section>
 
-    <!-- PÁGINA 3: REELS DE PIERNAS (SOLO LOS QUE ME DISTE) + REGRESAR -->
+    <!-- PÁGINA 3: TIMER + REELS (CON REPETIR / BUCLE / PARAR + LINKS) -->
     <section class="page" data-page="3">
       <div class="section-title">
         <h2>Reels – Piernas</h2>
         <span class="hint">Reels</span>
       </div>
 
+      <!-- TIMER EMBEBIDO -->
+      <div class="card" style="margin-bottom:14px;">
+        <h3>Timer</h3>
+        <div class="embed-wrap">
+          <iframe class="timerFrame"
+            src="https://cgviviana.github.io/Juego_Prueba/Ej/timer/"
+            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+        </div>
+        <div class="reelBtns">
+          <a class="miniBtn" href="https://cgviviana.github.io/Juego_Prueba/Ej/timer/" target="_blank" rel="noopener">Abrir timer</a>
+        </div>
+      </div>
+
       <div class="grid two">
 
+        <!-- REEL 1 -->
         <div class="card">
           <h3>Pierna polea</h3>
           <div class="embed-wrap">
-            <iframe class="embed"
+            <iframe id="reel1" class="embed"
+              data-base="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1244659137711672&show_text=false&width=560"
               src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1244659137711672&show_text=false&width=560"
               allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
               allowfullscreen="true"></iframe>
           </div>
+          <div class="reelBtns">
+            <button class="miniBtn" onclick="replay('reel1')">Repetir</button>
+            <button class="miniBtn" id="loopBtn_reel1" onclick="toggleLoop('reel1')">Bucle</button>
+            <button class="miniBtn" onclick="stopReel('reel1')">Parar</button>
+            <span class="durWrap">seg:
+              <input id="dur_reel1" type="number" min="3" value="30" />
+            </span>
+          </div>
+          <div class="linkRow">
+            <a href="https://www.facebook.com/reel/1244659137711672" target="_blank" rel="noopener">Abrir reel</a>
+          </div>
           <div class="small">https://www.facebook.com/reel/1244659137711672</div>
         </div>
 
+        <!-- REEL 2 -->
         <div class="card">
           <h3>Piernas varios</h3>
           <div class="embed-wrap">
-            <iframe class="embed"
+            <iframe id="reel2" class="embed"
+              data-base="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1377815250734941&show_text=false&width=560"
               src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1377815250734941&show_text=false&width=560"
               allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
               allowfullscreen="true"></iframe>
           </div>
+          <div class="reelBtns">
+            <button class="miniBtn" onclick="replay('reel2')">Repetir</button>
+            <button class="miniBtn" id="loopBtn_reel2" onclick="toggleLoop('reel2')">Bucle</button>
+            <button class="miniBtn" onclick="stopReel('reel2')">Parar</button>
+            <span class="durWrap">seg:
+              <input id="dur_reel2" type="number" min="3" value="30" />
+            </span>
+          </div>
+          <div class="linkRow">
+            <a href="https://www.facebook.com/reel/1377815250734941" target="_blank" rel="noopener">Abrir reel</a>
+          </div>
           <div class="small">https://www.facebook.com/reel/1377815250734941</div>
         </div>
 
+        <!-- REEL 3 -->
         <div class="card">
           <h3>Piernas pared</h3>
           <div class="embed-wrap">
-            <iframe class="embed"
+            <iframe id="reel3" class="embed"
+              data-base="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F916004390771121&show_text=false&width=560"
               src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F916004390771121&show_text=false&width=560"
               allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
               allowfullscreen="true"></iframe>
           </div>
+          <div class="reelBtns">
+            <button class="miniBtn" onclick="replay('reel3')">Repetir</button>
+            <button class="miniBtn" id="loopBtn_reel3" onclick="toggleLoop('reel3')">Bucle</button>
+            <button class="miniBtn" onclick="stopReel('reel3')">Parar</button>
+            <span class="durWrap">seg:
+              <input id="dur_reel3" type="number" min="3" value="30" />
+            </span>
+          </div>
+          <div class="linkRow">
+            <a href="https://www.facebook.com/reel/916004390771121" target="_blank" rel="noopener">Abrir reel</a>
+          </div>
           <div class="small">https://www.facebook.com/reel/916004390771121</div>
         </div>
 
+        <!-- REEL 4 -->
         <div class="card">
           <h3>Piernas pared</h3>
           <div class="embed-wrap">
-            <iframe class="embed"
+            <iframe id="reel4" class="embed"
+              data-base="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F692179537063163&show_text=false&width=560"
               src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F692179537063163&show_text=false&width=560"
               allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
               allowfullscreen="true"></iframe>
           </div>
+          <div class="reelBtns">
+            <button class="miniBtn" onclick="replay('reel4')">Repetir</button>
+            <button class="miniBtn" id="loopBtn_reel4" onclick="toggleLoop('reel4')">Bucle</button>
+            <button class="miniBtn" onclick="stopReel('reel4')">Parar</button>
+            <span class="durWrap">seg:
+              <input id="dur_reel4" type="number" min="3" value="30" />
+            </span>
+          </div>
+          <div class="linkRow">
+            <a href="https://www.facebook.com/reel/692179537063163" target="_blank" rel="noopener">Abrir reel</a>
+          </div>
           <div class="small">https://www.facebook.com/reel/692179537063163</div>
         </div>
 
+        <!-- REEL 5 -->
         <div class="card">
           <h3>Piernas silla</h3>
           <div class="embed-wrap">
-            <iframe class="embed"
+            <iframe id="reel5" class="embed"
+              data-base="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1407976210958975&show_text=false&width=560"
               src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1407976210958975&show_text=false&width=560"
               allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
               allowfullscreen="true"></iframe>
           </div>
+          <div class="reelBtns">
+            <button class="miniBtn" onclick="replay('reel5')">Repetir</button>
+            <button class="miniBtn" id="loopBtn_reel5" onclick="toggleLoop('reel5')">Bucle</button>
+            <button class="miniBtn" onclick="stopReel('reel5')">Parar</button>
+            <span class="durWrap">seg:
+              <input id="dur_reel5" type="number" min="3" value="30" />
+            </span>
+          </div>
+          <div class="linkRow">
+            <a href="https://www.facebook.com/reel/1407976210958975" target="_blank" rel="noopener">Abrir reel</a>
+          </div>
           <div class="small">https://www.facebook.com/reel/1407976210958975</div>
         </div>
 
+        <!-- REEL 6 -->
         <div class="card">
           <h3>Piernas silla</h3>
           <div class="embed-wrap">
-            <iframe class="embed"
+            <iframe id="reel6" class="embed"
+              data-base="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F835764442565721&show_text=false&width=560"
               src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F835764442565721&show_text=false&width=560"
               allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
               allowfullscreen="true"></iframe>
           </div>
+          <div class="reelBtns">
+            <button class="miniBtn" onclick="replay('reel6')">Repetir</button>
+            <button class="miniBtn" id="loopBtn_reel6" onclick="toggleLoop('reel6')">Bucle</button>
+            <button class="miniBtn" onclick="stopReel('reel6')">Parar</button>
+            <span class="durWrap">seg:
+              <input id="dur_reel6" type="number" min="3" value="30" />
+            </span>
+          </div>
+          <div class="linkRow">
+            <a href="https://www.facebook.com/reel/835764442565721" target="_blank" rel="noopener">Abrir reel</a>
+          </div>
           <div class="small">https://www.facebook.com/reel/835764442565721</div>
         </div>
 
+        <!-- REEL 7 -->
         <div class="card">
           <h3>Glúteos / Pierna (búlgara en caja)</h3>
           <div class="embed-wrap">
-            <iframe class="embed"
+            <iframe id="reel7" class="embed"
+              data-base="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1117547667129494&show_text=false&width=560"
               src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1117547667129494&show_text=false&width=560"
               allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
               allowfullscreen="true"></iframe>
+          </div>
+          <div class="reelBtns">
+            <button class="miniBtn" onclick="replay('reel7')">Repetir</button>
+            <button class="miniBtn" id="loopBtn_reel7" onclick="toggleLoop('reel7')">Bucle</button>
+            <button class="miniBtn" onclick="stopReel('reel7')">Parar</button>
+            <span class="durWrap">seg:
+              <input id="dur_reel7" type="number" min="3" value="30" />
+            </span>
+          </div>
+          <div class="linkRow">
+            <a href="https://www.facebook.com/reel/1117547667129494" target="_blank" rel="noopener">Abrir reel</a>
           </div>
           <div class="small">https://www.facebook.com/reel/1117547667129494</div>
         </div>
@@ -385,6 +521,52 @@
   });
 
   show(0);
+
+  // ====== REELS: Repetir / Bucle / Parar ======
+  const loopTimers = {}; // id -> interval
+
+  function replay(id){
+    const f = document.getElementById(id);
+    if(!f) return;
+
+    const base = f.getAttribute("data-base") || f.src;
+    f.src = "about:blank";
+    setTimeout(() => {
+      const join = base.includes("?") ? "&" : "?";
+      f.src = base + join + "autoplay=1";
+    }, 80);
+  }
+
+  function stopReel(id){
+    // apaga bucle si estaba encendido
+    if(loopTimers[id]){
+      clearInterval(loopTimers[id]);
+      delete loopTimers[id];
+      const b = document.getElementById("loopBtn_" + id);
+      if(b){ b.classList.remove("on"); b.textContent = "Bucle"; }
+    }
+    const f = document.getElementById(id);
+    if(!f) return;
+    f.src = "about:blank";
+  }
+
+  function toggleLoop(id){
+    const btn = document.getElementById("loopBtn_" + id);
+    const durInp = document.getElementById("dur_" + id);
+    const dur = Math.max(3, parseInt((durInp && durInp.value) ? durInp.value : "30", 10));
+
+    if(loopTimers[id]){
+      clearInterval(loopTimers[id]);
+      delete loopTimers[id];
+      if(btn){ btn.classList.remove("on"); btn.textContent = "Bucle"; }
+      return;
+    }
+
+    // enciende bucle
+    replay(id);
+    loopTimers[id] = setInterval(() => replay(id), dur * 1000);
+    if(btn){ btn.classList.add("on"); btn.textContent = "Bucle ON"; }
+  }
 </script>
 </body>
 </html>
