@@ -1,1 +1,531 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Timer Kawaii – Series y Repeticiones</title>
+<style>
+  :root{
+    --bg1:#fff7fb;
+    --bg2:#f2fbff;
+    --card:#ffffffcc;
+    --stroke:#ffd3e8;
+    --stroke2:#cfefff;
+    --txt:#1f2937;
+    --muted:#6b7280;
+    --accent:#ff5fa2;
+    --accent2:#6bd6ff;
+    --shadow: 0 10px 30px rgba(17,24,39,.10);
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    color:var(--txt);
+    background:
+      radial-gradient(1200px 600px at 10% 10%, var(--bg2), transparent 60%),
+      radial-gradient(1200px 700px at 90% 0%, var(--bg1), transparent 55%),
+      linear-gradient(180deg, #ffffff, #fff6fb 50%, #f6fdff);
+    min-height:100vh;
+  }
+
+  .wrap{max-width:860px;margin:auto;padding:18px}
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:12px;margin-bottom:14px;
+  }
+  .brand{
+    display:flex;align-items:center;gap:10px;
+  }
+  .logo{
+    width:42px;height:42px;border-radius:14px;
+    background: linear-gradient(135deg, #ffd1e6, #cfefff);
+    box-shadow: var(--shadow);
+    border:1px solid #ffffff;
+    position:relative;
+  }
+  .logo:before,.logo:after{
+    content:"";
+    position:absolute;
+    width:6px;height:6px;border-radius:999px;
+    background:#fff;
+    top:12px;
+    box-shadow: 18px 0 0 #fff;
+    left:10px;
+    opacity:.95;
+  }
+  .logo:after{
+    width:16px;height:8px;border-radius:0 0 999px 999px;
+    background:transparent;
+    border:2px solid rgba(255,255,255,.95);
+    border-top:0;
+    top:22px;left:12px;
+    box-shadow:none;
+  }
+  h1{margin:0;font-size:18px;letter-spacing:.2px}
+  .sub{margin:2px 0 0;color:var(--muted);font-size:13px}
+
+  .card{
+    background:var(--card);
+    border:1px solid rgba(255,95,162,.25);
+    border-bottom-color: rgba(107,214,255,.25);
+    border-right-color: rgba(107,214,255,.20);
+    border-left-color: rgba(255,95,162,.20);
+    border-radius:20px;
+    padding:14px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(8px);
+  }
+
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  label{display:block;font-size:13px;color:#374151;margin:10px 0 6px}
+  input{
+    width:100%;
+    padding:12px 12px;
+    border:1px solid rgba(255,95,162,.25);
+    border-radius:14px;
+    font-size:14px;
+    outline:none;
+    background:#fff;
+    box-shadow: inset 0 0 0 1px rgba(107,214,255,.05);
+  }
+  input:focus{
+    border-color: rgba(255,95,162,.45);
+    box-shadow: 0 0 0 4px rgba(255,95,162,.12);
+  }
+
+  .btns{display:flex;gap:10px;margin-top:14px}
+  button{
+    flex:1;
+    padding:12px 14px;
+    border-radius:16px;
+    border:1px solid rgba(31,41,55,.12);
+    font-weight:800;
+    cursor:pointer;
+    box-shadow: 0 10px 20px rgba(17,24,39,.08);
+  }
+  .primary{
+    background: linear-gradient(135deg, #ff5fa2, #6bd6ff);
+    color:white;
+    border-color: rgba(255,255,255,.2);
+  }
+  .secondary{
+    background:white;
+    color:var(--txt);
+    border-color: rgba(107,214,255,.25);
+  }
+  button:disabled{opacity:.45;cursor:not-allowed}
+
+  .hidden{display:none}
+
+  /* RUN */
+  .stack{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+  .pill{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:8px 12px;border-radius:999px;
+    background: linear-gradient(135deg, rgba(255,95,162,.10), rgba(107,214,255,.10));
+    border:1px solid rgba(255,95,162,.20);
+    color:#111827;font-size:12px;font-weight:700;
+  }
+  .dot{
+    width:10px;height:10px;border-radius:999px;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px rgba(255,95,162,.14);
+  }
+  .dot.rest{background: var(--accent2); box-shadow: 0 0 0 4px rgba(107,214,255,.14);}
+
+  .bigWrap{
+    margin-top:12px;
+    display:flex;align-items:center;justify-content:center;
+    padding:18px;
+    border-radius:22px;
+    background: radial-gradient(600px 200px at 50% 20%, rgba(255,95,162,.18), transparent 60%),
+                radial-gradient(600px 200px at 50% 80%, rgba(107,214,255,.18), transparent 60%),
+                #fff;
+    border:1px dashed rgba(255,95,162,.35);
+  }
+  .big{
+    font-size:72px;
+    font-weight:900;
+    letter-spacing:1px;
+    color:#111827;
+    text-shadow: 0 6px 0 rgba(255,95,162,.08);
+  }
+  .status{
+    margin-top:10px;
+    color:#334155;
+    font-size:14px;
+    text-align:center;
+    font-weight:700;
+  }
+  .kawaiiNote{
+    margin-top:8px;
+    text-align:center;
+    color:var(--muted);
+    font-size:12px;
+  }
+
+  /* tiny sparkles */
+  .sparkles{
+    margin-left:auto;
+    font-size:18px;
+    opacity:.9;
+    user-select:none;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- TOP -->
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <h1>Timer Kawaii</h1>
+        <p class="sub">Series → Repeticiones → Descanso ✨</p>
+      </div>
+    </div>
+    <div class="sparkles">✨🌸✨</div>
+  </div>
+
+  <!-- PANTALLA 1: CONFIG -->
+  <section id="screenConfig">
+    <div class="card">
+      <h1 style="font-size:16px;margin-bottom:4px">Configuración</h1>
+      <p class="sub">Define series, repeticiones y tiempos. Luego Iniciar.</p>
+
+      <div class="row">
+        <div>
+          <label>Series</label>
+          <input id="series" type="number" min="1" value="3" />
+        </div>
+        <div>
+          <label>Repeticiones por serie</label>
+          <input id="repsPerSerie" type="number" min="1" value="2" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label>Segundos por repetición</label>
+          <input id="secRep" type="number" min="1" value="10" />
+        </div>
+        <div>
+          <label>Descanso entre series (seg)</label>
+          <input id="secRest" type="number" min="0" value="20" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label>Voz (TTS) 1=Sí, 0=No</label>
+          <input id="voiceOn" type="number" min="0" max="1" value="1" />
+        </div>
+        <div>
+          <label>Volumen (0.0 a 1.0)</label>
+          <input id="vol" type="number" min="0" max="1" step="0.1" value="1" />
+        </div>
+      </div>
+
+      <div class="btns">
+        <button id="startBtn" class="primary">Iniciar 💖</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PANTALLA 2: VISUALIZACIÓN -->
+  <section id="screenRun" class="hidden">
+    <div class="card">
+      <h1 style="font-size:16px;margin-bottom:4px">En progreso</h1>
+      <p class="sub" id="runSubtitle">—</p>
+
+      <div class="stack">
+        <span class="pill"><span class="dot" id="dot"></span><span id="pSerie">Serie: -</span></span>
+        <span class="pill"><span class="dot" style="background:#ffb703;box-shadow:0 0 0 4px rgba(255,183,3,.14)"></span><span id="pRep">Repetición: -</span></span>
+        <span class="pill"><span class="dot rest" id="dotPhase"></span><span id="pFase">Fase: -</span></span>
+      </div>
+
+      <div class="bigWrap">
+        <div class="big" id="bigTimer">0</div>
+      </div>
+
+      <div class="status" id="statusLine">Listo.</div>
+      <div class="kawaiiNote">🌸 Respira: cuando termine la serie, viene el descanso ✨</div>
+
+      <div class="btns" style="margin-top:14px">
+        <button id="pauseBtn" class="secondary">Pausar</button>
+        <button id="stopBtn" class="primary">Detener</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* =========================
+   VOZ (Web Speech API)
+   - interrupt: true  => corta lo anterior
+   - interrupt: false => no corta (si está hablando, ignora)
+========================= */
+function speak(text, vol=1, {interrupt=false} = {}){
+  if(!("speechSynthesis" in window)) return;
+
+  const synth = window.speechSynthesis;
+  if(interrupt) synth.cancel();
+  if(!interrupt && synth.speaking) return;
+
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "es-ES";
+  u.rate = 1;
+  u.pitch = 1;
+  u.volume = Math.max(0, Math.min(1, vol));
+  synth.speak(u);
+}
+
+/* =========================
+   ELEMENTOS UI
+========================= */
+const screenConfig = document.getElementById("screenConfig");
+const screenRun = document.getElementById("screenRun");
+
+const seriesInp = document.getElementById("series");
+const repsPerSerieInp = document.getElementById("repsPerSerie");
+const secRepInp = document.getElementById("secRep");
+const secRestInp = document.getElementById("secRest");
+const voiceOnInp = document.getElementById("voiceOn");
+const volInp = document.getElementById("vol");
+
+const startBtn = document.getElementById("startBtn");
+const pauseBtn = document.getElementById("pauseBtn");
+const stopBtn  = document.getElementById("stopBtn");
+
+const bigTimer = document.getElementById("bigTimer");
+const statusLine = document.getElementById("statusLine");
+const runSubtitle = document.getElementById("runSubtitle");
+
+const pSerie = document.getElementById("pSerie");
+const pRep = document.getElementById("pRep");
+const pFase = document.getElementById("pFase");
+
+const dot = document.getElementById("dot");
+const dotPhase = document.getElementById("dotPhase");
+
+/* =========================
+   ESTADO
+========================= */
+let cfg = null;
+let timerId = null;
+let paused = false;
+
+let curSerie = 1;
+let curRep = 1;
+
+/*
+  fase:
+  - "repeticion" (cuenta 1..secRep)
+  - "descanso"   (cuenta secRest..0)
+*/
+let fase = "repeticion";
+let t = 0;
+let remaining = 0;
+
+// para evitar que el conteo pise el anuncio:
+let delayTicks = 0;
+
+function showRun(){
+  screenConfig.classList.add("hidden");
+  screenRun.classList.remove("hidden");
+}
+function showConfig(){
+  screenRun.classList.add("hidden");
+  screenConfig.classList.remove("hidden");
+}
+
+function setUI(){
+  pSerie.textContent = `Serie: ${curSerie}/${cfg.series}`;
+  pRep.textContent = `Repetición: ${curRep}/${cfg.repsPerSerie}`;
+  pFase.textContent = `Fase: ${fase}`;
+
+  if(fase === "descanso"){
+    dotPhase.classList.add("rest");
+  }else{
+    dotPhase.classList.remove("rest");
+  }
+}
+
+function clearTimer(){
+  if(timerId) clearInterval(timerId);
+  timerId = null;
+}
+
+function stopAll(){
+  clearTimer();
+  paused = false;
+  pauseBtn.textContent = "Pausar";
+  if("speechSynthesis" in window) window.speechSynthesis.cancel();
+
+  curSerie = 1;
+  curRep = 1;
+  fase = "repeticion";
+  t = 0;
+  remaining = 0;
+  delayTicks = 0;
+
+  showConfig();
+}
+
+function finishAll(){
+  clearTimer();
+  statusLine.textContent = "Terminado.";
+  bigTimer.textContent = "✓";
+  if(cfg.voiceOn) speak("Terminado", cfg.vol, {interrupt:true});
+}
+
+/* =========================
+   BLOQUES
+========================= */
+function startRepBlock(){
+  fase = "repeticion";
+  t = 0;
+  setUI();
+
+  statusLine.textContent = `Serie ${curSerie}, Repetición ${curRep}`;
+  bigTimer.textContent = "1";
+
+  // Anuncio completo SIEMPRE, y luego empieza el conteo (sin pisarlo)
+  delayTicks = 1; // salta el primer tick de conteo (1 segundo)
+  if(cfg.voiceOn){
+    speak(`Serie ${curSerie}, repetición ${curRep}`, cfg.vol, {interrupt:true});
+  }
+}
+
+function startRestBlock(){
+  fase = "descanso";
+  remaining = cfg.secRest;
+  setUI();
+
+  bigTimer.textContent = String(remaining);
+  statusLine.textContent = `Descanso (${remaining}s)`;
+
+  delayTicks = 1;
+  if(cfg.voiceOn){
+    speak(`Descanso ${cfg.secRest} segundos`, cfg.vol, {interrupt:true});
+  }
+}
+
+function nextStep(){
+  if(fase === "repeticion"){
+    if(curRep < cfg.repsPerSerie){
+      curRep++;
+      startRepBlock();
+      return;
+    }
+
+    if(curSerie < cfg.series){
+      if(cfg.secRest > 0){
+        startRestBlock();
+        return;
+      }
+      curSerie++;
+      curRep = 1;
+      startRepBlock();
+      return;
+    }
+
+    finishAll();
+    return;
+  }
+
+  if(fase === "descanso"){
+    if(curSerie < cfg.series){
+      curSerie++;
+      curRep = 1;
+      startRepBlock();
+      return;
+    }
+    finishAll();
+  }
+}
+
+/* =========================
+   TICK
+========================= */
+function tick(){
+  if(paused) return;
+
+  if(delayTicks > 0){
+    delayTicks--;
+    return;
+  }
+
+  if(fase === "repeticion"){
+    t++;
+    const show = Math.min(t, cfg.secRep);
+    bigTimer.textContent = String(show);
+
+    // conteo: ahora no cancela el anuncio porque ya pasó
+    if(cfg.voiceOn) speak(String(show), cfg.vol, {interrupt:true});
+
+    if(t >= cfg.secRep){
+      nextStep();
+    }
+    return;
+  }
+
+  if(fase === "descanso"){
+    remaining--;
+    const r = Math.max(remaining, 0);
+    bigTimer.textContent = String(r);
+    statusLine.textContent = `Descanso (${r}s)`;
+
+    if(cfg.voiceOn && remaining >= 0) speak(String(r), cfg.vol, {interrupt:true});
+
+    if(remaining === 0){
+      nextStep();
+    }
+  }
+}
+
+/* =========================
+   EVENTOS
+========================= */
+startBtn.addEventListener("click", () => {
+  cfg = {
+    series: Math.max(1, parseInt(seriesInp.value || "1", 10)),
+    repsPerSerie: Math.max(1, parseInt(repsPerSerieInp.value || "1", 10)),
+    secRep: Math.max(1, parseInt(secRepInp.value || "1", 10)),
+    secRest: Math.max(0, parseInt(secRestInp.value || "0", 10)),
+    voiceOn: (parseInt(voiceOnInp.value || "1", 10) === 1),
+    vol: Math.max(0, Math.min(1, parseFloat(volInp.value || "1")))
+  };
+
+  curSerie = 1;
+  curRep = 1;
+  fase = "repeticion";
+  t = 0;
+  remaining = 0;
+  delayTicks = 0;
+
+  showRun();
+  runSubtitle.textContent =
+    `${cfg.series} series · ${cfg.repsPerSerie} repeticiones · ${cfg.secRep}s por repetición · descanso ${cfg.secRest}s`;
+
+  startRepBlock();
+  clearTimer();
+  timerId = setInterval(tick, 1000);
+});
+
+pauseBtn.addEventListener("click", () => {
+  paused = !paused;
+  pauseBtn.textContent = paused ? "Reanudar" : "Pausar";
+  statusLine.textContent = paused ? "Pausado." : statusLine.textContent;
+  if(paused && ("speechSynthesis" in window)) window.speechSynthesis.cancel();
+});
+
+stopBtn.addEventListener("click", stopAll);
+</script>
+</body>
+</html>
 
