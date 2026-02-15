@@ -22,12 +22,17 @@
             padding: 20px;
         }
 
+        .app-wrapper {
+            display: flex;
+            gap: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
         .container {
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             width: 320px;
-            overflow: hidden;
             border: 1px solid #e0e0e0;
         }
 
@@ -117,7 +122,7 @@
         }
 
         .container.minimized .clock {
-            font-size: 32px;
+            font-size: 28px;
         }
 
         .container.minimized .controls {
@@ -149,11 +154,11 @@
         }
 
         .clock {
-            font-size: 48px;
+            font-size: 40px;
             font-weight: 300;
             color: #2c3e50;
             font-family: 'Segoe UI', sans-serif;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             margin-bottom: 6px;
         }
 
@@ -277,20 +282,21 @@
             cursor: not-allowed;
         }
 
-        /* Panel de configuración */
+        /* Panel de configuración LATERAL */
         .settings-panel {
-            max-height: 0;
+            width: 0;
             overflow: hidden;
-            transition: max-height 0.4s ease;
+            transition: width 0.3s ease;
             background: #fafafa;
-            border-top: 1px solid #e0e0e0;
+            border-left: 1px solid #e0e0e0;
         }
 
         .settings-panel.open {
-            max-height: 600px;
+            width: 300px;
         }
 
         .settings-content {
+            width: 300px;
             padding: 24px;
         }
 
@@ -538,57 +544,60 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="header-left">
-                <h1>PAUSAS ACTIVAS</h1>
-                <div class="header-subtitle">Gestor de descansos</div>
-            </div>
-            <div class="header-buttons">
-                <button class="minimize-btn" onclick="toggleMinimize()" title="Minimizar">▼</button>
-                <button class="settings-toggle" onclick="toggleSettings()" title="Configuración">⚙️</button>
-            </div>
-        </div>
-
-        <!-- Display principal -->
-        <div class="main-display">
-            <!-- Reloj -->
-            <div class="clock-section">
-                <div class="clock-label">Hora actual</div>
-                <div class="clock" id="currentClock">00:00:00</div>
-                <div class="clock-status">
-                    <span class="status-dot" id="statusDot"></span>
-                    <span id="clockSource">Hora del sistema</span>
+    <div class="app-wrapper">
+        <div class="container">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-left">
+                    <h1>PAUSAS ACTIVAS</h1>
+                    <div class="header-subtitle">Gestor de descansos</div>
+                </div>
+                <div class="header-buttons">
+                    <button class="minimize-btn" onclick="toggleMinimize()" title="Minimizar">▼</button>
+                    <button class="settings-toggle" onclick="toggleSettings()" title="Configuración">⚙️</button>
                 </div>
             </div>
 
-            <div class="divider"></div>
+            <!-- Display principal -->
+            <div class="main-display">
+                <!-- Reloj -->
+                <div class="clock-section">
+                    <div class="clock-label">Hora actual</div>
+                    <div class="clock" id="currentClock">00:00:00</div>
+                    <div class="clock-status">
+                        <span class="status-dot" id="statusDot"></span>
+                        <span id="clockSource">Hora del sistema</span>
+                    </div>
+                </div>
 
-            <!-- Timer -->
-            <div class="timer-section">
-                <div class="timer-label">Tiempo restante</div>
-                <div class="timer-display" id="timerDisplay">--:--:--</div>
-                <div class="timer-status" id="statusText">Listo para iniciar</div>
-            </div>
+                <div class="divider"></div>
 
-            <!-- Próxima pausa -->
-            <div id="nextPauseInfo" class="next-pause">
-                <div class="next-pause-label">Próxima pausa en</div>
-                <div class="next-pause-time" id="nextPauseTime">--:--</div>
-            </div>
+                <!-- Timer -->
+                <div class="timer-section">
+                    <div class="timer-label">Tiempo restante</div>
+                    <div class="timer-display" id="timerDisplay">--:--:--</div>
+                    <div class="timer-status" id="statusText">Listo para iniciar</div>
+                </div>
 
-            <!-- Controles -->
-            <div class="controls">
-                <button class="btn btn-start" id="startBtn">▶ Iniciar</button>
-                <button class="btn btn-stop" id="stopBtn" disabled>⏹ Detener</button>
+                <!-- Próxima pausa -->
+                <div id="nextPauseInfo" class="next-pause">
+                    <div class="next-pause-label">Próxima pausa en</div>
+                    <div class="next-pause-time" id="nextPauseTime">--:--</div>
+                </div>
+
+                <!-- Controles -->
+                <div class="controls">
+                    <button class="btn btn-start" id="startBtn">▶ Iniciar</button>
+                    <button class="btn btn-stop" id="stopBtn" disabled>⏹ Detener</button>
+                </div>
             </div>
         </div>
+    </div>
 
-        <!-- Panel de configuración (colapsable) -->
-        <div class="settings-panel" id="settingsPanel">
-            <div class="settings-content">
-                <div class="settings-title">Configuración</div>
+    <!-- Panel de configuración LATERAL -->
+    <div class="settings-panel" id="settingsPanel">
+        <div class="settings-content">
+            <div class="settings-title">Configuración</div>
 
                 <div class="setting-group">
                     <label>Duración total de trabajo (horas)</label>
@@ -642,6 +651,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
     <!-- Modal de pausa activa -->
@@ -789,13 +799,22 @@
             }
         }
 
-        // Actualizar reloj
+        // Actualizar reloj (formato 12 horas con AM/PM)
         function updateClock() {
             const now = new Date(Date.now() + timeOffset);
-            const hours = String(now.getHours()).padStart(2, '0');
+            let hours = now.getHours();
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
-            currentClock.textContent = `${hours}:${minutes}:${seconds}`;
+            
+            // Determinar AM o PM
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            
+            // Convertir a formato 12 horas
+            hours = hours % 12;
+            hours = hours ? hours : 12; // Si es 0, mostrar 12
+            const hoursStr = String(hours).padStart(2, '0');
+            
+            currentClock.textContent = `${hoursStr}:${minutes}:${seconds} ${ampm}`;
         }
 
         // Actualizar volumen
