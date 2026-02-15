@@ -1,478 +1,663 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Fuentes de información — Tarjetas</title>
-  <style>
-    :root{
-      --ink:#0b0b0b;
-      --paper:#fff7d6;
-      --bg1:#ffffff;
-      --bg2:#ffeef3;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timer de Pausas Activas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-      --hot:#ff2d55;
-      --blue:#2d7dff;
-      --yellow:#ffd400;
-      --green:#20c997;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-      /* Color del contenedor de pregunta (pedido) */
-      --questionBg:#e8f2ff; /* azul claro */
-    }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 450px;
+            width: 100%;
+        }
 
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color:var(--ink);
-      min-height:100vh;
-      padding:16px;
-      background:
-        radial-gradient(circle at 12% 12%, rgba(255,212,0,.18) 0 18%, transparent 19%),
-        radial-gradient(circle at 72% 22%, rgba(45,125,255,.14) 0 16%, transparent 17%),
-        radial-gradient(circle at 85% 80%, rgba(255,45,85,.12) 0 14%, transparent 15%),
-        linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 100%);
-    }
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
 
-    .app{max-width:980px;margin:0 auto;display:grid;gap:12px}
+        .header h1 {
+            color: #667eea;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
 
-    header{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:12px 14px;
-      border:4px solid var(--ink);
-      border-radius:18px;
-      background:var(--paper);
-    }
-    .headerTitle{
-      margin:0;
-      font-weight:1000;
-      text-transform:uppercase;
-      letter-spacing:.6px;
-      font-size: clamp(16px, 2.2vw, 22px);
-    }
-    .progressText{
-      font-weight:900;
-      text-transform:uppercase;
-      letter-spacing:.3px;
-      font-size: 14px;
-    }
+        .clock {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 42px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+        }
 
-    .stage{
-      position:relative;
-      border:4px solid var(--ink);
-      border-radius:20px;
-      background:#fff;
-      overflow:hidden;
-    }
-    .stage::before{
-      content:"";
-      position:absolute;
-      inset:-18px;
-      background: radial-gradient(circle, rgba(0,0,0,.10) 10%, transparent 11%) 0 0/14px 14px;
-      opacity:.20;
-      pointer-events:none;
-      mix-blend-mode:multiply;
-    }
+        .clock-info {
+            text-align: center;
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 20px;
+        }
 
-    .card{position:relative;padding:14px;display:grid;gap:12px}
-    .cardTitle{
-      margin:0;
-      font-weight:1000;
-      text-transform:uppercase;
-      letter-spacing:.6px;
-      font-size: clamp(18px, 2.4vw, 26px);
-      line-height:1.15;
-    }
+        .sync-btn {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 10px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
 
-    /* Significado + ejemplo en UN solo contenedor */
-    .infoBox{
-      border:4px solid var(--ink);
-      border-radius:18px;
-      background:var(--paper);
-      padding:12px;
-      display:grid;
-      gap:10px;
-    }
-    .infoLine{
-      margin:0;
-      font-size:15px;
-      line-height:1.35;
-      font-weight:700;
-    }
-    .tag{
-      display:inline-block;
-      margin-right:8px;
-      font-weight:1000;
-      text-transform:uppercase;
-      letter-spacing:.6px;
-      font-size:12px;
-      padding:4px 8px;
-      border:3px solid var(--ink);
-      border-radius:999px;
-      background:#fff;
-    }
+        .sync-btn:hover {
+            background: #45a049;
+        }
 
-    /* Contenedor de pregunta con otro color */
-    .questionBox{
-      border:4px solid var(--ink);
-      border-radius:18px;
-      background:var(--questionBg);
-      padding:12px;
-      display:grid;
-      gap:10px;
-    }
-    .question{
-      margin:0;
-      font-weight:1000;
-      font-size:16px;
-    }
-    .hintText{
-      margin:0;
-      font-weight:800;
-      font-size:13px;
-      opacity:.85;
-    }
+        .settings {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
 
-    .choices{
-      display:grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap:10px;
-    }
-    @media (max-width:860px){ .choices{grid-template-columns:1fr} }
+        .setting-group {
+            margin-bottom: 20px;
+        }
 
-    /* Botones simples */
-    .bubble{
-      cursor:pointer;
-      border:3px solid var(--ink);
-      border-radius:999px;
-      padding:12px 12px;
-      background:#fff;
-      font-weight:900;
-      text-align:center;
-      user-select:none;
-      outline:none;
-      transition: transform .06s ease, background .15s ease;
-    }
-    .bubble:active{transform: translate(2px,2px)}
-    .bubble[disabled]{opacity:.55; cursor:not-allowed}
+        .setting-group:last-child {
+            margin-bottom: 0;
+        }
 
-    /* Feedback SIN imágenes: overlay + texto + animación */
-    .overlay{
-      position:absolute;
-      inset:0;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      z-index:10;
-      pointer-events:none;
-      background: rgba(255,255,255,.60);
-      backdrop-filter: blur(1px);
-    }
-    .overlay.show{display:flex}
+        .setting-group label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
 
-    .feedback{
-      font-weight:1000;
-      font-size: clamp(24px, 5vw, 56px);
-      letter-spacing:1px;
-      border:6px solid var(--ink);
-      padding: 12px 16px;
-      border-radius: 20px;
-      text-transform:uppercase;
-      color:#fff;
-      text-shadow: 3px 3px 0 rgba(0,0,0,.25);
-    }
+        .setting-group input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
 
-    .overlay.correct .feedback{
-      background: var(--green);
-      animation: pop .35s ease-out;
-    }
-    .overlay.wrong .feedback{
-      background: var(--hot);
-      animation: shake .45s ease-out;
-    }
+        .setting-group input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
 
-    @keyframes pop{
-      0%{transform: scale(.85)}
-      60%{transform: scale(1.05)}
-      100%{transform: scale(1)}
-    }
-    @keyframes shake{
-      0%{transform: translateX(0)}
-      20%{transform: translateX(-10px)}
-      40%{transform: translateX(10px)}
-      60%{transform: translateX(-6px)}
-      80%{transform: translateX(6px)}
-      100%{transform: translateX(0)}
-    }
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
 
-    footer{
-      text-align:center;
-      font-weight:800;
-      font-size:13px;
-      padding:8px 0 2px;
-      opacity:.9;
-    }
+        .volume-control input[type="range"] {
+            flex: 1;
+            height: 8px;
+            border-radius: 5px;
+            background: #e0e0e0;
+            outline: none;
+            -webkit-appearance: none;
+        }
 
-    .sr-only{
-      position:absolute; left:-9999px;
-      width:1px; height:1px; overflow:hidden;
-    }
-  </style>
+        .volume-control input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+        }
+
+        .volume-control input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            border: none;
+        }
+
+        .volume-label {
+            font-weight: 600;
+            color: #667eea;
+            min-width: 45px;
+            text-align: right;
+        }
+
+        .test-sound-btn {
+            width: 100%;
+            padding: 12px;
+            background: #ffd700;
+            color: #333;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .test-sound-btn:hover {
+            background: #ffed4e;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+        }
+
+        .timer-display {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .timer-display .time {
+            font-size: 48px;
+            font-weight: bold;
+            color: white;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 3px;
+        }
+
+        .timer-display .status {
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-start {
+            background: #4caf50;
+            color: white;
+        }
+
+        .btn-start:hover:not(:disabled) {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-stop {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-stop:hover:not(:disabled) {
+            background: #da190b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            margin: 10% auto;
+            padding: 40px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            animation: slideIn 0.3s;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-content h2 {
+            color: #667eea;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .modal-content .emoji {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .modal-content ul {
+            list-style: none;
+            text-align: left;
+            margin: 20px 0;
+            padding: 0 20px;
+        }
+
+        .modal-content li {
+            padding: 10px 0;
+            font-size: 16px;
+            color: #555;
+        }
+
+        .modal-content li:before {
+            content: "✓ ";
+            color: #4caf50;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .modal-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .next-pause {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #856404;
+            font-size: 14px;
+        }
+
+        .next-pause strong {
+            color: #ff9800;
+        }
+
+        @media (max-width: 500px) {
+            .container {
+                padding: 20px;
+            }
+
+            .timer-display .time {
+                font-size: 36px;
+            }
+
+            .modal-content {
+                padding: 30px 20px;
+            }
+        }
+    </style>
 </head>
-
 <body>
-  <div class="app">
-    <header>
-      <h1 class="headerTitle">Fuentes de información</h1>
-      <div class="progressText" id="progress">Tarjeta 1 / 10</div>
-    </header>
-
-    <main class="stage">
-      <div class="overlay correct" id="overlayCorrect" aria-hidden="true">
-        <div class="feedback">¡EXCELENTE!</div>
-      </div>
-
-      <div class="overlay wrong" id="overlayWrong" aria-hidden="true">
-        <div class="feedback">¡INTÉNTALO DE NUEVO!</div>
-      </div>
-
-      <section class="card" aria-labelledby="cardTitle">
-        <h2 class="cardTitle" id="cardTitle">Tarjeta</h2>
-
-        <div class="infoBox">
-          <p class="infoLine">
-            <span class="tag">Significado</span><span id="definition"></span>
-          </p>
-          <p class="infoLine">
-            <span class="tag">Ejemplo</span><span id="example"></span>
-          </p>
+    <div class="container">
+        <div class="header">
+            <h1>⏰ Timer de Pausas Activas</h1>
         </div>
 
-        <div class="questionBox" role="group" aria-label="Pregunta y opciones">
-          <p class="question" id="question"></p>
-          <p class="hintText">Elige la opción correcta.</p>
-          <div class="choices" id="choices"></div>
-          <div class="sr-only" aria-live="polite" id="live"></div>
+        <div class="clock" id="currentClock">00:00:00</div>
+        <div class="clock-info">
+            <span id="clockSource">Hora del sistema</span>
+            <button class="sync-btn" id="syncBtn" onclick="syncInternetTime()">🌐 Sincronizar con Internet</button>
         </div>
-      </section>
-    </main>
 
-    <footer>Aprendiendo con @LaProfeVivy</footer>
-  </div>
+        <div class="settings">
+            <div class="setting-group">
+                <label for="duration">Duración total de trabajo (horas):</label>
+                <input type="number" id="duration" min="0.5" max="12" step="0.5" value="3">
+            </div>
 
-  <script>
-    const cards = [
-      {
-        title: "Recopilación de datos verídica",
-        definition: "Es buscar y obtener información confiable, precisa y comprobable, usando fuentes seguras y preferiblemente actualizadas.",
-        example: "Para un plan de negocios, reviso estadísticas oficiales recientes y un estudio revisado por pares, y guardo las referencias.",
-        question: "¿El ejemplo corresponde a “recopilación de datos verídica”?",
-        options: [
-          { text: "Sí, usa fuentes seguras y verificables", correct: true },
-          { text: "No, porque solo cuenta una opinión personal", correct: false },
-          { text: "No, porque no importa la fecha de los datos", correct: false }
-        ]
-      },
-      {
-        title: "Fuente primaria",
-        definition: "Es información original sin interpretar: registros, entrevistas, encuestas aplicadas por ti, resultados de pruebas o datos recolectados directamente.",
-        example: "Encuesta aplicada por ti a 60 clientes y el archivo con sus respuestas (sin resumen).",
-        question: "¿Ese ejemplo sí es una fuente primaria?",
-        options: [
-          { text: "Sí, es dato original recolectado directamente", correct: true },
-          { text: "No, es secundaria porque resume otras fuentes", correct: false },
-          { text: "No, es terciaria porque solo organiza enlaces", correct: false }
-        ]
-      },
-      {
-        title: "Fuente secundaria",
-        definition: "Analiza, interpreta o resume fuentes primarias (revisiones, libros, manuales, informes o artículos comparativos).",
-        example: "Un informe que compara resultados de varios estudios anteriores.",
-        question: "¿El ejemplo corresponde a fuente secundaria?",
-        options: [
-          { text: "Sí, interpreta información previa (no es dato original)", correct: true },
-          { text: "No, es primaria porque es una encuesta original", correct: false },
-          { text: "No, es terciaria porque solo es un buscador", correct: false }
-        ]
-      },
-      {
-        title: "Fuente terciaria",
-        definition: "Organiza y facilita encontrar fuentes primarias y secundarias (bases de datos, catálogos, índices, enciclopedias o buscadores).",
-        example: "Una base de datos para localizar artículos por tema y autor.",
-        question: "¿El ejemplo es una fuente terciaria?",
-        options: [
-          { text: "Sí, ayuda a localizar estudios (no crea el dato)", correct: true },
-          { text: "No, es primaria porque produce datos nuevos", correct: false },
-          { text: "No, es secundaria porque siempre opina o analiza", correct: false }
-        ]
-      },
-      {
-        title: "Otros tipos de fuentes",
-        definition: "Clasifica fuentes por procedencia (académicas, institucionales, gubernamentales, científicas y digitales) para evaluar utilidad y confiabilidad.",
-        example: "Separo si lo que leo viene de universidad, empresa, gobierno o revista científica antes de usarlo.",
-        question: "¿El ejemplo corresponde a “otros tipos de fuentes”?",
-        options: [
-          { text: "Sí, está clasificando por procedencia", correct: true },
-          { text: "No, porque solo existe primaria/secundaria/terciaria", correct: false },
-          { text: "No, porque la procedencia no cambia nada", correct: false }
-        ]
-      },
-      {
-        title: "Fuente académica",
-        definition: "Proviene de contextos educativos o de investigación (tesis, artículos, ponencias, revistas universitarias).",
-        example: "Tesis con metodología, datos y conclusiones.",
-        question: "¿Ese ejemplo corresponde a fuente académica?",
-        options: [
-          { text: "Sí, proviene de investigación/educación formal", correct: true },
-          { text: "No, es gubernamental porque habla de empleo", correct: false },
-          { text: "No, es digital solo por estar en PDF", correct: false }
-        ]
-      },
-      {
-        title: "Fuente institucional",
-        definition: "La crea una organización (empresa, universidad, ONG): informes, políticas, manuales o documentos oficiales internos.",
-        example: "Manual de atención al cliente y protocolo de devoluciones de una empresa.",
-        question: "¿El ejemplo corresponde a fuente institucional?",
-        options: [
-          { text: "Sí, es un documento oficial de una organización", correct: true },
-          { text: "No, es científica porque usa términos técnicos", correct: false },
-          { text: "No, es primaria porque todo documento interno es “dato original”", correct: false }
-        ]
-      },
-      {
-        title: "Fuente gubernamental",
-        definition: "La produce el Estado: leyes, decretos, estadísticas oficiales, políticas públicas, planes de desarrollo.",
-        example: "Una ley sobre protección de datos y un portal de estadísticas oficiales.",
-        question: "¿El ejemplo corresponde a fuente gubernamental?",
-        options: [
-          { text: "Sí, proviene de entidades públicas del Estado", correct: true },
-          { text: "No, es académica porque “explica” algo", correct: false },
-          { text: "No, es terciaria porque tiene gráficos", correct: false }
-        ]
-      },
-      {
-        title: "Fuente científica",
-        definition: "Presenta investigación con método (artículos revisados por pares, experimentos, reportes) para sustentar afirmaciones con evidencia.",
-        example: "Artículo revisado por pares que evalúa un método con experimentos y reporta resultados.",
-        question: "¿El ejemplo corresponde a fuente científica?",
-        options: [
-          { text: "Sí, presenta resultados basados en investigación científica", correct: true },
-          { text: "No, es institucional porque lo pudo escribir una empresa", correct: false },
-          { text: "No, es secundaria porque todo artículo “solo resume”", correct: false }
-        ]
-      },
-      {
-        title: "Fuente digital",
-        definition: "Se distribuye por medios electrónicos (web, repositorios, plataformas). Lo digital no garantiza calidad: se evalúa con criterios de veracidad.",
-        example: "Repositorio en línea con documentación y actualizaciones de una herramienta.",
-        question: "¿El ejemplo corresponde a fuente digital?",
-        options: [
-          { text: "Sí, se accede y distribuye por medios electrónicos", correct: true },
-          { text: "No, lo digital nunca puede ser confiable", correct: false },
-          { text: "No, si está en internet siempre es terciario", correct: false }
-        ]
-      }
-    ];
+            <div class="setting-group">
+                <label for="interval">Intervalo entre pausas (minutos):</label>
+                <input type="number" id="interval" min="1" max="120" step="1" value="30">
+            </div>
 
-    const elCardTitle = document.getElementById("cardTitle");
-    const elDefinition = document.getElementById("definition");
-    const elExample = document.getElementById("example");
-    const elQuestion = document.getElementById("question");
-    const elChoices = document.getElementById("choices");
-    const elProgress = document.getElementById("progress");
-    const elOverlayCorrect = document.getElementById("overlayCorrect");
-    const elOverlayWrong = document.getElementById("overlayWrong");
-    const elLive = document.getElementById("live");
+            <div class="setting-group">
+                <label for="volume">Volumen de alarma:</label>
+                <div class="volume-control">
+                    <input type="range" id="volume" min="0" max="100" value="50">
+                    <span class="volume-label" id="volumeLabel">50%</span>
+                </div>
+                <button class="test-sound-btn" id="testSoundBtn">🔊 Probar sonido</button>
+            </div>
+        </div>
 
-    let idx = 0;
-    let locked = false;
+        <div id="nextPauseInfo" class="next-pause" style="display: none;">
+            <strong>Próxima pausa en:</strong> <span id="nextPauseTime">--:--</span>
+        </div>
 
-    function shuffle(arr){
-      const a = arr.slice();
-      for(let i=a.length-1;i>0;i--){
-        const j = Math.floor(Math.random()*(i+1));
-        [a[i],a[j]]=[a[j],a[i]];
-      }
-      return a;
-    }
+        <div class="timer-display">
+            <div class="time" id="timerDisplay">--:--:--</div>
+            <div class="status" id="statusText">Configurar y presionar Iniciar</div>
+        </div>
 
-    function setChoicesDisabled(disabled){
-      [...elChoices.querySelectorAll("button.bubble")].forEach(b => b.disabled = disabled);
-    }
+        <div class="controls">
+            <button class="btn btn-start" id="startBtn">▶ Iniciar</button>
+            <button class="btn btn-stop" id="stopBtn" disabled>⏹ Detener</button>
+        </div>
+    </div>
 
-    function showCorrect(){
-      elOverlayCorrect.classList.add("show");
-      elOverlayCorrect.setAttribute("aria-hidden","false");
-      setTimeout(()=>{
-        elOverlayCorrect.classList.remove("show");
-        elOverlayCorrect.setAttribute("aria-hidden","true");
-      }, 650);
-    }
+    <!-- Modal de pausa activa -->
+    <div id="pauseModal" class="modal">
+        <div class="modal-content">
+            <div class="emoji">⏰</div>
+            <h2>¡Es hora de una pausa activa!</h2>
+            <p style="color: #666; margin-bottom: 15px;">Tómate un momento para cuidar tu salud:</p>
+            <ul>
+                <li>Estirar el cuerpo y relajar los músculos</li>
+                <li>Descansar la vista de la pantalla</li>
+                <li>Caminar un poco y moverte</li>
+                <li>Tomar agua e hidratarte</li>
+                <li>Respirar profundamente</li>
+            </ul>
+            <button class="modal-btn" id="closeModal">Entendido ✓</button>
+        </div>
+    </div>
 
-    function showWrong(){
-      elOverlayWrong.classList.add("show");
-      elOverlayWrong.setAttribute("aria-hidden","false");
-      setTimeout(()=>{
-        elOverlayWrong.classList.remove("show");
-        elOverlayWrong.setAttribute("aria-hidden","true");
-      }, 650);
-    }
+    <script>
+        // Variables globales
+        let timerActive = false;
+        let timeRemaining = 0;
+        let totalDuration = 0;
+        let pauseInterval = 0;
+        let volume = 50;
+        let timerIntervalId = null;
+        let pauseCheckIntervalId = null;
+        let nextPauseTime = null;
+        let audioContext = null;
+        let elapsedTime = 0; // CORREGIDO: Variable global para contar tiempo transcurrido
+        let timeOffset = 0; // Diferencia entre hora de internet y hora local
 
-    function renderCard(){
-      locked = false;
-      const c = cards[idx];
+        // Elementos del DOM
+        const currentClock = document.getElementById('currentClock');
+        const clockSource = document.getElementById('clockSource');
+        const durationInput = document.getElementById('duration');
+        const intervalInput = document.getElementById('interval');
+        const volumeSlider = document.getElementById('volume');
+        const volumeLabel = document.getElementById('volumeLabel');
+        const testSoundBtn = document.getElementById('testSoundBtn');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const statusText = document.getElementById('statusText');
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const pauseModal = document.getElementById('pauseModal');
+        const closeModal = document.getElementById('closeModal');
+        const nextPauseInfo = document.getElementById('nextPauseInfo');
+        const nextPauseTimeSpan = document.getElementById('nextPauseTime');
 
-      elCardTitle.textContent = `Tarjeta ${idx+1}: ${c.title}`;
-      elDefinition.textContent = c.definition;
-      elExample.textContent = c.example;
-      elQuestion.textContent = c.question;
-      elProgress.textContent = `Tarjeta ${idx+1} / ${cards.length}`;
+        // Sincronizar hora con internet
+        async function syncInternetTime() {
+            try {
+                clockSource.textContent = 'Sincronizando...';
+                const response = await fetch('https://worldtimeapi.org/api/timezone/America/Bogota');
+                const data = await response.json();
+                const internetTime = new Date(data.datetime);
+                const localTime = new Date();
+                timeOffset = internetTime - localTime;
+                clockSource.textContent = 'Hora sincronizada con Internet ✓';
+                clockSource.style.color = '#4caf50';
+            } catch (error) {
+                clockSource.textContent = 'No se pudo sincronizar (sin internet)';
+                clockSource.style.color = '#f44336';
+                timeOffset = 0;
+            }
+        }
 
-      // Barajar opciones: correcta aleatoria
-      const shuffled = shuffle(c.options);
+        // Inicializar AudioContext
+        function initAudioContext() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
 
-      elChoices.innerHTML = "";
-      shuffled.forEach((opt, i) => {
-        const b = document.createElement("button");
-        b.type = "button";
-        b.className = "bubble";
-        b.textContent = opt.text;
-        b.setAttribute("aria-label", `Opción ${i+1}: ${opt.text}`);
-        b.addEventListener("click", ()=> handleChoice(opt.correct));
-        elChoices.appendChild(b);
-      });
+        // Actualizar reloj actual
+        function updateClock() {
+            const now = new Date(Date.now() + timeOffset);
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            currentClock.textContent = `${hours}:${minutes}:${seconds}`;
+        }
 
-      elLive.textContent = `Nueva tarjeta: ${c.title}.`;
-    }
+        // Actualizar volumen
+        volumeSlider.addEventListener('input', (e) => {
+            volume = parseInt(e.target.value);
+            volumeLabel.textContent = `${volume}%`;
+        });
 
-    function nextCard(){
-      if(idx < cards.length - 1){
-        idx++;
-        renderCard();
-      } else {
-        locked = true;
-        setChoicesDisabled(true);
-        elQuestion.textContent = "¡Listo! Terminaste las 10 tarjetas.";
-        elChoices.innerHTML = "";
-      }
-    }
+        // Reproducir sonido de alarma
+        function playAlarm() {
+            initAudioContext();
+            
+            const volumeFactor = volume / 100;
+            if (volumeFactor < 0.1) return;
 
-    function handleChoice(isCorrect){
-      if(locked) return;
-      if(isCorrect){
-        locked = true;
-        setChoicesDisabled(true);
-        showCorrect();
-        setTimeout(()=> nextCard(), 750);
-      } else {
-        showWrong();
-      }
-    }
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
 
-    // Init
-    renderCard();
-  </script>
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.frequency.value = 800;
+            oscillator.type = 'sine';
+
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(volumeFactor * 0.3, audioContext.currentTime + 0.01);
+            gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.3);
+
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.3);
+
+            // Repetir el beep 3 veces
+            setTimeout(() => {
+                const osc2 = audioContext.createOscillator();
+                const gain2 = audioContext.createGain();
+                osc2.connect(gain2);
+                gain2.connect(audioContext.destination);
+                osc2.frequency.value = 800;
+                osc2.type = 'sine';
+                gain2.gain.setValueAtTime(0, audioContext.currentTime);
+                gain2.gain.linearRampToValueAtTime(volumeFactor * 0.3, audioContext.currentTime + 0.01);
+                gain2.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.3);
+                osc2.start(audioContext.currentTime);
+                osc2.stop(audioContext.currentTime + 0.3);
+            }, 400);
+
+            setTimeout(() => {
+                const osc3 = audioContext.createOscillator();
+                const gain3 = audioContext.createGain();
+                osc3.connect(gain3);
+                gain3.connect(audioContext.destination);
+                osc3.frequency.value = 800;
+                osc3.type = 'sine';
+                gain3.gain.setValueAtTime(0, audioContext.currentTime);
+                gain3.gain.linearRampToValueAtTime(volumeFactor * 0.3, audioContext.currentTime + 0.01);
+                gain3.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.3);
+                osc3.start(audioContext.currentTime);
+                osc3.stop(audioContext.currentTime + 0.3);
+            }, 800);
+        }
+
+        // Probar sonido
+        testSoundBtn.addEventListener('click', () => {
+            playAlarm();
+        });
+
+        // Mostrar modal de pausa
+        function showPauseModal() {
+            console.log('¡MOSTRANDO PAUSA!'); // Para debug
+            playAlarm();
+            pauseModal.style.display = 'block';
+        }
+
+        // Cerrar modal
+        closeModal.addEventListener('click', () => {
+            pauseModal.style.display = 'none';
+        });
+
+        // Formatear tiempo
+        function formatTime(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+            return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        // Calcular tiempo hasta próxima pausa
+        function updateNextPauseTime() {
+            if (pauseInterval > 0 && elapsedTime < pauseInterval) {
+                const remainingSeconds = pauseInterval - elapsedTime;
+                const minutes = Math.floor(remainingSeconds / 60);
+                const seconds = remainingSeconds % 60;
+                nextPauseTimeSpan.textContent = `${minutes}m ${seconds}s`;
+                nextPauseInfo.style.display = 'block';
+            }
+        }
+
+        // Iniciar timer
+        startBtn.addEventListener('click', () => {
+            const duration = parseFloat(durationInput.value);
+            const interval = parseInt(intervalInput.value);
+
+            if (duration <= 0 || interval <= 0) {
+                alert('Por favor ingresa valores válidos mayores a cero.');
+                return;
+            }
+
+            totalDuration = duration * 3600;
+            pauseInterval = interval * 60;
+            timeRemaining = totalDuration;
+            timerActive = true;
+            elapsedTime = 0; // CORREGIDO: Reiniciar contador
+
+            // Actualizar UI
+            startBtn.disabled = true;
+            stopBtn.disabled = false;
+            durationInput.disabled = true;
+            intervalInput.disabled = true;
+            statusText.textContent = 'Timer en ejecución...';
+
+            // Iniciar contador principal
+            timerIntervalId = setInterval(() => {
+                if (timeRemaining > 0) {
+                    timeRemaining--;
+                    timerDisplay.textContent = formatTime(timeRemaining);
+                } else {
+                    stopTimer();
+                    alert('¡Has completado tu tiempo de trabajo programado!');
+                }
+            }, 1000);
+
+            // CORREGIDO: Iniciar verificador de pausas
+            pauseCheckIntervalId = setInterval(() => {
+                elapsedTime++;
+                updateNextPauseTime();
+                
+                console.log(`Tiempo transcurrido: ${elapsedTime}s / ${pauseInterval}s`); // Para debug
+                
+                if (elapsedTime >= pauseInterval) {
+                    showPauseModal();
+                    elapsedTime = 0; // Reiniciar contador
+                }
+            }, 1000);
+
+            // Mostrar tiempo inicial
+            timerDisplay.textContent = formatTime(timeRemaining);
+            updateNextPauseTime();
+        });
+
+        // Detener timer
+        function stopTimer() {
+            timerActive = false;
+            clearInterval(timerIntervalId);
+            clearInterval(pauseCheckIntervalId);
+            
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+            durationInput.disabled = false;
+            intervalInput.disabled = false;
+            
+            timerDisplay.textContent = '--:--:--';
+            statusText.textContent = 'Timer detenido';
+            nextPauseInfo.style.display = 'none';
+            elapsedTime = 0;
+        }
+
+        stopBtn.addEventListener('click', stopTimer);
+
+        // Iniciar reloj
+        updateClock();
+        setInterval(updateClock, 1000);
+    </script>
 </body>
 </html>
