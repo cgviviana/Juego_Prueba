@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -368,7 +369,21 @@
         <div class="clock" id="currentClock">00:00:00</div>
         <div class="clock-info">
             <span id="clockSource">Hora del sistema</span>
-            <button class="sync-btn" id="syncBtn" onclick="syncInternetTime()">🌐 Sincronizar con Internet</button>
+            <button class="sync-btn" id="syncBtn" onclick="syncInternetTime()">🌐 Sincronizar</button>
+            <button class="sync-btn" id="manualBtn" onclick="showManualAdjust()" style="background:#ff9800">✏️ Ajustar</button>
+        </div>
+
+        <!-- Panel de ajuste manual -->
+        <div id="manualAdjustPanel" style="display:none; background:#fff3cd; padding:15px; border-radius:10px; margin-bottom:15px; border-left:4px solid #ff9800;">
+            <div style="font-weight:600; margin-bottom:10px; color:#856404;">⏰ Ajustar hora manualmente:</div>
+            <div style="display:flex; gap:10px; margin-bottom:10px;">
+                <div style="flex:1;">
+                    <label style="font-size:11px; color:#666;">Hora correcta:</label>
+                    <input type="time" id="correctTime" style="width:100%; padding:8px; border:2px solid #e0e0e0; border-radius:6px; font-size:14px;">
+                </div>
+            </div>
+            <button onclick="applyManualTime()" style="width:100%; padding:10px; background:#4caf50; color:white; border:none; border-radius:6px; font-weight:600; cursor:pointer;">✓ Aplicar hora correcta</button>
+            <div style="font-size:11px; color:#666; margin-top:8px;">💡 Mira la hora en tu celular y ponla aquí</div>
         </div>
 
         <div class="settings">
@@ -464,13 +479,58 @@
                 const internetTime = new Date(data.datetime);
                 const localTime = new Date();
                 timeOffset = internetTime - localTime;
-                clockSource.textContent = 'Hora sincronizada con Internet ✓';
+                clockSource.textContent = 'Hora sincronizada ✓';
                 clockSource.style.color = '#4caf50';
+                alert('Hora sincronizada correctamente con Internet');
             } catch (error) {
-                clockSource.textContent = 'No se pudo sincronizar (sin internet)';
+                clockSource.textContent = 'No se pudo sincronizar';
                 clockSource.style.color = '#f44336';
                 timeOffset = 0;
+                alert('No se pudo conectar a Internet para sincronizar.\n\nUsa el botón "Ajustar" para poner la hora correcta manualmente.');
             }
+        }
+
+        // Mostrar panel de ajuste manual
+        function showManualAdjust() {
+            const panel = document.getElementById('manualAdjustPanel');
+            if (panel.style.display === 'none') {
+                panel.style.display = 'block';
+                // Poner hora actual como sugerencia
+                const now = new Date();
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                document.getElementById('correctTime').value = `${hours}:${minutes}`;
+            } else {
+                panel.style.display = 'none';
+            }
+        }
+
+        // Aplicar hora manual
+        function applyManualTime() {
+            const correctTimeInput = document.getElementById('correctTime').value;
+            if (!correctTimeInput) {
+                alert('Por favor ingresa la hora correcta');
+                return;
+            }
+
+            const [hours, minutes] = correctTimeInput.split(':').map(Number);
+            
+            // Crear fecha con hora correcta
+            const correctTime = new Date();
+            correctTime.setHours(hours);
+            correctTime.setMinutes(minutes);
+            correctTime.setSeconds(0);
+            
+            // Calcular offset
+            const localTime = new Date();
+            timeOffset = correctTime - localTime;
+            
+            clockSource.textContent = 'Hora ajustada manualmente ✓';
+            clockSource.style.color = '#ff9800';
+            
+            document.getElementById('manualAdjustPanel').style.display = 'none';
+            
+            alert(`Hora ajustada a ${correctTimeInput}\n\nEl reloj ahora mostrará la hora correcta.`);
         }
 
         // Inicializar AudioContext
