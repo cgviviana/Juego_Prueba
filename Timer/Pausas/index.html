@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fuentes de información — Tarjetas</title>
+  <style>
+    :root{
+      --ink:#0b0b0b;
+      --paper:#fff7d6;
+      --bg1:#ffffff;
+      --bg2:#ffeef3;
+
+      --hot:#ff2d55;
+      --blue:#2d7dff;
+      --yellow:#ffd400;
+      --green:#20c997;
+
+      /* Color del contenedor de pregunta (pedido) */
+      --questionBg:#e8f2ff; /* azul claro */
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--ink);
+      min-height:100vh;
+      padding:16px;
+      background:
+        radial-gradient(circle at 12% 12%, rgba(255,212,0,.18) 0 18%, transparent 19%),
+        radial-gradient(circle at 72% 22%, rgba(45,125,255,.14) 0 16%, transparent 17%),
+        radial-gradient(circle at 85% 80%, rgba(255,45,85,.12) 0 14%, transparent 15%),
+        linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 100%);
+    }
+
+    .app{max-width:980px;margin:0 auto;display:grid;gap:12px}
+
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:12px 14px;
+      border:4px solid var(--ink);
+      border-radius:18px;
+      background:var(--paper);
+    }
+    .headerTitle{
+      margin:0;
+      font-weight:1000;
+      text-transform:uppercase;
+      letter-spacing:.6px;
+      font-size: clamp(16px, 2.2vw, 22px);
+    }
+    .progressText{
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.3px;
+      font-size: 14px;
+    }
+
+    .stage{
+      position:relative;
+      border:4px solid var(--ink);
+      border-radius:20px;
+      background:#fff;
+      overflow:hidden;
+    }
+    .stage::before{
+      content:"";
+      position:absolute;
+      inset:-18px;
+      background: radial-gradient(circle, rgba(0,0,0,.10) 10%, transparent 11%) 0 0/14px 14px;
+      opacity:.20;
+      pointer-events:none;
+      mix-blend-mode:multiply;
+    }
+
+    .card{position:relative;padding:14px;display:grid;gap:12px}
+    .cardTitle{
+      margin:0;
+      font-weight:1000;
+      text-transform:uppercase;
+      letter-spacing:.6px;
+      font-size: clamp(18px, 2.4vw, 26px);
+      line-height:1.15;
+    }
+
+    /* Significado + ejemplo en UN solo contenedor */
+    .infoBox{
+      border:4px solid var(--ink);
+      border-radius:18px;
+      background:var(--paper);
+      padding:12px;
+      display:grid;
+      gap:10px;
+    }
+    .infoLine{
+      margin:0;
+      font-size:15px;
+      line-height:1.35;
+      font-weight:700;
+    }
+    .tag{
+      display:inline-block;
+      margin-right:8px;
+      font-weight:1000;
+      text-transform:uppercase;
+      letter-spacing:.6px;
+      font-size:12px;
+      padding:4px 8px;
+      border:3px solid var(--ink);
+      border-radius:999px;
+      background:#fff;
+    }
+
+    /* Contenedor de pregunta con otro color */
+    .questionBox{
+      border:4px solid var(--ink);
+      border-radius:18px;
+      background:var(--questionBg);
+      padding:12px;
+      display:grid;
+      gap:10px;
+    }
+    .question{
+      margin:0;
+      font-weight:1000;
+      font-size:16px;
+    }
+    .hintText{
+      margin:0;
+      font-weight:800;
+      font-size:13px;
+      opacity:.85;
+    }
+
+    .choices{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:10px;
+    }
+    @media (max-width:860px){ .choices{grid-template-columns:1fr} }
+
+    /* Botones simples */
+    .bubble{
+      cursor:pointer;
+      border:3px solid var(--ink);
+      border-radius:999px;
+      padding:12px 12px;
+      background:#fff;
+      font-weight:900;
+      text-align:center;
+      user-select:none;
+      outline:none;
+      transition: transform .06s ease, background .15s ease;
+    }
+    .bubble:active{transform: translate(2px,2px)}
+    .bubble[disabled]{opacity:.55; cursor:not-allowed}
+
+    /* Feedback SIN imágenes: overlay + texto + animación */
+    .overlay{
+      position:absolute;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:10;
+      pointer-events:none;
+      background: rgba(255,255,255,.60);
+      backdrop-filter: blur(1px);
+    }
+    .overlay.show{display:flex}
+
+    .feedback{
+      font-weight:1000;
+      font-size: clamp(24px, 5vw, 56px);
+      letter-spacing:1px;
+      border:6px solid var(--ink);
+      padding: 12px 16px;
+      border-radius: 20px;
+      text-transform:uppercase;
+      color:#fff;
+      text-shadow: 3px 3px 0 rgba(0,0,0,.25);
+    }
+
+    .overlay.correct .feedback{
+      background: var(--green);
+      animation: pop .35s ease-out;
+    }
+    .overlay.wrong .feedback{
+      background: var(--hot);
+      animation: shake .45s ease-out;
+    }
+
+    @keyframes pop{
+      0%{transform: scale(.85)}
+      60%{transform: scale(1.05)}
+      100%{transform: scale(1)}
+    }
+    @keyframes shake{
+      0%{transform: translateX(0)}
+      20%{transform: translateX(-10px)}
+      40%{transform: translateX(10px)}
+      60%{transform: translateX(-6px)}
+      80%{transform: translateX(6px)}
+      100%{transform: translateX(0)}
+    }
+
+    footer{
+      text-align:center;
+      font-weight:800;
+      font-size:13px;
+      padding:8px 0 2px;
+      opacity:.9;
+    }
+
+    .sr-only{
+      position:absolute; left:-9999px;
+      width:1px; height:1px; overflow:hidden;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <header>
+      <h1 class="headerTitle">Fuentes de información</h1>
+      <div class="progressText" id="progress">Tarjeta 1 / 10</div>
+    </header>
+
+    <main class="stage">
+      <div class="overlay correct" id="overlayCorrect" aria-hidden="true">
+        <div class="feedback">¡EXCELENTE!</div>
+      </div>
+
+      <div class="overlay wrong" id="overlayWrong" aria-hidden="true">
+        <div class="feedback">¡INTÉNTALO DE NUEVO!</div>
+      </div>
+
+      <section class="card" aria-labelledby="cardTitle">
+        <h2 class="cardTitle" id="cardTitle">Tarjeta</h2>
+
+        <div class="infoBox">
+          <p class="infoLine">
+            <span class="tag">Significado</span><span id="definition"></span>
+          </p>
+          <p class="infoLine">
+            <span class="tag">Ejemplo</span><span id="example"></span>
+          </p>
+        </div>
+
+        <div class="questionBox" role="group" aria-label="Pregunta y opciones">
+          <p class="question" id="question"></p>
+          <p class="hintText">Elige la opción correcta.</p>
+          <div class="choices" id="choices"></div>
+          <div class="sr-only" aria-live="polite" id="live"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer>Aprendiendo con @LaProfeVivy</footer>
+  </div>
+
+  <script>
+    const cards = [
+      {
+        title: "Recopilación de datos verídica",
+        definition: "Es buscar y obtener información confiable, precisa y comprobable, usando fuentes seguras y preferiblemente actualizadas.",
+        example: "Para un plan de negocios, reviso estadísticas oficiales recientes y un estudio revisado por pares, y guardo las referencias.",
+        question: "¿El ejemplo corresponde a “recopilación de datos verídica”?",
+        options: [
+          { text: "Sí, usa fuentes seguras y verificables", correct: true },
+          { text: "No, porque solo cuenta una opinión personal", correct: false },
+          { text: "No, porque no importa la fecha de los datos", correct: false }
+        ]
+      },
+      {
+        title: "Fuente primaria",
+        definition: "Es información original sin interpretar: registros, entrevistas, encuestas aplicadas por ti, resultados de pruebas o datos recolectados directamente.",
+        example: "Encuesta aplicada por ti a 60 clientes y el archivo con sus respuestas (sin resumen).",
+        question: "¿Ese ejemplo sí es una fuente primaria?",
+        options: [
+          { text: "Sí, es dato original recolectado directamente", correct: true },
+          { text: "No, es secundaria porque resume otras fuentes", correct: false },
+          { text: "No, es terciaria porque solo organiza enlaces", correct: false }
+        ]
+      },
+      {
+        title: "Fuente secundaria",
+        definition: "Analiza, interpreta o resume fuentes primarias (revisiones, libros, manuales, informes o artículos comparativos).",
+        example: "Un informe que compara resultados de varios estudios anteriores.",
+        question: "¿El ejemplo corresponde a fuente secundaria?",
+        options: [
+          { text: "Sí, interpreta información previa (no es dato original)", correct: true },
+          { text: "No, es primaria porque es una encuesta original", correct: false },
+          { text: "No, es terciaria porque solo es un buscador", correct: false }
+        ]
+      },
+      {
+        title: "Fuente terciaria",
+        definition: "Organiza y facilita encontrar fuentes primarias y secundarias (bases de datos, catálogos, índices, enciclopedias o buscadores).",
+        example: "Una base de datos para localizar artículos por tema y autor.",
+        question: "¿El ejemplo es una fuente terciaria?",
+        options: [
+          { text: "Sí, ayuda a localizar estudios (no crea el dato)", correct: true },
+          { text: "No, es primaria porque produce datos nuevos", correct: false },
+          { text: "No, es secundaria porque siempre opina o analiza", correct: false }
+        ]
+      },
+      {
+        title: "Otros tipos de fuentes",
+        definition: "Clasifica fuentes por procedencia (académicas, institucionales, gubernamentales, científicas y digitales) para evaluar utilidad y confiabilidad.",
+        example: "Separo si lo que leo viene de universidad, empresa, gobierno o revista científica antes de usarlo.",
+        question: "¿El ejemplo corresponde a “otros tipos de fuentes”?",
+        options: [
+          { text: "Sí, está clasificando por procedencia", correct: true },
+          { text: "No, porque solo existe primaria/secundaria/terciaria", correct: false },
+          { text: "No, porque la procedencia no cambia nada", correct: false }
+        ]
+      },
+      {
+        title: "Fuente académica",
+        definition: "Proviene de contextos educativos o de investigación (tesis, artículos, ponencias, revistas universitarias).",
+        example: "Tesis con metodología, datos y conclusiones.",
+        question: "¿Ese ejemplo corresponde a fuente académica?",
+        options: [
+          { text: "Sí, proviene de investigación/educación formal", correct: true },
+          { text: "No, es gubernamental porque habla de empleo", correct: false },
+          { text: "No, es digital solo por estar en PDF", correct: false }
+        ]
+      },
+      {
+        title: "Fuente institucional",
+        definition: "La crea una organización (empresa, universidad, ONG): informes, políticas, manuales o documentos oficiales internos.",
+        example: "Manual de atención al cliente y protocolo de devoluciones de una empresa.",
+        question: "¿El ejemplo corresponde a fuente institucional?",
+        options: [
+          { text: "Sí, es un documento oficial de una organización", correct: true },
+          { text: "No, es científica porque usa términos técnicos", correct: false },
+          { text: "No, es primaria porque todo documento interno es “dato original”", correct: false }
+        ]
+      },
+      {
+        title: "Fuente gubernamental",
+        definition: "La produce el Estado: leyes, decretos, estadísticas oficiales, políticas públicas, planes de desarrollo.",
+        example: "Una ley sobre protección de datos y un portal de estadísticas oficiales.",
+        question: "¿El ejemplo corresponde a fuente gubernamental?",
+        options: [
+          { text: "Sí, proviene de entidades públicas del Estado", correct: true },
+          { text: "No, es académica porque “explica” algo", correct: false },
+          { text: "No, es terciaria porque tiene gráficos", correct: false }
+        ]
+      },
+      {
+        title: "Fuente científica",
+        definition: "Presenta investigación con método (artículos revisados por pares, experimentos, reportes) para sustentar afirmaciones con evidencia.",
+        example: "Artículo revisado por pares que evalúa un método con experimentos y reporta resultados.",
+        question: "¿El ejemplo corresponde a fuente científica?",
+        options: [
+          { text: "Sí, presenta resultados basados en investigación científica", correct: true },
+          { text: "No, es institucional porque lo pudo escribir una empresa", correct: false },
+          { text: "No, es secundaria porque todo artículo “solo resume”", correct: false }
+        ]
+      },
+      {
+        title: "Fuente digital",
+        definition: "Se distribuye por medios electrónicos (web, repositorios, plataformas). Lo digital no garantiza calidad: se evalúa con criterios de veracidad.",
+        example: "Repositorio en línea con documentación y actualizaciones de una herramienta.",
+        question: "¿El ejemplo corresponde a fuente digital?",
+        options: [
+          { text: "Sí, se accede y distribuye por medios electrónicos", correct: true },
+          { text: "No, lo digital nunca puede ser confiable", correct: false },
+          { text: "No, si está en internet siempre es terciario", correct: false }
+        ]
+      }
+    ];
+
+    const elCardTitle = document.getElementById("cardTitle");
+    const elDefinition = document.getElementById("definition");
+    const elExample = document.getElementById("example");
+    const elQuestion = document.getElementById("question");
+    const elChoices = document.getElementById("choices");
+    const elProgress = document.getElementById("progress");
+    const elOverlayCorrect = document.getElementById("overlayCorrect");
+    const elOverlayWrong = document.getElementById("overlayWrong");
+    const elLive = document.getElementById("live");
+
+    let idx = 0;
+    let locked = false;
+
+    function shuffle(arr){
+      const a = arr.slice();
+      for(let i=a.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [a[i],a[j]]=[a[j],a[i]];
+      }
+      return a;
+    }
+
+    function setChoicesDisabled(disabled){
+      [...elChoices.querySelectorAll("button.bubble")].forEach(b => b.disabled = disabled);
+    }
+
+    function showCorrect(){
+      elOverlayCorrect.classList.add("show");
+      elOverlayCorrect.setAttribute("aria-hidden","false");
+      setTimeout(()=>{
+        elOverlayCorrect.classList.remove("show");
+        elOverlayCorrect.setAttribute("aria-hidden","true");
+      }, 650);
+    }
+
+    function showWrong(){
+      elOverlayWrong.classList.add("show");
+      elOverlayWrong.setAttribute("aria-hidden","false");
+      setTimeout(()=>{
+        elOverlayWrong.classList.remove("show");
+        elOverlayWrong.setAttribute("aria-hidden","true");
+      }, 650);
+    }
+
+    function renderCard(){
+      locked = false;
+      const c = cards[idx];
+
+      elCardTitle.textContent = `Tarjeta ${idx+1}: ${c.title}`;
+      elDefinition.textContent = c.definition;
+      elExample.textContent = c.example;
+      elQuestion.textContent = c.question;
+      elProgress.textContent = `Tarjeta ${idx+1} / ${cards.length}`;
+
+      // Barajar opciones: correcta aleatoria
+      const shuffled = shuffle(c.options);
+
+      elChoices.innerHTML = "";
+      shuffled.forEach((opt, i) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "bubble";
+        b.textContent = opt.text;
+        b.setAttribute("aria-label", `Opción ${i+1}: ${opt.text}`);
+        b.addEventListener("click", ()=> handleChoice(opt.correct));
+        elChoices.appendChild(b);
+      });
+
+      elLive.textContent = `Nueva tarjeta: ${c.title}.`;
+    }
+
+    function nextCard(){
+      if(idx < cards.length - 1){
+        idx++;
+        renderCard();
+      } else {
+        locked = true;
+        setChoicesDisabled(true);
+        elQuestion.textContent = "¡Listo! Terminaste las 10 tarjetas.";
+        elChoices.innerHTML = "";
+      }
+    }
+
+    function handleChoice(isCorrect){
+      if(locked) return;
+      if(isCorrect){
+        locked = true;
+        setChoicesDisabled(true);
+        showCorrect();
+        setTimeout(()=> nextCard(), 750);
+      } else {
+        showWrong();
+      }
+    }
+
+    // Init
+    renderCard();
+  </script>
+</body>
+</html>
