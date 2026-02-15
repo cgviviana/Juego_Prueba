@@ -14,7 +14,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f5f5f5;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -24,65 +24,283 @@
 
         .container {
             background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 450px;
-            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            width: 320px;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
         }
 
         .header {
-            text-align: center;
-            margin-bottom: 25px;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            flex: 1;
         }
 
         .header h1 {
-            color: #667eea;
-            font-size: 24px;
-            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .header-subtitle {
+            font-size: 11px;
+            opacity: 0.8;
+        }
+
+        .settings-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .settings-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .minimize-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            margin-right: 8px;
+        }
+
+        .minimize-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .header-buttons {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Modo minimizado */
+        .container.minimized {
+            width: 200px;
+        }
+
+        .container.minimized .header-subtitle,
+        .container.minimized .timer-section,
+        .container.minimized .next-pause,
+        .container.minimized .divider {
+            display: none;
+        }
+
+        .container.minimized .main-display {
+            padding: 16px;
+        }
+
+        .container.minimized .clock {
+            font-size: 32px;
+        }
+
+        .container.minimized .controls {
+            margin-top: 12px;
+        }
+
+        .container.minimized .btn {
+            padding: 10px;
+            font-size: 11px;
+        }
+
+        .main-display {
+            padding: 24px;
+            background: white;
+        }
+
+        .clock-section {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .clock-label {
+            font-size: 11px;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            font-weight: 600;
         }
 
         .clock {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            font-size: 42px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-            font-family: 'Courier New', monospace;
+            font-size: 48px;
+            font-weight: 300;
+            color: #2c3e50;
+            font-family: 'Segoe UI', sans-serif;
             letter-spacing: 2px;
+            margin-bottom: 6px;
         }
 
-        .clock-info {
-            text-align: center;
-            font-size: 11px;
-            color: #666;
-            margin-bottom: 20px;
-        }
-
-        .sync-btn {
-            background: #4caf50;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
+        .clock-status {
             font-size: 10px;
-            cursor: pointer;
-            margin-left: 5px;
+            color: #95a5a6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
 
-        .sync-btn:hover {
-            background: #45a049;
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #95a5a6;
         }
 
-        .settings {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 12px;
+        .status-dot.active {
+            background: #27ae60;
+        }
+
+        .divider {
+            height: 1px;
+            background: #ecf0f1;
+            margin: 20px 0;
+        }
+
+        .timer-section {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .timer-label {
+            font-size: 11px;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .timer-display {
+            font-size: 36px;
+            font-weight: 300;
+            color: #3498db;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 6px;
+        }
+
+        .timer-status {
+            font-size: 11px;
+            color: #95a5a6;
+        }
+
+        .next-pause {
+            background: #fff8e1;
+            padding: 12px;
+            border-radius: 8px;
             margin-bottom: 20px;
+            display: none;
+            border-left: 3px solid #ffc107;
+        }
+
+        .next-pause-label {
+            font-size: 10px;
+            color: #f57c00;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .next-pause-time {
+            font-size: 18px;
+            color: #e65100;
+            font-weight: 600;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-start {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-start:hover:not(:disabled) {
+            background: #229954;
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+        }
+
+        .btn-stop {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-stop:hover:not(:disabled) {
+            background: #c0392b;
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* Panel de configuración */
+        .settings-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            background: #fafafa;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .settings-panel.open {
+            max-height: 600px;
+        }
+
+        .settings-content {
+            padding: 24px;
+        }
+
+        .settings-title {
+            font-size: 13px;
+            color: #2c3e50;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            font-weight: 600;
         }
 
         .setting-group {
@@ -95,37 +313,39 @@
 
         .setting-group label {
             display: block;
-            font-weight: 600;
-            color: #333;
+            font-size: 12px;
+            color: #7f8c8d;
             margin-bottom: 8px;
-            font-size: 14px;
+            font-weight: 500;
         }
 
-        .setting-group input[type="number"] {
+        .setting-group input[type="number"],
+        .setting-group input[type="time"] {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
+            padding: 10px 12px;
+            border: 1px solid #dcdcdc;
+            border-radius: 6px;
+            font-size: 14px;
             transition: border-color 0.3s;
+            background: white;
         }
 
-        .setting-group input[type="number"]:focus {
+        .setting-group input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #3498db;
         }
 
         .volume-control {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
 
         .volume-control input[type="range"] {
             flex: 1;
-            height: 8px;
-            border-radius: 5px;
-            background: #e0e0e0;
+            height: 4px;
+            border-radius: 2px;
+            background: #dcdcdc;
             outline: none;
             -webkit-appearance: none;
         }
@@ -133,115 +353,86 @@
         .volume-control input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 20px;
-            height: 20px;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
-            background: #667eea;
+            background: #3498db;
             cursor: pointer;
         }
 
         .volume-control input[type="range"]::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
-            background: #667eea;
+            background: #3498db;
             cursor: pointer;
             border: none;
         }
 
         .volume-label {
+            font-size: 12px;
             font-weight: 600;
-            color: #667eea;
-            min-width: 45px;
+            color: #3498db;
+            min-width: 40px;
             text-align: right;
         }
 
-        .test-sound-btn {
+        .action-btn {
             width: 100%;
-            padding: 12px;
-            background: #ffd700;
-            color: #333;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
+            padding: 10px;
+            background: white;
+            color: #3498db;
+            border: 1px solid #3498db;
+            border-radius: 6px;
+            font-size: 12px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            margin-top: 10px;
+            margin-top: 8px;
         }
 
-        .test-sound-btn:hover {
-            background: #ffed4e;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
-        }
-
-        .timer-display {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 30px;
-            border-radius: 12px;
-            text-align: center;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-        }
-
-        .timer-display .time {
-            font-size: 48px;
-            font-weight: bold;
+        .action-btn:hover {
+            background: #3498db;
             color: white;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 3px;
         }
 
-        .timer-display .status {
-            color: rgba(255, 255, 255, 0.9);
-            margin-top: 10px;
-            font-size: 14px;
+        .action-btn.warning {
+            color: #f39c12;
+            border-color: #f39c12;
         }
 
-        .controls {
-            display: flex;
-            gap: 10px;
+        .action-btn.warning:hover {
+            background: #f39c12;
+            color: white;
         }
 
-        .btn {
-            flex: 1;
-            padding: 15px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
+        .time-adjust-panel {
+            background: #fff8e1;
+            padding: 16px;
+            border-radius: 6px;
+            margin-top: 12px;
+            border-left: 3px solid #f39c12;
+            display: none;
+        }
+
+        .time-adjust-panel.open {
+            display: block;
+        }
+
+        .time-adjust-title {
+            font-size: 11px;
+            color: #e67e22;
+            margin-bottom: 12px;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
         }
 
-        .btn-start {
-            background: #4caf50;
-            color: white;
+        .time-adjust-hint {
+            font-size: 10px;
+            color: #95a5a6;
+            margin-top: 8px;
         }
 
-        .btn-start:hover:not(:disabled) {
-            background: #45a049;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
-        }
-
-        .btn-stop {
-            background: #f44336;
-            color: white;
-        }
-
-        .btn-stop:hover:not(:disabled) {
-            background: #da190b;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -250,7 +441,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(44, 62, 80, 0.95);
             animation: fadeIn 0.3s;
         }
 
@@ -263,9 +454,9 @@
             background: white;
             margin: 10% auto;
             padding: 40px;
-            border-radius: 20px;
+            border-radius: 12px;
             width: 90%;
-            max-width: 450px;
+            max-width: 400px;
             text-align: center;
             animation: slideIn 0.3s;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
@@ -282,160 +473,191 @@
             }
         }
 
-        .modal-content h2 {
-            color: #667eea;
-            font-size: 28px;
+        .modal-icon {
+            font-size: 64px;
             margin-bottom: 20px;
         }
 
-        .modal-content .emoji {
-            font-size: 64px;
+        .modal-content h2 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .modal-content p {
+            color: #7f8c8d;
             margin-bottom: 20px;
+            font-size: 14px;
         }
 
         .modal-content ul {
             list-style: none;
             text-align: left;
             margin: 20px 0;
-            padding: 0 20px;
+            padding: 0;
         }
 
         .modal-content li {
-            padding: 10px 0;
-            font-size: 16px;
-            color: #555;
+            padding: 12px;
+            font-size: 14px;
+            color: #34495e;
+            background: #ecf0f1;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         .modal-content li:before {
-            content: "✓ ";
-            color: #4caf50;
+            content: "✓";
+            color: #27ae60;
             font-weight: bold;
-            margin-right: 10px;
+            font-size: 18px;
         }
 
         .modal-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #27ae60;
             color: white;
             border: none;
-            padding: 15px 40px;
+            padding: 14px 32px;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            margin-top: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .modal-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-        }
-
-        .next-pause {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            color: #856404;
-            font-size: 14px;
-        }
-
-        .next-pause strong {
-            color: #ff9800;
-        }
-
-        @media (max-width: 500px) {
-            .container {
-                padding: 20px;
-            }
-
-            .timer-display .time {
-                font-size: 36px;
-            }
-
-            .modal-content {
-                padding: 30px 20px;
-            }
+            background: #229954;
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Header -->
         <div class="header">
-            <h1>⏰ Timer de Pausas Activas</h1>
+            <div class="header-left">
+                <h1>PAUSAS ACTIVAS</h1>
+                <div class="header-subtitle">Gestor de descansos</div>
+            </div>
+            <div class="header-buttons">
+                <button class="minimize-btn" onclick="toggleMinimize()" title="Minimizar">▼</button>
+                <button class="settings-toggle" onclick="toggleSettings()" title="Configuración">⚙️</button>
+            </div>
         </div>
 
-        <div class="clock" id="currentClock">00:00:00</div>
-        <div class="clock-info">
-            <span id="clockSource">Hora del sistema</span>
-            <button class="sync-btn" id="syncBtn" onclick="syncInternetTime()">🌐 Sincronizar</button>
-            <button class="sync-btn" id="manualBtn" onclick="showManualAdjust()" style="background:#ff9800">✏️ Ajustar</button>
-        </div>
-
-        <!-- Panel de ajuste manual -->
-        <div id="manualAdjustPanel" style="display:none; background:#fff3cd; padding:15px; border-radius:10px; margin-bottom:15px; border-left:4px solid #ff9800;">
-            <div style="font-weight:600; margin-bottom:10px; color:#856404;">⏰ Ajustar hora manualmente:</div>
-            <div style="display:flex; gap:10px; margin-bottom:10px;">
-                <div style="flex:1;">
-                    <label style="font-size:11px; color:#666;">Hora correcta:</label>
-                    <input type="time" id="correctTime" style="width:100%; padding:8px; border:2px solid #e0e0e0; border-radius:6px; font-size:14px;">
+        <!-- Display principal -->
+        <div class="main-display">
+            <!-- Reloj -->
+            <div class="clock-section">
+                <div class="clock-label">Hora actual</div>
+                <div class="clock" id="currentClock">00:00:00</div>
+                <div class="clock-status">
+                    <span class="status-dot" id="statusDot"></span>
+                    <span id="clockSource">Hora del sistema</span>
                 </div>
             </div>
-            <button onclick="applyManualTime()" style="width:100%; padding:10px; background:#4caf50; color:white; border:none; border-radius:6px; font-weight:600; cursor:pointer;">✓ Aplicar hora correcta</button>
-            <div style="font-size:11px; color:#666; margin-top:8px;">💡 Mira la hora en tu celular y ponla aquí</div>
+
+            <div class="divider"></div>
+
+            <!-- Timer -->
+            <div class="timer-section">
+                <div class="timer-label">Tiempo restante</div>
+                <div class="timer-display" id="timerDisplay">--:--:--</div>
+                <div class="timer-status" id="statusText">Listo para iniciar</div>
+            </div>
+
+            <!-- Próxima pausa -->
+            <div id="nextPauseInfo" class="next-pause">
+                <div class="next-pause-label">Próxima pausa en</div>
+                <div class="next-pause-time" id="nextPauseTime">--:--</div>
+            </div>
+
+            <!-- Controles -->
+            <div class="controls">
+                <button class="btn btn-start" id="startBtn">▶ Iniciar</button>
+                <button class="btn btn-stop" id="stopBtn" disabled>⏹ Detener</button>
+            </div>
         </div>
 
-        <div class="settings">
-            <div class="setting-group">
-                <label for="duration">Duración total de trabajo (horas):</label>
-                <input type="number" id="duration" min="0.5" max="12" step="0.5" value="3">
-            </div>
+        <!-- Panel de configuración (colapsable) -->
+        <div class="settings-panel" id="settingsPanel">
+            <div class="settings-content">
+                <div class="settings-title">Configuración</div>
 
-            <div class="setting-group">
-                <label for="interval">Intervalo entre pausas (minutos):</label>
-                <input type="number" id="interval" min="1" max="120" step="1" value="30">
-            </div>
-
-            <div class="setting-group">
-                <label for="volume">Volumen de alarma:</label>
-                <div class="volume-control">
-                    <input type="range" id="volume" min="0" max="100" value="50">
-                    <span class="volume-label" id="volumeLabel">50%</span>
+                <div class="setting-group">
+                    <label>Duración total de trabajo (horas)</label>
+                    <input type="number" id="duration" min="0.5" max="12" step="0.5" value="3">
                 </div>
-                <button class="test-sound-btn" id="testSoundBtn">🔊 Probar sonido</button>
+
+                <div class="setting-group">
+                    <label>Intervalo entre pausas (minutos)</label>
+                    <input type="number" id="interval" min="1" max="120" step="1" value="30">
+                </div>
+
+                <div class="setting-group">
+                    <label>Tipo de notificación</label>
+                    <select id="notificationType" style="width:100%; padding:10px 12px; border:1px solid #dcdcdc; border-radius:6px; font-size:14px; background:white;">
+                        <option value="sound">🔊 Sonido (pito)</option>
+                        <option value="text">💬 Texto personalizado</option>
+                    </select>
+                </div>
+
+                <div class="setting-group" id="soundRepeatGroup">
+                    <label>Repeticiones del sonido</label>
+                    <input type="number" id="soundRepeat" min="1" max="10" step="1" value="3" style="width:100%; padding:10px 12px; border:1px solid #dcdcdc; border-radius:6px; font-size:14px;">
+                    <div style="font-size:10px; color:#95a5a6; margin-top:4px;">¿Cuántas veces debe sonar el pito? (1-10)</div>
+                </div>
+
+                <div class="setting-group" id="customTextGroup" style="display:none;">
+                    <label>Texto de notificación</label>
+                    <input type="text" id="customText" placeholder="Ej: ¡Hora de estirarse!" maxlength="50" style="width:100%; padding:10px 12px; border:1px solid #dcdcdc; border-radius:6px; font-size:14px;">
+                </div>
+
+                <div class="setting-group">
+                    <label>Volumen de alarma</label>
+                    <div class="volume-control">
+                        <input type="range" id="volume" min="0" max="100" value="50">
+                        <span class="volume-label" id="volumeLabel">50%</span>
+                    </div>
+                    <button class="action-btn" onclick="testSound()">🔊 Probar sonido</button>
+                </div>
+
+                <div class="setting-group">
+                    <label>Sincronización de hora</label>
+                    <button class="action-btn" onclick="syncInternetTime()">🌐 Sincronizar con Internet</button>
+                    <button class="action-btn warning" onclick="toggleTimeAdjust()">✏️ Ajustar manualmente</button>
+                    
+                    <div class="time-adjust-panel" id="timeAdjustPanel">
+                        <div class="time-adjust-title">Ajustar hora manualmente</div>
+                        <input type="time" id="correctTime" style="width:100%; padding:10px; border:1px solid #dcdcdc; border-radius:6px;">
+                        <button class="action-btn" onclick="applyManualTime()" style="margin-top:12px;">✓ Aplicar hora</button>
+                        <div class="time-adjust-hint">💡 Mira la hora en tu celular y ponla aquí</div>
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <div id="nextPauseInfo" class="next-pause" style="display: none;">
-            <strong>Próxima pausa en:</strong> <span id="nextPauseTime">--:--</span>
-        </div>
-
-        <div class="timer-display">
-            <div class="time" id="timerDisplay">--:--:--</div>
-            <div class="status" id="statusText">Configurar y presionar Iniciar</div>
-        </div>
-
-        <div class="controls">
-            <button class="btn btn-start" id="startBtn">▶ Iniciar</button>
-            <button class="btn btn-stop" id="stopBtn" disabled>⏹ Detener</button>
         </div>
     </div>
 
     <!-- Modal de pausa activa -->
     <div id="pauseModal" class="modal">
         <div class="modal-content">
-            <div class="emoji">⏰</div>
-            <h2>¡Es hora de una pausa activa!</h2>
-            <p style="color: #666; margin-bottom: 15px;">Tómate un momento para cuidar tu salud:</p>
+            <div class="modal-icon">⏰</div>
+            <h2>¡Hora de una pausa activa!</h2>
+            <p>Tómate un momento para cuidar tu salud</p>
             <ul>
-                <li>Estirar el cuerpo y relajar los músculos</li>
-                <li>Descansar la vista de la pantalla</li>
-                <li>Caminar un poco y moverte</li>
-                <li>Tomar agua e hidratarte</li>
-                <li>Respirar profundamente</li>
+                <li>Estirar el cuerpo</li>
+                <li>Descansar la vista</li>
+                <li>Caminar un poco</li>
+                <li>Tomar agua</li>
+                <li>Respirar profundo</li>
             </ul>
-            <button class="modal-btn" id="closeModal">Entendido ✓</button>
+            <button class="modal-btn" id="closeModal">Entendido</button>
         </div>
     </div>
 
@@ -448,19 +670,19 @@
         let volume = 50;
         let timerIntervalId = null;
         let pauseCheckIntervalId = null;
-        let nextPauseTime = null;
         let audioContext = null;
-        let elapsedTime = 0; // CORREGIDO: Variable global para contar tiempo transcurrido
-        let timeOffset = 0; // Diferencia entre hora de internet y hora local
+        let elapsedTime = 0;
+        let timeOffset = 0;
+        let isMinimized = false;
 
         // Elementos del DOM
         const currentClock = document.getElementById('currentClock');
         const clockSource = document.getElementById('clockSource');
+        const statusDot = document.getElementById('statusDot');
         const durationInput = document.getElementById('duration');
         const intervalInput = document.getElementById('interval');
         const volumeSlider = document.getElementById('volume');
         const volumeLabel = document.getElementById('volumeLabel');
-        const testSoundBtn = document.getElementById('testSoundBtn');
         const timerDisplay = document.getElementById('timerDisplay');
         const statusText = document.getElementById('statusText');
         const startBtn = document.getElementById('startBtn');
@@ -469,6 +691,53 @@
         const closeModal = document.getElementById('closeModal');
         const nextPauseInfo = document.getElementById('nextPauseInfo');
         const nextPauseTimeSpan = document.getElementById('nextPauseTime');
+        const notificationType = document.getElementById('notificationType');
+        const customTextGroup = document.getElementById('customTextGroup');
+        const customText = document.getElementById('customText');
+        const soundRepeatGroup = document.getElementById('soundRepeatGroup');
+        const soundRepeat = document.getElementById('soundRepeat');
+
+        // Toggle modo minimizado
+        function toggleMinimize() {
+            const container = document.querySelector('.container');
+            const btn = document.querySelector('.minimize-btn');
+            isMinimized = !isMinimized;
+            
+            if (isMinimized) {
+                container.classList.add('minimized');
+                btn.textContent = '▲';
+                btn.title = 'Expandir';
+                // Cerrar panel de configuración si está abierto
+                document.getElementById('settingsPanel').classList.remove('open');
+            } else {
+                container.classList.remove('minimized');
+                btn.textContent = '▼';
+                btn.title = 'Minimizar';
+            }
+        }
+
+        // Mostrar/ocultar campos según tipo de notificación
+        notificationType.addEventListener('change', (e) => {
+            if (e.target.value === 'text') {
+                customTextGroup.style.display = 'block';
+                soundRepeatGroup.style.display = 'none';
+            } else {
+                customTextGroup.style.display = 'none';
+                soundRepeatGroup.style.display = 'block';
+            }
+        });
+
+        // Toggle panel de configuración
+        function toggleSettings() {
+            const panel = document.getElementById('settingsPanel');
+            panel.classList.toggle('open');
+        }
+
+        // Toggle panel de ajuste de hora
+        function toggleTimeAdjust() {
+            const panel = document.getElementById('timeAdjustPanel');
+            panel.classList.toggle('open');
+        }
 
         // Sincronizar hora con internet
         async function syncInternetTime() {
@@ -479,29 +748,13 @@
                 const internetTime = new Date(data.datetime);
                 const localTime = new Date();
                 timeOffset = internetTime - localTime;
-                clockSource.textContent = 'Hora sincronizada ✓';
-                clockSource.style.color = '#4caf50';
-                alert('Hora sincronizada correctamente con Internet');
+                clockSource.textContent = 'Sincronizado con Internet';
+                statusDot.classList.add('active');
+                alert('✓ Hora sincronizada correctamente');
             } catch (error) {
-                clockSource.textContent = 'No se pudo sincronizar';
-                clockSource.style.color = '#f44336';
+                clockSource.textContent = 'Error de sincronización';
                 timeOffset = 0;
-                alert('No se pudo conectar a Internet para sincronizar.\n\nUsa el botón "Ajustar" para poner la hora correcta manualmente.');
-            }
-        }
-
-        // Mostrar panel de ajuste manual
-        function showManualAdjust() {
-            const panel = document.getElementById('manualAdjustPanel');
-            if (panel.style.display === 'none') {
-                panel.style.display = 'block';
-                // Poner hora actual como sugerencia
-                const now = new Date();
-                const hours = String(now.getHours()).padStart(2, '0');
-                const minutes = String(now.getMinutes()).padStart(2, '0');
-                document.getElementById('correctTime').value = `${hours}:${minutes}`;
-            } else {
-                panel.style.display = 'none';
+                alert('No se pudo conectar a Internet.\n\nUsa el ajuste manual para corregir la hora.');
             }
         }
 
@@ -514,23 +767,19 @@
             }
 
             const [hours, minutes] = correctTimeInput.split(':').map(Number);
-            
-            // Crear fecha con hora correcta
             const correctTime = new Date();
             correctTime.setHours(hours);
             correctTime.setMinutes(minutes);
             correctTime.setSeconds(0);
             
-            // Calcular offset
             const localTime = new Date();
             timeOffset = correctTime - localTime;
             
-            clockSource.textContent = 'Hora ajustada manualmente ✓';
-            clockSource.style.color = '#ff9800';
+            clockSource.textContent = 'Ajustado manualmente';
+            statusDot.classList.add('active');
             
-            document.getElementById('manualAdjustPanel').style.display = 'none';
-            
-            alert(`Hora ajustada a ${correctTimeInput}\n\nEl reloj ahora mostrará la hora correcta.`);
+            document.getElementById('timeAdjustPanel').classList.remove('open');
+            alert(`✓ Hora ajustada a ${correctTimeInput}`);
         }
 
         // Inicializar AudioContext
@@ -540,7 +789,7 @@
             }
         }
 
-        // Actualizar reloj actual
+        // Actualizar reloj
         function updateClock() {
             const now = new Date(Date.now() + timeOffset);
             const hours = String(now.getHours()).padStart(2, '0');
@@ -555,69 +804,50 @@
             volumeLabel.textContent = `${volume}%`;
         });
 
-        // Reproducir sonido de alarma
-        function playAlarm() {
+        // Reproducir alarma (configurable)
+        function playAlarm(repetitions = null) {
             initAudioContext();
-            
             const volumeFactor = volume / 100;
             if (volumeFactor < 0.1) return;
 
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
+            // Si no se especifica, tomar del input
+            const times = repetitions || parseInt(soundRepeat.value) || 3;
 
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-
-            oscillator.frequency.value = 800;
-            oscillator.type = 'sine';
-
-            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-            gainNode.gain.linearRampToValueAtTime(volumeFactor * 0.3, audioContext.currentTime + 0.01);
-            gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.3);
-
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.3);
-
-            // Repetir el beep 3 veces
-            setTimeout(() => {
-                const osc2 = audioContext.createOscillator();
-                const gain2 = audioContext.createGain();
-                osc2.connect(gain2);
-                gain2.connect(audioContext.destination);
-                osc2.frequency.value = 800;
-                osc2.type = 'sine';
-                gain2.gain.setValueAtTime(0, audioContext.currentTime);
-                gain2.gain.linearRampToValueAtTime(volumeFactor * 0.3, audioContext.currentTime + 0.01);
-                gain2.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.3);
-                osc2.start(audioContext.currentTime);
-                osc2.stop(audioContext.currentTime + 0.3);
-            }, 400);
-
-            setTimeout(() => {
-                const osc3 = audioContext.createOscillator();
-                const gain3 = audioContext.createGain();
-                osc3.connect(gain3);
-                gain3.connect(audioContext.destination);
-                osc3.frequency.value = 800;
-                osc3.type = 'sine';
-                gain3.gain.setValueAtTime(0, audioContext.currentTime);
-                gain3.gain.linearRampToValueAtTime(volumeFactor * 0.3, audioContext.currentTime + 0.01);
-                gain3.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.3);
-                osc3.start(audioContext.currentTime);
-                osc3.stop(audioContext.currentTime + 0.3);
-            }, 800);
+            for (let i = 0; i < times; i++) {
+                setTimeout(() => {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    oscillator.frequency.value = 800;
+                    oscillator.type = 'sine';
+                    gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                    gainNode.gain.linearRampToValueAtTime(volumeFactor * 0.3, audioContext.currentTime + 0.01);
+                    gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.3);
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.3);
+                }, i * 400);
+            }
         }
 
         // Probar sonido
-        testSoundBtn.addEventListener('click', () => {
+        function testSound() {
             playAlarm();
-        });
+        }
 
         // Mostrar modal de pausa
         function showPauseModal() {
-            console.log('¡MOSTRANDO PAUSA!'); // Para debug
-            playAlarm();
-            pauseModal.style.display = 'block';
+            const notifType = notificationType.value;
+            
+            if (notifType === 'sound') {
+                // Solo sonido
+                playAlarm();
+                pauseModal.style.display = 'block';
+            } else {
+                // Texto personalizado
+                const text = customText.value.trim() || '¡Es hora de una pausa activa!';
+                alert(text);
+            }
         }
 
         // Cerrar modal
@@ -633,7 +863,7 @@
             return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
         }
 
-        // Calcular tiempo hasta próxima pausa
+        // Actualizar próxima pausa
         function updateNextPauseTime() {
             if (pauseInterval > 0 && elapsedTime < pauseInterval) {
                 const remainingSeconds = pauseInterval - elapsedTime;
@@ -658,40 +888,34 @@
             pauseInterval = interval * 60;
             timeRemaining = totalDuration;
             timerActive = true;
-            elapsedTime = 0; // CORREGIDO: Reiniciar contador
+            elapsedTime = 0;
 
-            // Actualizar UI
             startBtn.disabled = true;
             stopBtn.disabled = false;
             durationInput.disabled = true;
             intervalInput.disabled = true;
-            statusText.textContent = 'Timer en ejecución...';
+            statusText.textContent = 'En ejecución';
 
-            // Iniciar contador principal
             timerIntervalId = setInterval(() => {
                 if (timeRemaining > 0) {
                     timeRemaining--;
                     timerDisplay.textContent = formatTime(timeRemaining);
                 } else {
                     stopTimer();
-                    alert('¡Has completado tu tiempo de trabajo programado!');
+                    alert('¡Trabajo completado!');
                 }
             }, 1000);
 
-            // CORREGIDO: Iniciar verificador de pausas
             pauseCheckIntervalId = setInterval(() => {
                 elapsedTime++;
                 updateNextPauseTime();
                 
-                console.log(`Tiempo transcurrido: ${elapsedTime}s / ${pauseInterval}s`); // Para debug
-                
                 if (elapsedTime >= pauseInterval) {
                     showPauseModal();
-                    elapsedTime = 0; // Reiniciar contador
+                    elapsedTime = 0;
                 }
             }, 1000);
 
-            // Mostrar tiempo inicial
             timerDisplay.textContent = formatTime(timeRemaining);
             updateNextPauseTime();
         });
@@ -708,7 +932,7 @@
             intervalInput.disabled = false;
             
             timerDisplay.textContent = '--:--:--';
-            statusText.textContent = 'Timer detenido';
+            statusText.textContent = 'Listo para iniciar';
             nextPauseInfo.style.display = 'none';
             elapsedTime = 0;
         }
